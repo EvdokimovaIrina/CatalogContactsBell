@@ -37,7 +37,9 @@ public class ContactController {
 
             String strReader = reader.readLine();
             selectedAction = Integer.parseInt(strReader);
+
             if (selectedAction == 0) break;
+            if (selectedAction > typeContactArray.length) continue;
 
             TypeContact typeContact = typeContactArray[selectedAction - 1];
             System.out.println("Введите данные " + typeContact.name() + ":");
@@ -56,11 +58,11 @@ public class ContactController {
     public void showContactList() {
         List<Contact> contactList = contactService.getContactsList();
         System.out.println("Список контактов:");
-        for (Contact contact: contactList) {
+        for (Contact contact : contactList) {
             System.out.println("*************************");
             System.out.println(contact.getFio());
-            for (ContactDetails contactDetails: contact.getContactDetailsList()) {
-                System.out.println(contactDetails.getType()+": "+contactDetails.getValue());
+            for (ContactDetails contactDetails : contact.getContactDetailsList()) {
+                System.out.println(contactDetails.getType() + ": " + contactDetails.getValue());
             }
         }
         System.out.println("*************************");

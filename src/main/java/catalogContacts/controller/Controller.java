@@ -36,14 +36,21 @@ public class Controller {
                 switch (selectedAction) {
                     case 1:
                         contactController.AddContact();
+                        continue;
                     case 2:
                         groupController.AddGroup();
+                        continue;
                     case 3:
                         contactController.showContactList();
+                        continue;
                     case 4:
                         contactController.showContactListGroup();
+                        continue;
                     case 5:
                         groupController.showGroupList();
+                        continue;
+                    default:
+                            continue;
                 }
             } catch (IOException e) {
 
