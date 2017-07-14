@@ -14,10 +14,10 @@ import java.util.List;
 public class Controller {
     ContactController contactController;
     GroupController groupController;
-    public void showMenu() {
-        boolean selectedItem = true;
 
-        while (selectedItem)  {
+    public void showMenu() {
+        boolean continueCycle=true;
+        while (continueCycle) {
             //При запуске выведем вопрос о необходимых действиях
             System.out.println("Выберите пункт меню");
             System.out.println("1 - создать новый контакт");
@@ -30,8 +30,6 @@ public class Controller {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 String strReader = reader.readLine();
                 int selectedAction = Integer.parseInt(strReader);
-
-                if (selectedAction==0) break;
 
                 switch (selectedAction) {
                     case 1:
@@ -49,8 +47,11 @@ public class Controller {
                     case 5:
                         groupController.showGroupList();
                         continue;
+                    case 0:
+                        continueCycle = false;
+                        break;
                     default:
-                            continue;
+                        continue;
                 }
             } catch (IOException e) {
 

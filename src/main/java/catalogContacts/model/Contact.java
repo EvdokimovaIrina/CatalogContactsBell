@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Contact {
     String fio;
+    int number;
     List<Group> groupList = new ArrayList<>();
     List<ContactDetails> contactDetailsList = new ArrayList<>();
 
@@ -12,15 +13,38 @@ public class Contact {
         this.fio = fio;
     }
 
-    public Contact(String fio, List<Group> groupList, List<ContactDetails> contactDetailsList) {
+    public Contact(String fio,int number) {
         this.fio = fio;
+        this.number = number;
+    }
+
+    public Contact(String fio, int number, List<Group> groupList, List<ContactDetails> contactDetailsList) {
+        this.fio = fio;
+        this.number = number;
         this.groupList = groupList;
         this.contactDetailsList = contactDetailsList;
+
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public List<Group> getGroupList() {
+        return groupList;
     }
 
     public String getFio() {
         return fio;
     }
+
+    public void setFio(String fio) {
+        this.fio = fio;
+      }
 
     public List<Group> getGroup() {
         return groupList;
@@ -28,10 +52,6 @@ public class Contact {
 
     public List<ContactDetails> getContactDetailsList() {
         return contactDetailsList;
-    }
-
-    public void setFio(String fio) {
-        this.fio = fio;
     }
 
     public void setGroupList(List<Group> groupList) {

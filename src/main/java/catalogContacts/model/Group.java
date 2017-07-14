@@ -5,6 +5,7 @@ package catalogContacts.model;
  */
 public class Group {
     String name;
+    int number;
 
     public Group(String name){
         this.name = name;
@@ -16,5 +17,13 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }
