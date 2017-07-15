@@ -1,13 +1,14 @@
 package catalogContacts.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Contact {
-    String fio;
-    int number;
-    List<Group> groupList = new ArrayList<>();
-    List<ContactDetails> contactDetailsList = new ArrayList<>();
+public class Contact implements Serializable {
+    private String fio;
+    private int number;
+    private List<Group> groupList = new ArrayList<>();
+    private List<ContactDetails> contactDetailsList = new ArrayList<>();
 
     public Contact(String fio) {
         this.fio = fio;

@@ -3,7 +3,9 @@ package catalogContacts.model;
 import catalogContacts.TypeContact;
 import catalogContacts.model.Contact;
 
-public class ContactDetails{
+import java.io.Serializable;
+
+public class ContactDetails implements Serializable {
     private Contact owner;
     private TypeContact type;
     private String value;

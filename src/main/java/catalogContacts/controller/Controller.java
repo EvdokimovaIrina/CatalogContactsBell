@@ -1,22 +1,19 @@
 package catalogContacts.controller;
 
-import catalogContacts.model.Contact;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by EvdokimovaIS on 13.07.2017.
  */
 public class Controller {
-    ContactController contactController;
-    GroupController groupController;
+    private ContactController contactController;
+    private GroupController groupController;
 
     public void showMenu() {
-        boolean continueCycle=true;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        boolean continueCycle = true;
         while (continueCycle) {
             //При запуске выведем вопрос о необходимых действиях
             System.out.println("Выберите пункт меню");
@@ -27,39 +24,41 @@ public class Controller {
             System.out.println("5 - вывести список групп");
             System.out.println("0 - выход");
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
                 String strReader = reader.readLine();
                 int selectedAction = Integer.parseInt(strReader);
+                continueCycle = Action(reader, selectedAction);
 
-                switch (selectedAction) {
-                    case 1:
-                        contactController.AddContact();
-                        continue;
-                    case 2:
-                        groupController.AddGroup();
-                        continue;
-                    case 3:
-                        contactController.showContactList();
-                        continue;
-                    case 4:
-                        contactController.showContactListGroup();
-                        continue;
-                    case 5:
-                        groupController.showGroupList();
-                        continue;
-                    case 0:
-                        continueCycle = false;
-                        break;
-                    default:
-                        continue;
-                }
             } catch (IOException e) {
-
+                System.out.println("Не известная команда!");
             }
-
-
         }
     }
+
+    public boolean Action(BufferedReader reader, int selectedAction) throws IOException {
+        switch (selectedAction) {
+            case 1:
+                contactController.AddContact(reader);
+                return true;
+            case 2:
+                groupController.AddGroup(reader);
+                return true;
+            case 3:
+                contactController.showContactList(reader);
+                return true;
+            case 4:
+                contactController.showContactListGroup();
+                return true;
+            case 5:
+                groupController.showGroupList();
+                return true;
+            case 0:
+                return false;
+            default:
+                return true;
+        }
+    }
+
 
     public GroupController getGroupController() {
         return groupController;

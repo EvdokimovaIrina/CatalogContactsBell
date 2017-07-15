@@ -2,6 +2,7 @@ package catalogContacts.service;
 
 import catalogContacts.model.Contact;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Created by EvdokimovaIS on 13.07.2017.
  */
-public class ContactService {
+public class ContactService implements Serializable{
     List<Contact> contactsList = new ArrayList<>();
 
     public void saveContact(Contact contact) {

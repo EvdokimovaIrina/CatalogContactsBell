@@ -1,11 +1,13 @@
 package catalogContacts.model;
 
+import java.io.Serializable;
+
 /**
  * Created by iren on 12.07.2017.
  */
-public class Group {
-    String name;
-    int number;
+public class Group implements Serializable {
+    private String name;
+    private int number;
 
     public Group(String name){
         this.name = name;

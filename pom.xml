@@ -32,16 +32,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <outputDirectory>D:\for java\Bell Integrator\</outputDirectory>
-                </configuration>
-            </plugin>
-
-            <plugin>
+           <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.0</version>
@@ -53,9 +44,7 @@
                     </archive>
                 </configuration>
             </plugin>
-
-
-        </plugins>
+       </plugins>
     </build>
 
 

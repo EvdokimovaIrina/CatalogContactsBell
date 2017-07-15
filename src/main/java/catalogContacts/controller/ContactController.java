@@ -15,11 +15,10 @@ import java.util.List;
  * Created by iren on 13.07.2017.
  */
 public class ContactController {
-    ContactService contactService;
+    private ContactService contactService;
 
-    public void AddContact() throws IOException {
+    public void AddContact(BufferedReader reader) throws IOException {
         System.out.println("Введите имя контакта: ");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String name = reader.readLine();
         Contact contact = new Contact(name);
 
@@ -54,8 +53,12 @@ public class ContactController {
 
     }
 
+    /*public boolean addContactDetailToContact(){
+
+    }*/
+
     //вывод меню для редактирования контакта
-    public void changeContact(Contact contact) throws IOException {
+    public void changeContact(BufferedReader reader, Contact contact) throws IOException {
         boolean continueCycle=true;
         while (continueCycle) {
             System.out.println("Выберите действие:");
@@ -65,7 +68,6 @@ public class ContactController {
             System.out.println("4 - удалить контакт");
             System.out.println("0 - выход");
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             String strReader = reader.readLine();
             int selectedAction = Integer.parseInt(strReader);
 
@@ -123,7 +125,7 @@ public class ContactController {
     }
 
     //выводит список контактов
-    public void showContactList() throws IOException {
+    public void showContactList(BufferedReader reader) throws IOException {
         List<Contact> contactList = contactService.getContactsList();
         System.out.println("Список контактов:");
 
@@ -135,7 +137,6 @@ public class ContactController {
 
         while (true) {
             System.out.println("Для редактирования контакта укажите его номер, для возврата в главное меню наберите 0: ");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             String strReader = reader.readLine();
             int selectedAction = Integer.parseInt(strReader);
             if (selectedAction > 0) {
@@ -146,7 +147,7 @@ public class ContactController {
                     showContact(contact);
 
                     //предложим дальнейшие действия с найденым контактом
-                    changeContact(contact);
+                    changeContact(reader,contact);
                 }
                 for (Contact contact : contactList) {
                     if (contact.getNumber() == selectedAction) {

@@ -12,11 +12,10 @@ import java.util.List;
  * Created by EvdokimovaIS on 13.07.2017.
  */
 public class GroupController {
-    GroupService groupService;
+    private GroupService groupService;
 
-    public void AddGroup() throws IOException{
+    public void AddGroup(BufferedReader reader) throws IOException{
         System.out.println("Введите название группы: ");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String name = reader.readLine();
         Group group = new Group(name);
 
