@@ -3,11 +3,13 @@ package catalogContacts.controller;
 import catalogContacts.TypeContact;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
+import catalogContacts.model.Group;
 import catalogContacts.service.ContactService;
+import catalogContacts.service.ContactServiceImpl;
+import catalogContacts.service.GroupService;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -16,13 +18,23 @@ import java.util.List;
  */
 public class ContactController {
     private ContactService contactService;
+    private GroupService groupService;
+    private BufferedReader reader;
+    private Valid valid;
 
-    public void AddContact(BufferedReader reader) throws IOException {
+    public void AddContact() throws IOException {
         System.out.println("Введите имя контакта: ");
         String name = reader.readLine();
         Contact contact = new Contact(name);
 
+        AddContactDetails(contact);
+        contactService.saveContact(contact);
+    }
+
+    //Добавление новой контактной информации
+    public void AddContactDetails(Contact contact) throws IOException {
         List<ContactDetails> contactDetailList = new ArrayList<>();
+        contactDetailList.addAll(contact.getContactDetailsList());
 
         int selectedAction = 1;
         while (true) {
@@ -36,10 +48,10 @@ public class ContactController {
             System.out.println("для отмены выберите 0:");
 
             String strReader = reader.readLine();
-            selectedAction = Integer.parseInt(strReader);
+            selectedAction = valid.actionValid(strReader);
 
             if (selectedAction == 0) break;
-            if (selectedAction > typeContactArray.length) continue;
+            if (selectedAction > typeContactArray.length || selectedAction < 0) continue;
 
             TypeContact typeContact = typeContactArray[selectedAction - 1];
             System.out.println("Введите данные " + typeContact.name() + ":");
@@ -49,17 +61,12 @@ public class ContactController {
             contactDetailList.add(contactDetail);
         }
         contact.setContactDetailsList(contactDetailList);
-        contactService.saveContact(contact);
-
     }
 
-    /*public boolean addContactDetailToContact(){
-
-    }*/
 
     //вывод меню для редактирования контакта
-    public void changeContact(BufferedReader reader, Contact contact) throws IOException {
-        boolean continueCycle=true;
+    public void changeContact(Contact contact) throws IOException {
+        boolean continueCycle = true;
         while (continueCycle) {
             System.out.println("Выберите действие:");
             System.out.println("1 - редактировать имя");
@@ -69,9 +76,7 @@ public class ContactController {
             System.out.println("0 - выход");
 
             String strReader = reader.readLine();
-            int selectedAction = Integer.parseInt(strReader);
-
-
+            int selectedAction = valid.actionValid(strReader);
             switch (selectedAction) {
                 case 1:
                     //редактируем имя контакта
@@ -82,24 +87,12 @@ public class ContactController {
                     continue;
                 case 2:
                     //редактируем контактную информацию
-                    while (true) {
-                        List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
-                        System.out.println("Укажите номер контактной информации для редактирования. Для выхода наберите 0:");
-                        strReader = reader.readLine();
-                        int numberContactDetails = Integer.parseInt(strReader);
-                        if (numberContactDetails > 0 & numberContactDetails < contactDetailsList.size()) {
-                            System.out.println("Укажите новое значение:");
-
-                            ContactDetails contactDetails = contactDetailsList.get(numberContactDetails - 1);
-                            contactDetails.setValue(reader.readLine());
-                            break;
-                        } else if (numberContactDetails == 0) {
-                            break;
-                        }
-                    }
+                    changeContactDetails(contact);
                     showContact(contact);
                     continue;
                 case 3:
+                    //List<Group> groupList = contact.getGroupList();
+                    selecteActionGroupListContact(contact);
                     continue;
                 case 4:
                     contactService.deleteContact(contact);
@@ -114,6 +107,131 @@ public class ContactController {
         }
     }
 
+    //Редактирование контактной информации
+    public void changeContactDetails(Contact contact) throws IOException {
+        boolean continueCycle = true;
+        while (continueCycle) {
+            System.out.println("Выберите пункт меню:");
+            System.out.println("1 - добавить контактную информацию");
+            System.out.println("2 - удалить контактную информацию");
+            System.out.println("3 - изменить контактную информацию");
+            System.out.println("0 - выход");
+
+            String strReader = reader.readLine();
+            int selectedAction = valid.actionValid(strReader);
+            List<Group> lisGroupForChange;
+            switch (selectedAction) {
+                case 1:
+                    AddContactDetails(contact);
+                    continue;
+                case 2:
+                    deleteContactDetails(contact);
+                    continue;
+                case 3:
+                    ChangeSelectedContactDetails(contact);
+                    continue;
+                case 0:
+                    continueCycle = false;
+                    break;
+            }
+        }
+    }
+
+
+    public void deleteContactDetails(Contact contact) throws IOException {
+        showContact(contact);
+        while (true) {
+            List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
+            System.out.println("Укажите номер контактной информации для удаления. Для выхода наберите 0:");
+            String strReader = reader.readLine();
+            int numberContactDetails = valid.actionValid(strReader);
+            if (numberContactDetails > 0 & numberContactDetails < contactDetailsList.size()) {
+                ContactDetails contactDetails = contactDetailsList.get(numberContactDetails);
+                contactDetailsList.remove(contactDetails);
+                contact.setContactDetailsList(contactDetailsList);
+                break;
+            } else if (numberContactDetails == 0) {
+                break;
+            }
+        }
+    }
+
+    public void ChangeSelectedContactDetails(Contact contact) throws IOException {
+        while (true) {
+            List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
+            System.out.println("Укажите номер контактной информации для редактирования. Для выхода наберите 0:");
+            String strReader = reader.readLine();
+            int numberContactDetails = valid.actionValid(strReader);
+            if (numberContactDetails > 0 & numberContactDetails < contactDetailsList.size()) {
+                System.out.println("Укажите новое значение:");
+
+                ContactDetails contactDetails = contactDetailsList.get(numberContactDetails - 1);
+                contactDetails.setValue(reader.readLine());
+                break;
+            } else if (numberContactDetails == 0) {
+                break;
+            }
+        }
+    }
+
+    //редактирование состава групп
+    public void selecteActionGroupListContact(Contact contact) throws IOException {
+        showGroupListContact(contact);
+
+        boolean continueCycle = true;
+        while (continueCycle) {
+            System.out.println("Выберите пункт меню:");
+            System.out.println("1 - добавить принадлежность к группе");
+            System.out.println("2 - удалить принадлежность к группе");
+            System.out.println("0 - выход");
+
+            String strReader = reader.readLine();
+            int selectedAction = valid.actionValid(strReader);
+            List<Group> lisGroupForChange;
+            switch (selectedAction) {
+                case 1:
+                    lisGroupForChange = CreatelisGroupForChange(contact, groupService.getGroupsList());
+                    contactService.changeGroupListAdd(contact, lisGroupForChange);
+                    groupService.changeContactListAdd(contact, lisGroupForChange);
+                    break;
+                case 2:
+                    lisGroupForChange = CreatelisGroupForChange(contact, contact.getGroupList());
+                    contactService.changeGroupListDelete(contact, lisGroupForChange);
+                    groupService.changeContactListDelete(contact, lisGroupForChange);
+                    break;
+                case 0:
+                    continueCycle = false;
+                    break;
+            }
+        }
+    }
+
+    public List<Group> CreatelisGroupForChange(Contact contact, List<Group> groupList) throws IOException {
+        showGroupListContact(contact);
+        List<Group> listGroupForChange = new ArrayList<>();
+        for (Group group : groupList) {
+            System.out.println(group.getNumber() + " " + group.getName());
+        }
+        System.out.println("Укажите номера групп. Чтобы закончить наберите 0:");
+        while (true) {
+            String strReader = reader.readLine();
+            int selectedAction = valid.actionValid(strReader);
+            if (selectedAction == 0) break;
+            if (selectedAction < 0) continue;
+            try {
+                Group group = groupService.findByNumber(selectedAction);
+                if (!listGroupForChange.contains(group) & group != null) {
+                    listGroupForChange.add(group);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Не верный номер группы");
+                continue;
+            }
+        }
+
+        return listGroupForChange;
+    }
+
     //выводит информацию о контакте
     public void showContact(Contact contact) {
 
@@ -121,16 +239,38 @@ public class ContactController {
         for (ContactDetails contactDetails : contact.getContactDetailsList()) {
             System.out.println(contactDetails.getType() + ": " + contactDetails.getValue());
         }
+
+        showGroupListContact(contact);
+    }
+
+    public void showGroupListContact(Contact contact) {
+        System.out.println("Группы:");
+        for (Group group : contact.getGroupList()) {
+            System.out.println(group.getNumber() + " " + group.getName());
+        }
+        System.out.println("*************************");
+    }
+
+    public void showGroupList() {
+        System.out.println("Все группы:");
+        for (Group group : groupService.getGroupsList()) {
+            System.out.println(group.getNumber() + " " + group.getName());
+        }
         System.out.println("*************************");
     }
 
     //выводит список контактов
-    public void showContactList(BufferedReader reader) throws IOException {
-        List<Contact> contactList = contactService.getContactsList();
-        System.out.println("Список контактов:");
+    public void showContactList(Group group) throws IOException {
+        List<Contact> contactList = new ArrayList();
+        if (group == null) {
+            contactList = contactService.getContactsList();
+        } else {
+            contactList = group.getContactList();
+        }
+
+        System.out.println("Список контактов " + ((group == null) ? "" : group.getName()) + ":");
 
         System.out.println("*************************");
-
         for (Contact contact : contactList) {
             showContact(contact);
         }
@@ -138,33 +278,34 @@ public class ContactController {
         while (true) {
             System.out.println("Для редактирования контакта укажите его номер, для возврата в главное меню наберите 0: ");
             String strReader = reader.readLine();
-            int selectedAction = Integer.parseInt(strReader);
-            if (selectedAction > 0) {
-                //найдем контакт и выведем информацию по нему
-                if (selectedAction >= 0 & selectedAction < contactList.size()) {
-                    Contact contact = contactList.get(selectedAction - 1);
-                    //выведем информацию по контакту
-                    showContact(contact);
+            int selectedAction = valid.actionValid(strReader);
 
-                    //предложим дальнейшие действия с найденым контактом
-                    changeContact(reader,contact);
-                }
-                for (Contact contact : contactList) {
-                    if (contact.getNumber() == selectedAction) {
+            if (selectedAction == 0) break;
+            if (selectedAction > contactList.size() || selectedAction < 0) continue;
 
-                        break;
-                    }
-                }
-            } else {
-                if (selectedAction == 0) {
-                    //т.к. выбрали возврат в главное меню, то закончим вечный цикл и выполнение вернется к главному циклу
-                    break;
-                }
-            }
+            //найдем контакт и выведем информацию по нему
+            Contact contact = contactList.get(selectedAction - 1);
+            //выведем информацию по контакту
+            showContact(contact);
+            //предложим дальнейшие действия с найденым контактом
+            changeContact(contact);
+
+            continue;
         }
     }
 
-    public void showContactListGroup() {
+    public void showContactListGroup() throws IOException {
+        showGroupList();
+        while (true) {
+            System.out.println("Укажите номер группы, для отмены наберите 0: ");
+            String strReader = reader.readLine();
+            int selectedAction = valid.actionValid(strReader);
+
+            if (selectedAction == 0) break;
+            List<Group> groupList = groupService.getGroupsList();
+            if (selectedAction > groupList.size() || selectedAction < 0) continue;
+            showContactList(groupList.get(selectedAction - 1));
+        }
 
     }
 
@@ -174,5 +315,29 @@ public class ContactController {
 
     public void setContactService(ContactService contactService) {
         this.contactService = contactService;
+    }
+
+    public BufferedReader getReader() {
+        return reader;
+    }
+
+    public void setReader(BufferedReader reader) {
+        this.reader = reader;
+    }
+
+    public GroupService getGroupService() {
+        return groupService;
+    }
+
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
+    }
+
+    public Valid getValid() {
+        return valid;
+    }
+
+    public void setValid(Valid valid) {
+        this.valid = valid;
     }
 }

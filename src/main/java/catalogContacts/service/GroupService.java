@@ -3,23 +3,16 @@ package catalogContacts.service;
 import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by EvdokimovaIS on 13.07.2017.
+ * Created by iren on 16.07.2017.
  */
-public class GroupService implements Serializable{
-
-    List<Group> groupsList = new ArrayList<>();
-
-    public void saveGroup(Group group){
-        groupsList.add(group);
-
-    }
-
-    public List<Group> getGroupsList() {
-        return groupsList;
-    }
+public interface GroupService {
+    public void saveGroup(Group group);
+    public List<Group> getGroupsList();
+    public void deleteGroup(Group group);
+    public void changeContactListAdd(Contact group, List<Group> contact);
+    public void changeContactListDelete(Contact contact, List<Group> groupList);
+    public Group findByNumber(int number);
 }

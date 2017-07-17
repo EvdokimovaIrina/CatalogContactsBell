@@ -2,7 +2,6 @@ package catalogContacts.service;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,11 +24,11 @@ public class SavAndRestoreData {
             FileInputStream inpS = new FileInputStream("objects.dat");
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("objects.dat"));
             //ContactService contactService = ;
-            mapReturn.put("ContactService", (ContactService) in.readObject());
-            mapReturn.put("GroupService", (GroupService) in.readObject());
+            mapReturn.put("ContactService", (ContactServiceImpl) in.readObject());
+            mapReturn.put("GroupService", (GroupServiceImpl) in.readObject());
         } else {
-            mapReturn.put("ContactService", new ContactService());
-            mapReturn.put("GroupService", new GroupService());
+            mapReturn.put("ContactService", new ContactServiceImpl());
+            mapReturn.put("GroupService", new GroupServiceImpl());
         }
 
         // GroupService groupService = (GroupService) in.readObject();

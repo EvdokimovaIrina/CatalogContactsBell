@@ -1,11 +1,7 @@
 package catalogContacts;
 
-import catalogContacts.controller.ContactController;
-import catalogContacts.controller.Controller;
-import catalogContacts.controller.GroupController;
-import catalogContacts.service.ContactService;
-import catalogContacts.service.GroupService;
-import catalogContacts.service.SavAndRestoreData;
+import catalogContacts.controller.*;
+import catalogContacts.service.*;
 
 import java.io.*;
 import java.util.Map;
@@ -22,26 +18,18 @@ public class Main {
         SavAndRestoreData srData = new SavAndRestoreData();
         try {
             Map<String, Object> mapService = srData.deserialize();
-            contactService = (ContactService) mapService.get("ContactService");
-            groupService = (GroupService) mapService.get("GroupService");
+            contactService = (ContactServiceImpl) mapService.get("ContactService");
+            groupService = (GroupServiceImpl) mapService.get("GroupService");
 
         } catch (Exception e) {
-            e.printStackTrace(System.err);
+            //e.printStackTrace(System.err);
             System.out.println("Не удалось восстановить список контактов и групп");
-            contactService = new ContactService();
-            groupService = new GroupService();
+            contactService = new ContactServiceImpl();
+            groupService = new GroupServiceImpl();
         }
-        ContactController contactController = new ContactController();
-        contactController.setContactService(contactService);
-
-        GroupController groupController = new GroupController();
-        groupController.setGroupService(groupService);
-
-        Controller controller = new Controller();
-        controller.setContactController(contactController);
-        controller.setGroupController(groupController);
 
         //Запустим основное меню программы
+        Controller controller = setParametersController(contactService,groupService);
         controller.showMenu();
 
         //Сериализуем список контактов и групп
@@ -51,8 +39,32 @@ public class Main {
             e.printStackTrace();
             System.out.println("Не удалось сохранить списки");
         }
-
     }
 
+    //Установим нужные параметры в контроллерах
+    public static Controller setParametersController(ContactService contactService,GroupService groupService){
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        Valid valid = new ValidImpl();
+
+        ContactController contactController = new ContactController();
+        contactController.setContactService(contactService);
+        contactController.setGroupService(groupService);
+        contactController.setReader(reader);
+        contactController.setValid(valid);
+
+        GroupController groupController = new GroupController();
+        groupController.setGroupService(groupService);
+        groupController.setContactService(contactService);
+        groupController.setContactController(contactController);
+        groupController.setReader(reader);
+        groupController.setValid(valid);
+
+        Controller controller = new Controller();
+        controller.setContactController(contactController);
+        controller.setGroupController(groupController);
+        controller.setReader(reader);
+        controller.setValid(valid);
+        return controller;
+    }
 }
 

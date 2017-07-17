@@ -10,9 +10,10 @@ import java.io.InputStreamReader;
 public class Controller {
     private ContactController contactController;
     private GroupController groupController;
+    private BufferedReader reader;
+    private Valid valid;
 
     public void showMenu() {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         boolean continueCycle = true;
         while (continueCycle) {
             //При запуске выведем вопрос о необходимых действиях
@@ -26,8 +27,8 @@ public class Controller {
             try {
 
                 String strReader = reader.readLine();
-                int selectedAction = Integer.parseInt(strReader);
-                continueCycle = Action(reader, selectedAction);
+                int selectedAction = valid.actionValid(strReader);
+                continueCycle = Action(selectedAction);
 
             } catch (IOException e) {
                 System.out.println("Не известная команда!");
@@ -35,16 +36,16 @@ public class Controller {
         }
     }
 
-    public boolean Action(BufferedReader reader, int selectedAction) throws IOException {
+    public boolean Action(int selectedAction) throws IOException {
         switch (selectedAction) {
             case 1:
-                contactController.AddContact(reader);
+                contactController.AddContact();
                 return true;
             case 2:
-                groupController.AddGroup(reader);
+                groupController.AddGroup();
                 return true;
             case 3:
-                contactController.showContactList(reader);
+                contactController.showContactList(null);
                 return true;
             case 4:
                 contactController.showContactListGroup();
@@ -74,5 +75,21 @@ public class Controller {
 
     public void setContactController(ContactController contactController) {
         this.contactController = contactController;
+    }
+
+    public BufferedReader getReader() {
+        return reader;
+    }
+
+    public void setReader(BufferedReader reader) {
+        this.reader = reader;
+    }
+
+    public Valid getValid() {
+        return valid;
+    }
+
+    public void setValid(Valid valid) {
+        this.valid = valid;
     }
 }
