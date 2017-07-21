@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by iren on 15.07.2017.
  */
-public class SavAndRestoreDataImpl implements SavAndRestoreData{
+public class SavAndRestoreDataImpl implements SaveAndRestore{
 
     public void serialize() throws IOException {
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("objects.dat"));
