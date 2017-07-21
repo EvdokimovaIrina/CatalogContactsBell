@@ -10,7 +10,6 @@ import java.util.List;
  */
 public interface GroupService {
     public void saveGroup(Group group);
-    public List<Group> getGroupsList();
     public void deleteGroup(Group group);
     public void changeContactListAdd(Contact group, List<Group> contact);
     public void changeContactListDelete(Contact contact, List<Group> groupList);

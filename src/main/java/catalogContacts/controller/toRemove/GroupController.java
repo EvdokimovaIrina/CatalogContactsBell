@@ -1,9 +1,10 @@
-package catalogContacts.controller;
+package catalogContacts.controller.toRemove;
 
+import catalogContacts.controller.ValidController;
 import catalogContacts.model.Group;
+import catalogContacts.model.PhoneBook;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.GroupService;
-import catalogContacts.service.GroupServiceImpl;
 
 import java.io.*;
 import java.util.List;
@@ -16,7 +17,7 @@ public class GroupController {
     private ContactService contactService;
     private BufferedReader reader;
     private ContactController contactController;
-    private Valid valid;
+    private ValidController valid;
 
     public void AddGroup() throws IOException {
         System.out.println("Введите название группы: ");
@@ -34,7 +35,7 @@ public class GroupController {
     }
 
     public void showGroupList() throws IOException {
-        List<Group> groupsList = groupService.getGroupsList();
+        List<Group> groupsList = PhoneBook.groupsList;
         System.out.println("Список групп:");
 
         System.out.println("*************************");
@@ -129,11 +130,11 @@ public class GroupController {
         this.reader = reader;
     }
 
-    public Valid getValid() {
+    public ValidController getValid() {
         return valid;
     }
 
-    public void setValid(Valid valid) {
+    public void setValid(ValidController valid) {
         this.valid = valid;
     }
 

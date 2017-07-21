@@ -9,9 +9,11 @@ import java.util.List;
  * Created by iren on 16.07.2017.
  */
 public interface ContactService {
-    public void saveContact(Contact contact);
-    public void deleteContact(Contact contact);
-    public List<Contact> getContactsList();
-    public void changeGroupListAdd(Contact contact, List<Group> groupsList);
-    public void changeGroupListDelete(Contact contact, List<Group> groupsList);
+
+    void addContact(String name);
+    void saveContact(Contact contact);
+    void deleteContact(Contact contact);
+    void showListContact(Contact contact, List<Group> groupsList);
+    void changeGroupListAdd(Contact contact, List<Group> groupsList);
+    void changeGroupListDelete(Contact contact, List<Group> groupsList);
 }

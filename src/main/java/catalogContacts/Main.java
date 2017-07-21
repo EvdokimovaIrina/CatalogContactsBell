@@ -1,10 +1,19 @@
 package catalogContacts;
 
+import catalogContacts.controller.toRemove.ContactController;
+import catalogContacts.controller.toRemove.ControllerOld;
+import catalogContacts.controller.toRemove.GroupController;
+import catalogContacts.dao.SavAndRestoreDataImpl;
 import catalogContacts.controller.*;
-import catalogContacts.service.*;
+import catalogContacts.event.Observer;
+import catalogContacts.service.ContactService;
+import catalogContacts.service.ContactServiceImpl;
+import catalogContacts.service.GroupService;
+import catalogContacts.service.GroupServiceImpl;
+import catalogContacts.view.ValidViewImpl;
+import catalogContacts.view.ViewInput;
 
 import java.io.*;
-import java.util.Map;
 
 
 /**
@@ -13,12 +22,12 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
         //восстановим списки контактов и групп если они сериализованы
-        ContactService contactService = null;
+       /* ContactService contactService = null;
         GroupService groupService = null;
         SavAndRestoreData srData = new SavAndRestoreData();
         try {
             Map<String, Object> mapService = srData.deserialize();
-            contactService = (ContactServiceImpl) mapService.get("ContactService");
+            contactService = (ContactServiceImplOld) mapService.get("ContactService");
             groupService = (GroupServiceImpl) mapService.get("GroupService");
 
         } catch (Exception e) {
@@ -27,14 +36,27 @@ public class Main {
             contactService = new ContactServiceImpl();
             groupService = new GroupServiceImpl();
         }
+        */
+
 
         //Запустим основное меню программы
-        Controller controller = setParametersController(contactService,groupService);
-        controller.showMenu();
+        ViewInput viewInput = setParametersController();
+        SavAndRestoreDataImpl srData = new SavAndRestoreDataImpl();
+
+        try {
+            if (!srData.deserialize()){
+                System.out.println("Не удалось восстановить список контактов и групп");
+            }
+        } catch (Exception e) {
+            //e.printStackTrace(System.err);
+            System.out.println("Не удалось восстановить список контактов и групп");
+        }
+
+        viewInput.displayMainMenu();
 
         //Сериализуем список контактов и групп
         try {
-            srData.serialize(contactService, groupService);
+            srData.serialize();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Не удалось сохранить списки");
@@ -42,11 +64,21 @@ public class Main {
     }
 
     //Установим нужные параметры в контроллерах
-    public static Controller setParametersController(ContactService contactService,GroupService groupService){
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        Valid valid = new ValidImpl();
+    public static ViewInput setParametersController(){
 
-        ContactController contactController = new ContactController();
+        Controller controller = new Controller();
+        ContactService contactService = ContactServiceImpl.getInstance();
+        controller.setContactService(contactService);
+        controller.setGroupService(GroupServiceImpl.getInstance());
+        controller.setValidController(new ValidControllerImpl());
+
+        ViewInput viewInput = new ViewInput();
+        viewInput.addObserver(new Controller());
+        viewInput.setController(controller);
+        viewInput.setReader(new BufferedReader(new InputStreamReader(System.in)));
+        viewInput.setValid(new ValidViewImpl());
+
+        /*ContactController contactController = new ContactController();
         contactController.setContactService(contactService);
         contactController.setGroupService(groupService);
         contactController.setReader(reader);
@@ -59,12 +91,12 @@ public class Main {
         groupController.setReader(reader);
         groupController.setValid(valid);
 
-        Controller controller = new Controller();
+        ControllerOld controller = new ControllerOld();
         controller.setContactController(contactController);
         controller.setGroupController(groupController);
         controller.setReader(reader);
-        controller.setValid(valid);
-        return controller;
+        controller.setValid(valid);*/
+        return viewInput;
     }
 }
 

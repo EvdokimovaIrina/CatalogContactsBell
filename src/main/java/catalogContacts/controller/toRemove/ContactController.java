@@ -1,11 +1,12 @@
-package catalogContacts.controller;
+package catalogContacts.controller.toRemove;
 
 import catalogContacts.TypeContact;
+import catalogContacts.controller.ValidController;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
 import catalogContacts.model.Group;
+import catalogContacts.model.PhoneBook;
 import catalogContacts.service.ContactService;
-import catalogContacts.service.ContactServiceImpl;
 import catalogContacts.service.GroupService;
 
 import java.io.*;
@@ -20,7 +21,7 @@ public class ContactController {
     private ContactService contactService;
     private GroupService groupService;
     private BufferedReader reader;
-    private Valid valid;
+    private ValidController valid;
 
     public void AddContact() throws IOException {
         System.out.println("Введите имя контакта: ");
@@ -190,7 +191,7 @@ public class ContactController {
             List<Group> lisGroupForChange;
             switch (selectedAction) {
                 case 1:
-                    lisGroupForChange = CreatelisGroupForChange(contact, groupService.getGroupsList());
+                    lisGroupForChange = CreatelisGroupForChange(contact, PhoneBook.groupsList);
                     contactService.changeGroupListAdd(contact, lisGroupForChange);
                     groupService.changeContactListAdd(contact, lisGroupForChange);
                     break;
@@ -253,7 +254,7 @@ public class ContactController {
 
     public void showGroupList() {
         System.out.println("Все группы:");
-        for (Group group : groupService.getGroupsList()) {
+        for (Group group : PhoneBook.groupsList) {
             System.out.println(group.getNumber() + " " + group.getName());
         }
         System.out.println("*************************");
@@ -263,7 +264,7 @@ public class ContactController {
     public void showContactList(Group group) throws IOException {
         List<Contact> contactList = new ArrayList();
         if (group == null) {
-            contactList = contactService.getContactsList();
+            contactList = PhoneBook.contactsList;
         } else {
             contactList = group.getContactList();
         }
@@ -302,7 +303,7 @@ public class ContactController {
             int selectedAction = valid.actionValid(strReader);
 
             if (selectedAction == 0) break;
-            List<Group> groupList = groupService.getGroupsList();
+            List<Group> groupList = PhoneBook.groupsList;
             if (selectedAction > groupList.size() || selectedAction < 0) continue;
             showContactList(groupList.get(selectedAction - 1));
         }
@@ -333,11 +334,11 @@ public class ContactController {
         this.groupService = groupService;
     }
 
-    public Valid getValid() {
+    public ValidController getValid() {
         return valid;
     }
 
-    public void setValid(Valid valid) {
+    public void setValid(ValidController valid) {
         this.valid = valid;
     }
 }

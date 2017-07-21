@@ -1,95 +1,60 @@
 package catalogContacts.controller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import catalogContacts.TypeContact;
+import catalogContacts.event.ObservableViewInput;
+import catalogContacts.event.Observer;
+import catalogContacts.event.ObserverForViewImpl;
+import catalogContacts.service.ContactService;
+import catalogContacts.service.ContactServiceImpl;
+import catalogContacts.service.GroupService;
+import catalogContacts.service.GroupServiceImpl;
 
 /**
- * Created by EvdokimovaIS on 13.07.2017.
+ * Created by iren on 20.07.2017.
  */
-public class Controller {
-    private ContactController contactController;
-    private GroupController groupController;
-    private BufferedReader reader;
-    private Valid valid;
+public class Controller implements ObserverForViewImpl{
+    private ContactService contactService;
+    private GroupService groupService;
+    private ValidController validController;
 
-    public void showMenu() {
-        boolean continueCycle = true;
-        while (continueCycle) {
-            //При запуске выведем вопрос о необходимых действиях
-            System.out.println("Выберите пункт меню");
-            System.out.println("1 - создать новый контакт");
-            System.out.println("2 - создать новую группу");
-            System.out.println("3 - вывести список");
-            System.out.println("4 - вывести список по группе");
-            System.out.println("5 - вывести список групп");
-            System.out.println("0 - выход");
-            try {
-
-                String strReader = reader.readLine();
-                int selectedAction = valid.actionValid(strReader);
-                continueCycle = Action(selectedAction);
-
-            } catch (IOException e) {
-                System.out.println("Не известная команда!");
-            }
-        }
+    public ContactService getContactService() {
+        return contactService;
     }
 
-    public boolean Action(int selectedAction) throws IOException {
-        switch (selectedAction) {
-            case 1:
-                contactController.AddContact();
-                return true;
-            case 2:
-                groupController.AddGroup();
-                return true;
-            case 3:
-                contactController.showContactList(null);
-                return true;
-            case 4:
-                contactController.showContactListGroup();
-                return true;
-            case 5:
-                groupController.showGroupList();
-                return true;
-            case 0:
-                return false;
-            default:
-                return true;
-        }
+    public void handleEventMenuSelection(int item) {
+
+    }
+
+    public Controller(){
+        this.contactService = ContactServiceImpl.getInstance();
+        this.groupService = GroupServiceImpl.getInstance();
+        this.validController = new ValidControllerImpl();
+    }
+
+    public void handleEventAddContact(String name) {
+        contactService.addContact(name);
+    }
+
+    public void setContactService(ContactService contactService) {
+        this.contactService = contactService;
+    }
+
+    public GroupService getGroupService() {
+        return groupService;
+    }
+
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
+    }
+
+    public ValidController getValidController() {
+        return validController;
+    }
+
+    public void setValidController(ValidController validController) {
+        this.validController = validController;
     }
 
 
-    public GroupController getGroupController() {
-        return groupController;
-    }
 
-    public void setGroupController(GroupController groupController) {
-        this.groupController = groupController;
-    }
-
-    public ContactController getContactController() {
-        return contactController;
-    }
-
-    public void setContactController(ContactController contactController) {
-        this.contactController = contactController;
-    }
-
-    public BufferedReader getReader() {
-        return reader;
-    }
-
-    public void setReader(BufferedReader reader) {
-        this.reader = reader;
-    }
-
-    public Valid getValid() {
-        return valid;
-    }
-
-    public void setValid(Valid valid) {
-        this.valid = valid;
-    }
 }

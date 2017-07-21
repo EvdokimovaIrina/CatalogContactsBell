@@ -5,7 +5,7 @@ import catalogContacts.model.Contact;
 
 import java.io.Serializable;
 
-public class ContactDetails implements Serializable {
+public class ContactDetails implements Serializable,Details {
     private Contact owner;
     private TypeContact type;
     private String value;
