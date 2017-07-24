@@ -1,4 +1,4 @@
-package catalogContacts.view.validImpl;
+package catalogContacts.view.impl;
 
 import catalogContacts.view.ValidView;
 

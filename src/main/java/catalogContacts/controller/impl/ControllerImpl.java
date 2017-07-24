@@ -1,11 +1,11 @@
-package catalogContacts.controller.controllerImpl;
+package catalogContacts.controller.impl;
 
 import catalogContacts.controller.Controller;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
-import catalogContacts.service.serviceImpl.ContactServiceImpl;
+import catalogContacts.service.impl.ContactServiceImpl;
 import catalogContacts.service.GroupService;
-import catalogContacts.service.serviceImpl.GroupServiceImpl;
+import catalogContacts.service.impl.GroupServiceImpl;
 
 import java.util.Map;
 

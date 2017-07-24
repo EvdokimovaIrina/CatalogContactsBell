@@ -1,6 +1,5 @@
 package catalogContacts.service;
 
-import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
 
 import java.util.List;

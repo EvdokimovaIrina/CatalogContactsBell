@@ -1,10 +1,7 @@
 package catalogContacts.service;
 
 import catalogContacts.model.Contact;
-import catalogContacts.model.Group;
 import catalogContacts.model.TypeContact;
-
-import java.util.List;
 import java.util.Map;
 
 /**

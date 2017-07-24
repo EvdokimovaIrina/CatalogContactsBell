@@ -1,13 +1,13 @@
-package catalogContacts.service.serviceImpl;
+package catalogContacts.service.impl;
 
 import catalogContacts.event.Event;
-import catalogContacts.event.Observable;
 import catalogContacts.event.Observer;
 import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
-import catalogContacts.model.TypeEvent;
+import catalogContacts.event.TypeEvent;
+import catalogContacts.model.PhoneBook;
 import catalogContacts.service.GroupService;
-import catalogContacts.view.viewImpl.ViewOutput;
+import catalogContacts.view.impl.ViewOutput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by EvdokimovaIS on 13.07.2017.
  */
-public class GroupServiceImpl implements GroupService, Observable {
+public final class GroupServiceImpl implements GroupService, Observer.Observable {
     private static GroupServiceImpl instance;
     private List<Contact> contactList;
     private List<Group> groupList;
@@ -23,6 +23,8 @@ public class GroupServiceImpl implements GroupService, Observable {
 
     // Singleton
     private GroupServiceImpl() {
+        this.contactList = PhoneBook.getPhoneBook().getContactsList();
+        this.groupList = PhoneBook.getPhoneBook().getGroupsList();
     }
 
     public static synchronized GroupServiceImpl getInstance() {
@@ -112,19 +114,4 @@ public class GroupServiceImpl implements GroupService, Observable {
         return group;
     }
 
-    public List<Contact> getContactList() {
-        return contactList;
-    }
-
-    public void setContactList(List<Contact> contactList) {
-        this.contactList = contactList;
-    }
-
-    public List<Group> getGroupList() {
-        return groupList;
-    }
-
-    public void setGroupList(List<Group> groupList) {
-        this.groupList = groupList;
-    }
 }

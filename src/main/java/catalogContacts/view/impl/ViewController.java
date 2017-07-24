@@ -1,4 +1,4 @@
-package catalogContacts.view.viewImpl;
+package catalogContacts.view.impl;
 
 import catalogContacts.controller.*;
 import catalogContacts.model.*;

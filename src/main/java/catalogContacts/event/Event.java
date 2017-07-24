@@ -1,7 +1,5 @@
 package catalogContacts.event;
 
-import catalogContacts.model.TypeEvent;
-
 /**
  * Created by iren on 22.07.2017.
  */

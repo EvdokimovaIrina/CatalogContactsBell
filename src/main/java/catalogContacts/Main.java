@@ -1,14 +1,14 @@
 package catalogContacts;
 
-import catalogContacts.controller.controllerImpl.ControllerImpl;
-import catalogContacts.dao.SavAndRestoreDataImpl;
+import catalogContacts.controller.impl.ControllerImpl;
+import catalogContacts.dao.impl.SavAndRestoreDataImpl;
 import catalogContacts.controller.*;
 import catalogContacts.model.PhoneBook;
-import catalogContacts.service.serviceImpl.ContactServiceImpl;
-import catalogContacts.service.serviceImpl.GroupServiceImpl;
-import catalogContacts.view.validImpl.ValidViewImpl;
-import catalogContacts.view.viewImpl.ViewController;
-import catalogContacts.view.viewImpl.ViewOutput;
+import catalogContacts.service.impl.ContactServiceImpl;
+import catalogContacts.service.impl.GroupServiceImpl;
+import catalogContacts.view.impl.ValidViewImpl;
+import catalogContacts.view.impl.ViewController;
+import catalogContacts.view.impl.ViewOutput;
 
 import java.io.*;
 
@@ -18,22 +18,7 @@ import java.io.*;
  */
 public class Main {
     public static void main(String[] args) {
-        //восстановим списки контактов и групп если они сериализованы
-       /* ContactService contactService = null;
-        GroupService groupService = null;
-        SavAndRestoreData srData = new SavAndRestoreData();
-        try {
-            Map<String, Object> mapService = srData.deserialize();
-            contactService = (ContactServiceImplOld) mapService.get("ContactService");
-            groupService = (GroupServiceImpl) mapService.get("GroupService");
 
-        } catch (Exception e) {
-            //e.printStackTrace(System.err);
-            System.out.println("Не удалось восстановить список контактов и групп");
-            contactService = new ContactServiceImpl();
-            groupService = new GroupServiceImpl();
-        }
-        */
         //востановим данные
         SavAndRestoreDataImpl srData = new SavAndRestoreDataImpl();
 
@@ -42,8 +27,7 @@ public class Main {
                 System.out.println("Не удалось восстановить список контактов и групп");
             }
         } catch (Exception e) {
-            //e.printStackTrace(System.err);
-            System.out.println("Не удалось восстановить список контактов и групп");
+               System.out.println("Не удалось восстановить список контактов и групп");
         }
 
         //Запустим основное меню программы
@@ -66,19 +50,15 @@ public class Main {
 
 
         ContactServiceImpl contactService = ContactServiceImpl.getInstance();
-        contactService.setContactList(PhoneBook.getPhoneBook().getContactsList());
-        contactService.setGroupList(PhoneBook.getPhoneBook().getGroupsList());
 
         GroupServiceImpl groupService = GroupServiceImpl.getInstance();
-        groupService.setContactList(PhoneBook.getPhoneBook().getContactsList());
-        groupService.setGroupList(PhoneBook.getPhoneBook().getGroupsList());
 
         contactService.addObserver(new ViewOutput());
         Controller controller = new ControllerImpl(contactService,groupService);
 
         ViewController viewInput = new ViewController();
         viewInput.setController(controller);
-        //viewInput.setReader(new BufferedReader(new InputStreamReader(System.in)));
+
         viewInput.setValid(new ValidViewImpl());
 
 

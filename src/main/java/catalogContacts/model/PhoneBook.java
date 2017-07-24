@@ -10,8 +10,11 @@ import java.util.List;
 public class PhoneBook implements Serializable {
     private List<Contact> contactsList = new ArrayList<>();
     private List<Group> groupsList = new ArrayList<>();
-    private static PhoneBook instance;
+    public static PhoneBook instance;
 
+    private PhoneBook(){
+
+    }
 
     public static synchronized PhoneBook getPhoneBook(){
         if (instance == null) {

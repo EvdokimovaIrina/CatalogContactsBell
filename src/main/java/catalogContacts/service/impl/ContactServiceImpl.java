@@ -1,8 +1,8 @@
-package catalogContacts.service.serviceImpl;
+package catalogContacts.service.impl;
 
 import catalogContacts.event.Event;
-import catalogContacts.event.Observable;
 import catalogContacts.event.Observer;
+import catalogContacts.event.TypeEvent;
 import catalogContacts.model.*;
 import catalogContacts.service.ContactService;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by iren on 20.07.2017.
  */
-public final class ContactServiceImpl implements ContactService, Observable {
+public final class ContactServiceImpl implements ContactService, Observer.Observable {
     private static ContactServiceImpl instance;
     private List<Contact> contactList;
     private List<Group> groupList;
@@ -21,6 +21,8 @@ public final class ContactServiceImpl implements ContactService, Observable {
 
     // Singleton
     private ContactServiceImpl() {
+        this.contactList = PhoneBook.getPhoneBook().getContactsList();
+        this.groupList = PhoneBook.getPhoneBook().getGroupsList();
     }
 
     public static synchronized ContactServiceImpl getInstance() {
@@ -212,11 +214,4 @@ public final class ContactServiceImpl implements ContactService, Observable {
     }
     /////////////////
 
-    public void setContactList(List<Contact> contactList) {
-        this.contactList = contactList;
-    }
-
-    public void setGroupList(List<Group> groupList) {
-        this.groupList = groupList;
-    }
 }
