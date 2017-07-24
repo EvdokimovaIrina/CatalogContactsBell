@@ -1,30 +1,17 @@
 package catalogContacts.model;
 
-import catalogContacts.TypeContact;
-import catalogContacts.model.Contact;
-
 import java.io.Serializable;
 
-public class ContactDetails implements Serializable,Details {
-    private Contact owner;
+public class ContactDetails implements Serializable {
     private TypeContact type;
     private String value;
 
-    public ContactDetails(Contact owner, TypeContact type, String value){
-        this.owner = owner;
+    public ContactDetails(TypeContact type, String value){
         this.type = type;
         this.value = value;
     }
 
     public ContactDetails() {
-    }
-
-    public Contact getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Contact owner) {
-        this.owner = owner;
     }
 
     public TypeContact getType() {

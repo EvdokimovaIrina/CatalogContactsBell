@@ -1,7 +1,6 @@
-package catalogContacts.view;
+package catalogContacts.view.validImpl;
 
-import catalogContacts.TypeContact;
-import catalogContacts.controller.ValidController;
+import catalogContacts.view.ValidView;
 
 /**
  * Created by iren on 16.07.2017.

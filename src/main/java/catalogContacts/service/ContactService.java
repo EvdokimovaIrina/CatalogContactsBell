@@ -2,8 +2,10 @@ package catalogContacts.service;
 
 import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
+import catalogContacts.model.TypeContact;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by iren on 16.07.2017.
@@ -11,9 +13,14 @@ import java.util.List;
 public interface ContactService {
 
     void addContact(String name);
+    void addContactDetails(int numberContact,Map<TypeContact,String> mapDetails);
     void saveContact(Contact contact);
-    void deleteContact(Contact contact);
-    void showListContact(Contact contact, List<Group> groupsList);
-    void changeGroupListAdd(Contact contact, List<Group> groupsList);
-    void changeGroupListDelete(Contact contact, List<Group> groupsList);
+    void deleteContact(int numberContact);
+    void deleteContactDetails(int numberContact,int numberContactDetails);
+    void ChangeSelectedContactDetails(int numberContact,int numberContactDetails,String value);
+    void showContactList(Integer numberGroup);
+    void showContactDetails(int numberContact);
+    void changeContact(int numberContact,String value);
+    void addGroupToContact(int numberContact, int numberGroup);
+    void deleteGroupToContact(int numberContact, int numberGroup);
 }

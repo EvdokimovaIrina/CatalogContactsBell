@@ -1,17 +1,8 @@
 package catalogContacts.dao;
 
-import catalogContacts.model.Contact;
-import catalogContacts.model.Group;
 import catalogContacts.model.PhoneBook;
-import catalogContacts.service.ContactService;
-import catalogContacts.service.toRemove.ContactServiceImplOld;
-import catalogContacts.service.GroupService;
-import catalogContacts.service.GroupServiceImpl;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by iren on 15.07.2017.
@@ -20,8 +11,7 @@ public class SavAndRestoreDataImpl implements SaveAndRestore{
 
     public void serialize() throws IOException {
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("objects.dat"));
-        out.writeObject(PhoneBook.contactsList);
-        out.writeObject(PhoneBook.groupsList);
+        out.writeObject(PhoneBook.getPhoneBook());
         out.close();
     }
 
@@ -31,9 +21,10 @@ public class SavAndRestoreDataImpl implements SaveAndRestore{
         if (file.exists()) {
             FileInputStream inpS = new FileInputStream("objects.dat");
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("objects.dat"));
-
-            PhoneBook.contactsList = (List<Contact>) in.readObject();
-            PhoneBook.groupsList = (List<Group>) in.readObject();
+            PhoneBook phoneBookDeserialize = (PhoneBook) in.readObject();
+            PhoneBook phoneBook = PhoneBook.getPhoneBook();
+            phoneBook.setContactsList(phoneBookDeserialize.getContactsList());
+            phoneBook.setGroupsList(phoneBookDeserialize.getGroupsList());
         } else {
            return false;
         }

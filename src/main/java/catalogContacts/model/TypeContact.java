@@ -1,4 +1,4 @@
-package catalogContacts;
+package catalogContacts.model;
 
 /**
  * Created by iren on 12.07.2017.

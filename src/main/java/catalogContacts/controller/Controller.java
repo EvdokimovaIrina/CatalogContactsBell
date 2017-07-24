@@ -1,60 +1,41 @@
 package catalogContacts.controller;
 
-import catalogContacts.TypeContact;
-import catalogContacts.event.ObservableViewInput;
-import catalogContacts.event.Observer;
-import catalogContacts.event.ObserverForViewImpl;
+import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
-import catalogContacts.service.ContactServiceImpl;
 import catalogContacts.service.GroupService;
-import catalogContacts.service.GroupServiceImpl;
+
+import java.util.Map;
 
 /**
- * Created by iren on 20.07.2017.
+ * Created by iren on 24.07.2017.
  */
-public class Controller implements ObserverForViewImpl{
-    private ContactService contactService;
-    private GroupService groupService;
-    private ValidController validController;
+public interface Controller {
+    void addContact(String name);
 
-    public ContactService getContactService() {
-        return contactService;
-    }
+    void addGroup(String name);
 
-    public void handleEventMenuSelection(int item) {
+    void addDetails(int number, Map<TypeContact, String> mapDetails);
 
-    }
+    void addGroupToContact(int numberContact, int numberGroup);
 
-    public Controller(){
-        this.contactService = ContactServiceImpl.getInstance();
-        this.groupService = GroupServiceImpl.getInstance();
-        this.validController = new ValidControllerImpl();
-    }
+    void deleteGroupToContact(int numberContact, int numberGroup);
 
-    public void handleEventAddContact(String name) {
-        contactService.addContact(name);
-    }
+    void showContactList(Integer numberGroup);
 
-    public void setContactService(ContactService contactService) {
-        this.contactService = contactService;
-    }
+    void showDetails(Integer numberContact);
 
-    public GroupService getGroupService() {
-        return groupService;
-    }
+    void showGroupList();
 
-    public void setGroupService(GroupService groupService) {
-        this.groupService = groupService;
-    }
+    void deletContact(int numberContact);
 
-    public ValidController getValidController() {
-        return validController;
-    }
+    void deletContactDetails(int numberContact, int numberContactDetails);
 
-    public void setValidController(ValidController validController) {
-        this.validController = validController;
-    }
+    void ChangeSelectedContactDetails(int numberContact, int numberContactDetails, String value);
 
+    void deletGroup(int numberGroup);
 
+    void changeGroup(int numberGroup, String value);
+
+    void changeContact(int numberContact, String value);
 
 }
