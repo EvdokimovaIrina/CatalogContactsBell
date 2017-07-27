@@ -11,6 +11,9 @@ public class Group implements Serializable {
     private String name;
     private int number;
 
+    public Group(){
+    }
+
     public Group(String name){
         this.name = name;
     }

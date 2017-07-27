@@ -10,14 +10,19 @@ public class Contact implements Serializable {
     private List<Group> groupList = new ArrayList<>();
     private List<ContactDetails> contactDetailsList = new ArrayList<>();
 
+    public Contact() {
+
+    }
+
     public Contact(String fio) {
         this.fio = fio;
     }
 
-    public Contact(String fio,int number) {
+    public Contact(String fio, int number) {
         this.fio = fio;
         this.number = number;
     }
+
 
     public Contact(String fio, int number, List<Group> groupList, List<ContactDetails> contactDetailsList) {
         this.fio = fio;
@@ -45,7 +50,7 @@ public class Contact implements Serializable {
 
     public void setFio(String fio) {
         this.fio = fio;
-      }
+    }
 
     public List<Group> getGroup() {
         return groupList;

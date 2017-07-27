@@ -1,5 +1,8 @@
 package catalogContacts.service.impl;
 
+import catalogContacts.dao.CrudDAO;
+import catalogContacts.dao.factory.AbstractFactoryDao;
+import catalogContacts.dao.factory.impl.FactoryDaoDOM;
 import catalogContacts.event.Event;
 import catalogContacts.event.Observer;
 import catalogContacts.event.TypeEvent;
@@ -21,8 +24,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
 
     // Singleton
     private ContactServiceImpl() {
-        this.contactList = PhoneBook.getPhoneBook().getContactsList();
-        this.groupList = PhoneBook.getPhoneBook().getGroupsList();
+
     }
 
     public static synchronized ContactServiceImpl getInstance() {
@@ -75,14 +77,13 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
         }
     }
 
-    //Сохранение контакта в списке
+    //Сохранение контакта в хранилище
     public void saveContact(Contact contact) {
-        if (!contactList.contains(contact)) {
-            //т.к. такого контакта еще нет, то установим ему номер и добавим в список
-            contactList.add(contact);
-            contact.setNumber(contactList.indexOf(contact) + 1);
-        }
-        notifyObserver(TypeEvent.showContactList, contactList,null);
+        AbstractFactoryDao factoryDao = new FactoryDaoDOM();
+        CrudDAO<Contact> contactCrudDAO = factoryDao.createDao();
+        contactCrudDAO.create(contact);
+
+        // notifyObserver(TypeEvent.showContactList, contactList,null);
     }
 
     //удаление контакта из списка
