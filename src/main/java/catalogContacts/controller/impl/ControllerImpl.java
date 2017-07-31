@@ -36,20 +36,20 @@ public class ControllerImpl implements Controller{
     }
 
     public void addDetails(int number, Map<TypeContact, String> mapDetails) {
-        contactService.addContactDetails(number-1,mapDetails);
+        contactService.addContactDetails(number,mapDetails);
     }
 
     public void addGroupToContact(int numberContact, int numberGroup) {
-        contactService.addGroupToContact(numberContact-1,numberGroup-1);
+        contactService.addGroupToContact(numberContact,numberGroup);
     }
 
     public void deleteGroupToContact(int numberContact, int numberGroup) {
-        contactService.deleteGroupToContact(numberContact-1,numberGroup-1);
+        contactService.deleteGroupToContact(numberContact,numberGroup);
     }
 
     public void showContactList(Integer numberGroup) {
         if (!(numberGroup==null)){
-            contactService.showContactList(numberGroup - 1);
+            contactService.showContactList(numberGroup );
         }else {
             contactService.showContactList(null);
         }
@@ -57,7 +57,7 @@ public class ControllerImpl implements Controller{
     }
 
     public void showDetails(Integer numberContact) {
-        contactService.showContactDetails(numberContact - 1);
+        contactService.showContactDetails(numberContact);
     }
 
     public void showGroupList() {
@@ -65,23 +65,23 @@ public class ControllerImpl implements Controller{
     }
 
     public void deletContact(int numberContact) {
-        contactService.deleteContact(numberContact - 1);
+        contactService.deleteContact(numberContact );
     }
 
     public void deletContactDetails(int numberContact,int numberContactDetails) {
-        contactService.deleteContactDetails(numberContact-1,numberContactDetails - 1);
+        contactService.deleteContactDetails(numberContact,numberContactDetails );
     }
 
     public void ChangeSelectedContactDetails(int numberContact,int numberContactDetails,String value){
-        contactService.ChangeSelectedContactDetails(numberContact-1,numberContactDetails - 1,value);
+        contactService.ChangeSelectedContactDetails(numberContact,numberContactDetails,value);
     }
 
     public void deletGroup(int numberGroup) {
-        groupService.deleteGroup(numberGroup - 1);
+        groupService.deleteGroup(numberGroup);
     }
 
     public void changeGroup(int numberGroup,String value) {
-        groupService.changeGroup(numberGroup - 1,value);
+        groupService.changeGroup(numberGroup,value);
     }
 
 

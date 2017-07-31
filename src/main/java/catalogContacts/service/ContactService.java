@@ -1,8 +1,10 @@
 package catalogContacts.service;
 
 import catalogContacts.dao.CrudDAO;
+import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.dao.factory.AbstractFactoryDao;
 import catalogContacts.model.Contact;
+import catalogContacts.model.Group;
 import catalogContacts.model.TypeContact;
 import java.util.Map;
 
@@ -22,5 +24,6 @@ public interface ContactService {
     void changeContact(int numberContact,String value);
     void addGroupToContact(int numberContact, int numberGroup);
     void deleteGroupToContact(int numberContact, int numberGroup);
-    void setFactoryDao(AbstractFactoryDao<CrudDAO> factoryDao);
+    void setCrudDAOContact(CrudDAO<Contact> crudDAO);
+    void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup);
 }

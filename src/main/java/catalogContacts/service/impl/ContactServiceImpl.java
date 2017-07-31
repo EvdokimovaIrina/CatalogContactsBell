@@ -1,6 +1,7 @@
 package catalogContacts.service.impl;
 
 import catalogContacts.dao.CrudDAO;
+import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.dao.factory.AbstractFactoryDao;
 import catalogContacts.event.Event;
 import catalogContacts.event.Observer;
@@ -8,6 +9,7 @@ import catalogContacts.event.TypeEvent;
 import catalogContacts.model.*;
 import catalogContacts.service.ContactService;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +19,8 @@ import java.util.Map;
  */
 public final class ContactServiceImpl implements ContactService, Observer.Observable {
     private static ContactServiceImpl instance;
-    private AbstractFactoryDao<CrudDAO> factoryDao;
-    private List<Contact> contactList;
-    private List<Group> groupList;
+    private CrudDAO<Contact> crudDAOContact;
+    private CrudDAO<Group> crudDAOGroup;
     private List<Observer> ObserversList = new ArrayList<>();
 
     // Singleton
@@ -35,8 +36,13 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
     }
     //////
 
-    public void setFactoryDao(AbstractFactoryDao<CrudDAO> factoryDao) {
-        this.factoryDao = factoryDao;
+
+    public void setCrudDAOContact(CrudDAO<Contact> crudDAOContact) {
+        this.crudDAOContact = crudDAOContact;
+    }
+
+    public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
+        this.crudDAOGroup = crudDAOGroup;
     }
 
     //работа с наблюдателями
@@ -55,10 +61,13 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
 
     public void notifyObserver(TypeEvent typeEvent, Object mainObject, Object value) {
         for (Observer observer : ObserversList) {
-            observer.handleEvent(new Event(typeEvent, mainObject,value));
+            observer.handleEvent(new Event(typeEvent, mainObject, value));
         }
     }
 
+    private void notifyObserverWithAneError(DaoXmlException e) {
+        notifyObserver(TypeEvent.ERROR, e.getMessage(), null);
+    }
     ////////
 
     //
@@ -66,156 +75,199 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
     public void addContact(String name) {
         Contact contact = new Contact(name);
         contact.setContactDetailsList(new ArrayList<>());
+        contact.setGroupList(new ArrayList<>());
         saveContact(contact);
     }
 
-    public void addContactDetails(int numberContact,Map<TypeContact, String> mapDetails) {
-        if (numberWithinBorders(numberContact, contactList.size())){
-            Contact contact = contactList.get(numberContact);
+    public void addContactDetails(int numberContact, Map<TypeContact, String> mapDetails) {
+
+        Contact contact = null;
+
+        try {
+            contact = crudDAOContact.getObject(numberContact);
+
             for (Map.Entry entry : mapDetails.entrySet()) {
-                ContactDetails contactDetails = new ContactDetails((TypeContact) entry.getKey(),(String) entry.getValue());
+                ContactDetails contactDetails = new ContactDetails((TypeContact) entry.getKey(), (String) entry.getValue());
                 contact.getContactDetailsList().add(contactDetails);
             }
-            notifyObserver(TypeEvent.showContactDetails,contact,mapDetails);
+            crudDAOContact.update(contact);
+            notifyObserver(TypeEvent.showContactDetails, contact, mapDetails);
 
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
     }
 
     //Сохранение контакта в хранилище
     public void saveContact(Contact contact) {
-        CrudDAO<Contact> contactCrudDAO = factoryDao.createDao(Contact.class);
-        contactCrudDAO.create(contact);
+        try {
+            contact.setNumber(crudDAOContact.toFormANewId());
+            crudDAOContact.create(contact);
+            List<Contact> contactList = crudDAOContact.getAll();
+            notifyObserver(TypeEvent.showContactList, contactList, null);
 
-        // notifyObserver(TypeEvent.showContactList, contactList,null);
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
+        }
+
+
     }
 
     //удаление контакта из списка
     public void deleteContact(int numberContact) {
-        // если номер в пределах, то удалим контакт с выбранным номером
-        if (numberWithinBorders(numberContact, contactList.size())){
-           contactList.remove(numberContact);
+        try {
+            crudDAOContact.delete(numberContact);
+
+            notifyObserver(TypeEvent.showContactList, crudDAOContact.getAll(), null);
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
 
-        //после удаления контакта переберем список и изменим номера в контактах
-        for (int i = 0; i < contactList.size(); i++) {
-            Contact contact1 = contactList.get(i);
-            contact1.setNumber(i + 1);
-        }
-
-        notifyObserver(TypeEvent.showContactList, contactList,null);
     }
 
     public void deleteContactDetails(int numberContact, int numberContactDetails) {
-        Contact contact = getContactByNumber(numberContact);
-        if (!(contact==null)){
+
+        try {
+            Contact contact = getContactByNumber(numberContact);
+
             List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
-            if(numberContactDetails>=0&numberContactDetails<contactDetailsList.size()){
+            if (numberContactDetails >= 0 & numberContactDetails < contactDetailsList.size()) {
                 contactDetailsList.remove(numberContactDetails);
-            }else {
-                notifyObserver(TypeEvent.errorNumber,null,null);
+            } else {
+                notifyObserver(TypeEvent.errorNumber, null, null);
             }
+            crudDAOContact.update(contact);
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
+
     }
 
-    public void ChangeSelectedContactDetails(int numberContact, int numberContactDetails,String value) {
-        Contact contact = getContactByNumber(numberContact);
-        if (!(contact==null)){
+    public void ChangeSelectedContactDetails(int numberContact, int numberContactDetails, String value) {
+        try {
+            Contact contact = getContactByNumber(numberContact);
+
             List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
-            if(numberContactDetails>=0&numberContactDetails<contactDetailsList.size()){
+            if (numberContactDetails >= 0 & numberContactDetails < contactDetailsList.size()) {
                 contactDetailsList.get(numberContactDetails).setValue(value);
-            }else {
-                notifyObserver(TypeEvent.errorNumber,null,null);
+            } else {
+                notifyObserver(TypeEvent.errorNumber, null, null);
             }
+            crudDAOContact.update(contact);
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
     }
 
     public void showContactList(Integer numberGroup) {
         if (numberGroup == null) {
-            notifyObserver(TypeEvent.showContactList, contactList,null);
+            try {
+                notifyObserver(TypeEvent.showContactList, crudDAOContact.getAll(), null);
+            } catch (DaoXmlException e) {
+                notifyObserverWithAneError(e);
+            }
         } else {
             Group group = GroupServiceImpl.getInstance().findByNumber(numberGroup);
-            notifyObserver(TypeEvent.showContactListFromGroup, contactListFromGroup(group),group);
+            notifyObserver(TypeEvent.showContactListFromGroup, contactListFromGroup(group), group);
         }
 
     }
 
     public List<Contact> contactListFromGroup(Group group) {
         List<Contact> list = new ArrayList<>();
-        for (Contact contact : contactList) {
-            if (contact.getGroupList().contains(group)) {
-                list.add(contact);
+        try {
+            for (Contact contact : crudDAOContact.getAll()) {
+                if (contact.getGroupList().contains(group)) {
+                    list.add(contact);
+                }
             }
+        } catch (DaoXmlException ignored) {
+
         }
         return list;
     }
 
 
-    public Contact getContactByNumber(int numberContact){
-        Contact contact = null;
-        if (numberWithinBorders(numberContact, contactList.size())) {
-            contact = contactList.get(numberContact);
-        }
+    public Contact getContactByNumber(int numberContact) throws DaoXmlException {
+        Contact contact = crudDAOContact.getObject(numberContact);
+
         return contact;
     }
 
     public void showContactDetails(int numberContact) {
-        Contact contact = getContactByNumber(numberContact);
-        if (!(contact ==null)){
-            notifyObserver(TypeEvent.showContactData,contact,null);
+
+        try {
+            Contact contact = getContactByNumber(numberContact);
+
+            notifyObserver(TypeEvent.showContactData, contact, null);
+
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
+
 
     }
 
-    public void changeContact(int numberContact,String value) {
-        Contact contact = getContactByNumber(numberContact);
-        if (!(contact ==null)){
-            contact.setFio(value);
-            notifyObserver(TypeEvent.showContactData,contact,null);
+    public void changeContact(int numberContact, String value) {
+
+        try {
+            Contact contact = getContactByNumber(numberContact);
+            if (!(contact == null)) {
+                contact.setFio(value);
+                crudDAOContact.update(contact);
+                notifyObserver(TypeEvent.showContactData, contact, null);
+            }
+
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
+
 
     }
 
     public void addGroupToContact(int numberContact, int numberGroup) {
-        Contact contact = getContactByNumber(numberContact);
-        Group group = getGroupByNumber(numberGroup);
-        if (!(contact ==null)&!(group ==null)){
-            contact.getGroupList().add(group);
-            notifyObserver(TypeEvent.showContactData,contact,null);
+
+        try {
+            Contact contact = getContactByNumber(numberContact);
+            Group group = getGroupByNumber(numberGroup);
+            if (!(contact == null) & !(group == null)) {
+                contact.getGroupList().add(group);
+                crudDAOContact.update(contact);
+                notifyObserver(TypeEvent.showContactData, contact, null);
+            }
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
+
     }
 
     public void deleteGroupToContact(int numberContact, int numberGroup) {
-        Contact contact = getContactByNumber(numberContact);
-        Group group = getGroupByNumber(numberGroup);
-        if (!(contact == null)&!(group == null)){
-            contact.getGroupList().remove(group);
-            notifyObserver(TypeEvent.showContactData,contact,null);
+
+        try {
+            Contact contact = getContactByNumber(numberContact);
+            Group group = getGroupByNumber(numberGroup);
+            if (!(contact == null) & !(group == null)) {
+                contact.getGroupList().remove(group);
+                crudDAOContact.update(contact);
+                notifyObserver(TypeEvent.showContactData, contact, null);
+            }
+
+        } catch (DaoXmlException e) {
+            e.printStackTrace();
         }
+
     }
 
-    public Group getGroupByNumber(int numberGroup){
+    public Group getGroupByNumber(int numberGroup) {
         Group group = null;
-        if (numberWithinBorders(numberGroup, groupList.size())) {
-            group = groupList.get(numberGroup);
+        try {
+            group = crudDAOGroup.getObject(numberGroup);
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
+
         return group;
     }
 
-    //Изменение состава GroupList добавление группы
-
-
-    //Изменение состава GroupList удаление группы
-
-
-    public boolean numberWithinBorders(int number, int max) {
-        if (number >= 0 && number < max) {
-            return true;
-        } else {
-            notifyObserver(TypeEvent.errorNumber,null,null);
-            return false;
-        }
-
-    }
-    /////////////////
 
 }

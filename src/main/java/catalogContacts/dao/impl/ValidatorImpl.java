@@ -1,6 +1,6 @@
 package catalogContacts.dao.impl;
 
-import catalogContacts.dao.ValidXML;
+import catalogContacts.dao.Validator;
 import catalogContacts.dao.exception.DaoXmlException;
 import org.xml.sax.SAXException;
 
@@ -8,17 +8,16 @@ import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.IOException;
 
 /**
  *
  */
-public class ValidXMLImpl implements ValidXML {
+public class ValidatorImpl implements Validator {
     public boolean isXmlCorrect() {
         try {
-            if (checkXMLforXSD("ContactList.xml", "ContactSchema.xsd") && checkXMLforXSD("GroupList.xml", "GroupSchema.xsd")) {
+            if (checkXMLforXSD("ContactList.xml", "src\\main\\java\\catalogContacts\\resources\\ContactSchema.xsd") && checkXMLforXSD("GroupList.xml", "src\\main\\java\\catalogContacts\\resources\\GroupSchema.xsd")) {
                 return true;
             }
             return false;
@@ -52,7 +51,7 @@ public class ValidXMLImpl implements ValidXML {
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = factory.newSchema(new StreamSource(pathXsd));
-            Validator validator = schema.newValidator();
+            javax.xml.validation.Validator validator = schema.newValidator();
             validator.validate(new StreamSource(pathXml));
 
         } catch (IOException e) {

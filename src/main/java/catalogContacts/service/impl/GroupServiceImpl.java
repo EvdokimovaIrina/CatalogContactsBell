@@ -1,6 +1,7 @@
 package catalogContacts.service.impl;
 
 import catalogContacts.dao.CrudDAO;
+import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.dao.factory.AbstractFactoryDao;
 import catalogContacts.event.Event;
 import catalogContacts.event.Observer;
@@ -18,9 +19,8 @@ import java.util.List;
  */
 public final class GroupServiceImpl implements GroupService, Observer.Observable {
     private static GroupServiceImpl instance;
-    private AbstractFactoryDao<CrudDAO> factoryDao;
-    private List<Contact> contactList;
-    private List<Group> groupList;
+    private CrudDAO<Group> crudDAOGroup;
+
     private List<Observer> ObserversList = new ArrayList<>();
 
     // Singleton
@@ -57,66 +57,74 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
         }
     }
 
+    private void notifyObserverWithAneError(DaoXmlException e) {
+        notifyObserver(TypeEvent.ERROR, e.getMessage(), null);
+    }
     ////////
     public void addGroup(String name) {
         Group group = new Group(name);
+
         saveGroup(group);
     }
 
     public void saveGroup(Group group) {
-        if (!groupList.contains(group)) {
-            //т.к. такой еще нет, то установим ему номер и добавим в список
-            groupList.add(group);
-            group.setNumber(groupList.indexOf(group) + 1);
+
+        try {
+            group.setNumber(crudDAOGroup.toFormANewId());
+            crudDAOGroup.create(group);
+            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
+
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
-        notifyObserver(TypeEvent.showGroupList, groupList,null);
+
     }
 
     public void deleteGroup(int numberGroup) {
-        // если номер в пределах, то удалим контакт с выбранным номером
-        if (numberWithinBorders(numberGroup, groupList.size())){
-            groupList.remove(numberGroup);
+        try {
+            crudDAOGroup.delete(numberGroup);
+            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
+
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
-        //после удаления группы переберем список и изменим номера в контактах
-        for (int i = 0; i < groupList.size(); i++) {
-            Group group1 = groupList.get(i);
-            group1.setNumber(i + 1);
-        }
-        notifyObserver(TypeEvent.showGroupList, groupList,null);
+
     }
 
     public void changeGroup(int numberGroup,String value) {
-        if (numberWithinBorders(numberGroup, groupList.size())){
-            groupList.get(numberGroup).setName(value);
+        try {
+            Group group = crudDAOGroup.getObject(numberGroup);
+            group.setName(value);
+            crudDAOGroup.update(group);
+
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
+
     }
 
     public void showGroupList() {
-        notifyObserver(TypeEvent.showGroupList, groupList,null);
-    }
-
-
-    public boolean numberWithinBorders(int number, int max) {
-        if (number >= 0 && number < max) {
-            return true;
-        } else {
-            notifyObserver(TypeEvent.errorNumber,"Номер за пределами границы",null);
-            return false;
+        try {
+            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
 
     }
+
+
     public Group findByNumber(int number) {
         Group group = null;
-        for (Group group2 : groupList) {
-            if (group2.getNumber() == number) {
-                group = group2;
-            }
+        try {
+            group = crudDAOGroup.getObject(number);
+        } catch (DaoXmlException e) {
+            notifyObserverWithAneError(e);
         }
+
         return group;
     }
 
-    public void setFactoryDao(AbstractFactoryDao<CrudDAO> factoryDao) {
-
+     public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
+        this.crudDAOGroup = crudDAOGroup;
     }
-
 }

@@ -1,6 +1,7 @@
 package catalogContacts.dao.impl;
 
 import catalogContacts.dao.CrudDAO;
+import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.model.Group;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class DaoGroupJackson implements CrudDAO<Group>{
 
     }
 
-    public void delete(Group object) {
+    public void delete(int number) {
 
     }
 
@@ -28,6 +29,14 @@ public class DaoGroupJackson implements CrudDAO<Group>{
 
     public List<Group> getAll() {
         return null;
+    }
+
+    public Group findTheName(String name) {
+        return null;
+    }
+
+    public int toFormANewId() throws DaoXmlException {
+        return 0;
     }
 
     public List<Group> xmlToListObject() {

@@ -3,7 +3,7 @@ package catalogContacts.dao;
 /**
  *
  */
-public interface ValidXML {
+public interface Validator {
     /**
      * Проверяет xml файлы хранилища на соответсвие схемы xsd
      * @return

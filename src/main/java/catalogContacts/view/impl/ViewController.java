@@ -4,7 +4,7 @@ import catalogContacts.controller.*;
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.TypesOfParsers;
 import catalogContacts.dao.factory.AbstractFactoryDao;
-import catalogContacts.dao.factory.SelectingAParcer;
+import catalogContacts.dao.factory.FactoryMethodSelecting;
 import catalogContacts.model.*;
 import catalogContacts.view.ValidView;
 import catalogContacts.view.View;
@@ -64,10 +64,12 @@ public class ViewController extends View {
     }
 
     private void initializeParser(TypesOfParsers typesOfParsers){
-        SelectingAParcer selectingAParcer = new SelectingAParcer();
-        AbstractFactoryDao<CrudDAO> factoryDao= selectingAParcer.factoryDao(typesOfParsers);
-        controller.getContactService().setFactoryDao(factoryDao);
-        controller.getGroupService().setFactoryDao(factoryDao);
+        FactoryMethodSelecting selectingAParcer = new FactoryMethodSelecting();
+        AbstractFactoryDao factoryDao= selectingAParcer.factoryDao(typesOfParsers);
+        CrudDAO<Group> groupCrudDAO = factoryDao.createDao(Group.class);
+        controller.getContactService().setCrudDAOContact(factoryDao.createDao(Contact.class));
+        controller.getContactService().setCrudDAOGroup(groupCrudDAO);
+        controller.getGroupService().setCrudDAOGroup(groupCrudDAO);
     }
 
     ////////////////////////

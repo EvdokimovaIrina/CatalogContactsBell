@@ -2,19 +2,13 @@ package catalogContacts;
 
 import catalogContacts.controller.impl.ControllerImpl;
 import catalogContacts.controller.*;
-import catalogContacts.dao.CrudDAO;
-import catalogContacts.dao.ValidXML;
-import catalogContacts.dao.factory.AbstractFactoryDao;
-import catalogContacts.dao.factory.SelectingAParcer;
-import catalogContacts.dao.factory.impl.FactoryDaoDOM;
-import catalogContacts.dao.impl.ValidXMLImpl;
+import catalogContacts.dao.Validator;
+import catalogContacts.dao.impl.ValidatorImpl;
 import catalogContacts.service.impl.ContactServiceImpl;
 import catalogContacts.service.impl.GroupServiceImpl;
 import catalogContacts.view.impl.ValidViewImpl;
 import catalogContacts.view.impl.ViewController;
 import catalogContacts.view.impl.ViewOutput;
-
-import java.io.*;
 
 
 /**
@@ -24,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
 
         //Валидация файлов хранилища посредством xsd
-        ValidXML validXML = new ValidXMLImpl();
+        Validator validXML = new ValidatorImpl();
         if (!validXML.isXmlCorrect()){
             System.exit(1);
         }

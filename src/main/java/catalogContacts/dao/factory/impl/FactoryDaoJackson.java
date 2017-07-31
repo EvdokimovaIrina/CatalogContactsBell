@@ -10,7 +10,7 @@ import catalogContacts.model.Group;
 /**
  *
  */
-public class FactoryDaoJackson implements AbstractFactoryDao<CrudDAO> {
+public class FactoryDaoJackson implements AbstractFactoryDao {
 
     public CrudDAO createDao(Class cl) {
         if(cl == Contact.class){

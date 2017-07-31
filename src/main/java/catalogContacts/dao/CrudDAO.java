@@ -1,7 +1,9 @@
 package catalogContacts.dao;
 
+import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.model.Contact;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.util.List;
 
 /**
@@ -12,33 +14,40 @@ public interface CrudDAO<T> {
      * Запись нового объекта в хранилище
      * @param object объект для записи
      */
-    void create(T object);
+    void create(T object) throws DaoXmlException;
 
     /**
      * Изменение существующего объекта в хранилище
      * @param object объект сведения по которому изменились
      */
-    void update(T object);
+    void update(T object) throws DaoXmlException;
 
     /**
      * Удаление данных по объекту из хранилища
-     * @param object объект данные по которому нужно удалить
+     * @number объект данные по которому нужно удалить
      */
-    void delete(T object);
+    void delete(int number) throws DaoXmlException;
 
     /**
      * Получает данные по запрошенному объекту из хранилища
      * @param id номер объекта
      * @return возвращает объект, см указанным типом
      */
-    T getObject(int id);
+    T getObject(int id) throws DaoXmlException;
 
     /**
      * Получает список всех объектов указанного типа
      *
      * @return список объектов указанного типа
      */
-    List<T> getAll();
+    List<T> getAll() throws DaoXmlException;
 
-    List<T> xmlToListObject();
+    /**
+     * Находит объект по заданному имени
+     *
+     * @name имя объекта
+     */
+    T findTheName(String name);
+
+    int toFormANewId() throws DaoXmlException;;
 }

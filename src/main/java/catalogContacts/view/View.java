@@ -38,6 +38,10 @@ public abstract class View implements Observer {
             case errorNumber:
                 System.out.println("Номер за пределами границ");
                 break;
+            case ERROR:
+                System.out.println((String) event.getMainObject());
+                break;
+
         }
     }
 
