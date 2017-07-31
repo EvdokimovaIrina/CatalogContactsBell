@@ -1,5 +1,7 @@
 package catalogContacts.dao;
 
+import catalogContacts.model.Contact;
+
 import java.util.List;
 
 /**
@@ -11,11 +13,6 @@ public interface CrudDAO<T> {
      * @param object объект для записи
      */
     void create(T object);
-
-    /**
-     *
-     */
-    void read();
 
     /**
      * Изменение существующего объекта в хранилище
@@ -42,4 +39,6 @@ public interface CrudDAO<T> {
      * @return список объектов указанного типа
      */
     List<T> getAll();
+
+    List<T> xmlToListObject();
 }

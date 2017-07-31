@@ -1,11 +1,12 @@
 package catalogContacts.service.impl;
 
+import catalogContacts.dao.CrudDAO;
+import catalogContacts.dao.factory.AbstractFactoryDao;
 import catalogContacts.event.Event;
 import catalogContacts.event.Observer;
 import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
 import catalogContacts.event.TypeEvent;
-import catalogContacts.model.PhoneBook;
 import catalogContacts.service.GroupService;
 import catalogContacts.view.impl.ViewOutput;
 
@@ -17,14 +18,14 @@ import java.util.List;
  */
 public final class GroupServiceImpl implements GroupService, Observer.Observable {
     private static GroupServiceImpl instance;
+    private AbstractFactoryDao<CrudDAO> factoryDao;
     private List<Contact> contactList;
     private List<Group> groupList;
     private List<Observer> ObserversList = new ArrayList<>();
 
     // Singleton
     private GroupServiceImpl() {
-        this.contactList = PhoneBook.getPhoneBook().getContactsList();
-        this.groupList = PhoneBook.getPhoneBook().getGroupsList();
+
     }
 
     public static synchronized GroupServiceImpl getInstance() {
@@ -112,6 +113,10 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
             }
         }
         return group;
+    }
+
+    public void setFactoryDao(AbstractFactoryDao<CrudDAO> factoryDao) {
+
     }
 
 }

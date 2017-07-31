@@ -18,6 +18,11 @@ public class Group implements Serializable {
         this.name = name;
     }
 
+    public Group(String name,int number){
+        this.name = name;
+        this.number = number;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,6 +1,8 @@
 package catalogContacts.controller;
 
 import catalogContacts.model.TypeContact;
+import catalogContacts.service.ContactService;
+import catalogContacts.service.GroupService;
 
 import java.util.Map;
 
@@ -102,4 +104,6 @@ public interface Controller {
      */
     void changeContact(int numberContact, String value);
 
+    ContactService getContactService();
+    GroupService getGroupService();
 }

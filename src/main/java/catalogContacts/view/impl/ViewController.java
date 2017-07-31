@@ -1,6 +1,10 @@
 package catalogContacts.view.impl;
 
 import catalogContacts.controller.*;
+import catalogContacts.dao.CrudDAO;
+import catalogContacts.dao.TypesOfParsers;
+import catalogContacts.dao.factory.AbstractFactoryDao;
+import catalogContacts.dao.factory.SelectingAParcer;
 import catalogContacts.model.*;
 import catalogContacts.view.ValidView;
 import catalogContacts.view.View;
@@ -21,6 +25,49 @@ public class ViewController extends View {
 
     public ViewController() {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
+    }
+
+    public boolean isSelectingAParcer() {
+
+        while (true) {
+            System.out.println("Выберите реализацию xml-парсера");
+            System.out.println("1 - DOM");
+            System.out.println("2 - SAX");
+            System.out.println("3 - на основе библиотеки Jackson");
+            System.out.println("0 - выход");
+            try {
+                String strReader = reader.readLine();
+                int selectedAction = valid.actionValid(strReader);
+                if (selectedAction == 0) {
+                    return false;
+                }
+                if (selectedAction < 0) {
+                    continue;
+                }
+                switch (selectedAction) {
+                    case 1:
+                        initializeParser(TypesOfParsers.DOM);
+                        return true;
+                    case 2:
+                        initializeParser(TypesOfParsers.SAX);
+                        return true;
+                    case 3:
+                        initializeParser(TypesOfParsers.JACKSON);
+                        return true;
+                }
+            } catch (IOException e) {
+                System.out.println("Не известная команда!");
+                return false;
+            }
+        }
+
+    }
+
+    private void initializeParser(TypesOfParsers typesOfParsers){
+        SelectingAParcer selectingAParcer = new SelectingAParcer();
+        AbstractFactoryDao<CrudDAO> factoryDao= selectingAParcer.factoryDao(typesOfParsers);
+        controller.getContactService().setFactoryDao(factoryDao);
+        controller.getGroupService().setFactoryDao(factoryDao);
     }
 
     ////////////////////////

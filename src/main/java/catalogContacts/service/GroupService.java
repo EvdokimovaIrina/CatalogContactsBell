@@ -1,5 +1,7 @@
 package catalogContacts.service;
 
+import catalogContacts.dao.CrudDAO;
+import catalogContacts.dao.factory.AbstractFactoryDao;
 import catalogContacts.model.Group;
 
 import java.util.List;
@@ -14,4 +16,5 @@ public interface GroupService {
     void changeGroup(int numberGroup,String value);
     void showGroupList();
     Group findByNumber(int number);
+    void setFactoryDao(AbstractFactoryDao<CrudDAO> factoryDao);
 }

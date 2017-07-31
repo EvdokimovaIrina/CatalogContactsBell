@@ -2,7 +2,6 @@ package catalogContacts.service.impl;
 
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.factory.AbstractFactoryDao;
-import catalogContacts.dao.factory.impl.FactoryDaoDOM;
 import catalogContacts.event.Event;
 import catalogContacts.event.Observer;
 import catalogContacts.event.TypeEvent;
@@ -18,6 +17,7 @@ import java.util.Map;
  */
 public final class ContactServiceImpl implements ContactService, Observer.Observable {
     private static ContactServiceImpl instance;
+    private AbstractFactoryDao<CrudDAO> factoryDao;
     private List<Contact> contactList;
     private List<Group> groupList;
     private List<Observer> ObserversList = new ArrayList<>();
@@ -34,6 +34,10 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
         return instance;
     }
     //////
+
+    public void setFactoryDao(AbstractFactoryDao<CrudDAO> factoryDao) {
+        this.factoryDao = factoryDao;
+    }
 
     //работа с наблюдателями
     public void addObserver(Observer observer) {
@@ -79,8 +83,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
 
     //Сохранение контакта в хранилище
     public void saveContact(Contact contact) {
-        AbstractFactoryDao factoryDao = new FactoryDaoDOM();
-        CrudDAO<Contact> contactCrudDAO = factoryDao.createDao();
+        CrudDAO<Contact> contactCrudDAO = factoryDao.createDao(Contact.class);
         contactCrudDAO.create(contact);
 
         // notifyObserver(TypeEvent.showContactList, contactList,null);

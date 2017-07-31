@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Contact implements Serializable {
+
     private String fio;
+
     private int number;
     private List<Group> groupList = new ArrayList<>();
     private List<ContactDetails> contactDetailsList = new ArrayList<>();

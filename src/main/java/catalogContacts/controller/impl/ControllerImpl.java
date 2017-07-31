@@ -99,5 +99,11 @@ public class ControllerImpl implements Controller{
         this.groupService = groupService;
     }
 
+    public ContactService getContactService() {
+        return contactService;
+    }
 
+    public GroupService getGroupService() {
+        return groupService;
+    }
 }
