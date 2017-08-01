@@ -1,6 +1,5 @@
 package catalogContacts.dao.impl;
 
-import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.model.Contact;
 
@@ -9,41 +8,30 @@ import java.util.List;
 /**
  *
  */
-public class DaoContactJackson implements CrudDAO<Contact> {
+public class DaoContactJackson extends DaoContact {
 
-    public void create(Contact object) {
-
+    @Override
+    public Contact getObject(int id) throws DaoXmlException {
+        return super.getObject(id);
     }
 
-    public void update(Contact object) {
-
+    @Override
+    public List<Contact> getAll() throws DaoXmlException {
+        return super.getAll();
     }
 
-    public void delete(int number) {
-
+    @Override
+    public List<Contact> findByName(String name) throws DaoXmlException {
+        return super.findByName(name);
     }
 
-    public Contact getObject(int id) {
-        return null;
-    }
-
-    public List<Contact> getAll() {
-        return null;
-    }
-
-    public Contact findTheName(String name) {
-        return null;
-    }
-
+    @Override
     public int toFormANewId() throws DaoXmlException {
-        return 0;
+        return super.toFormANewId();
     }
 
-    public List<Contact> xmlToListObject() {
-        return null;
-    }
-
-    public Contact getContact() {
-        return null;
+    @Override
+    List<Contact> xmlToListObject() throws DaoXmlException {
+        return super.xmlToListObject();
     }
 }

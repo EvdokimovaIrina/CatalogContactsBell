@@ -23,7 +23,7 @@ public abstract class View implements Observer {
                 showListContact((List<Contact>) event.getMainObject(), (Group) event.getValue());
                 break;
             case showGroupList:
-               // showListGroup(PhoneBook.getPhoneBook().getGroupsList());
+                showListGroup((List<Group>) event.getMainObject());
                 break;
             case showContactDetails:
                 showContactDetails((Contact) event.getMainObject(), (Map) event.getValue());

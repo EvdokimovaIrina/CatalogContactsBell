@@ -106,4 +106,6 @@ public interface Controller {
 
     ContactService getContactService();
     GroupService getGroupService();
+
+    void findByName(String name);
 }

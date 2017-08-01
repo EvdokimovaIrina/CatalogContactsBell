@@ -45,6 +45,15 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
         this.crudDAOGroup = crudDAOGroup;
     }
 
+    public void findByName(String name) {
+        try {
+            List<Contact> contactList = crudDAOContact.findByName(name);
+            notifyObserver(TypeEvent.showContactList, contactList, null);
+        } catch (DaoXmlException e) {
+            e.printStackTrace();
+        }
+    }
+
     //работа с наблюдателями
     public void addObserver(Observer observer) {
         if (!ObserversList.contains(observer)) {
@@ -109,8 +118,6 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
         } catch (DaoXmlException e) {
             notifyObserverWithAneError(e);
         }
-
-
     }
 
     //удаление контакта из списка
@@ -204,8 +211,6 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
         } catch (DaoXmlException e) {
             notifyObserverWithAneError(e);
         }
-
-
     }
 
     public void changeContact(int numberContact, String value) {

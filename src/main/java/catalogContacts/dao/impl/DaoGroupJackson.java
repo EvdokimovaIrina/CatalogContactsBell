@@ -31,7 +31,7 @@ public class DaoGroupJackson implements CrudDAO<Group>{
         return null;
     }
 
-    public Group findTheName(String name) {
+    public List<Group> findByName(String name) {
         return null;
     }
 

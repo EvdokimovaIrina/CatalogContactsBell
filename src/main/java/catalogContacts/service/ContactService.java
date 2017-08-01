@@ -26,4 +26,5 @@ public interface ContactService {
     void deleteGroupToContact(int numberContact, int numberGroup);
     void setCrudDAOContact(CrudDAO<Contact> crudDAO);
     void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup);
+    void findByName(String name);
 }

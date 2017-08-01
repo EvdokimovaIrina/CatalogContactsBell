@@ -1,13 +1,7 @@
 package catalogContacts.dao.impl;
 
-import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.model.Contact;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
@@ -17,67 +11,70 @@ import java.util.List;
 /**
  *
  */
-public class DaoContactSax implements CrudDAO<Contact> {
+public class DaoContactSax extends DaoContact {
 
-    private final String fileName = "ContactList.xml";
-
-    public void create(Contact object) {
-
-    }
-
-    public void update(Contact object) {
-
-    }
-
-    public void delete(int number) {
-
-    }
-
-    public Contact getObject(int id) {
+    @Override
+    public Contact getObject(int id) throws DaoXmlException {
+        List<Contact> contactList = getAll();
+        for (Contact contact:contactList) {
+            if (contact.getNumber()==id){
+                return contact;
+            }
+        }
         return null;
     }
 
+    @Override
     public List<Contact> getAll() throws DaoXmlException {
 
-        return getListSAXParser();
+        return xmlToListObject();
     }
 
-    public Contact findTheName(String name) {
-        return null;
+    @Override
+    public List<Contact> findByName(String name) throws DaoXmlException {
+        List<Contact> contactList = getAll();
+        List<Contact> contactListReturn = new ArrayList<>();
+        for (Contact contact:contactList) {
+            if (contact.getFio().contains(name)){
+                contactListReturn.add(contact);
+            }
+        }
+        return contactListReturn;
     }
 
+    @Override
     public int toFormANewId() throws DaoXmlException {
-        return 0;
+        List<Contact> contactList = getAll();
+        int max=0;
+        for (Contact contact:contactList) {
+            int number= contact.getNumber();
+            if (max<number){
+               max = number;
+            }
+        }
+        return max+1;
     }
 
-    private List<Contact> getListSAXParser() throws DaoXmlException {
-        List<Contact> contactList = new ArrayList<>();
+    @Override
+    List<Contact> xmlToListObject() throws DaoXmlException {
+        List<Contact> contactList;
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        SAXParser saxParser  = null;
-        InputStream xmlData = null;
-        try
-        {
+        SAXParser saxParser;
+        InputStream xmlData;
+        try {
             xmlData = new FileInputStream(fileXml());
 
-            saxParser  = factory.newSAXParser();
-            SurveyReaderSAXContact surveyReaderSAXContact= new SurveyReaderSAXContact();
-            saxParser.parse(xmlData,surveyReaderSAXContact);
+            saxParser = factory.newSAXParser();
+            SurveyReaderSAXContact surveyReaderSAXContact = new SurveyReaderSAXContact();
+            saxParser.parse(xmlData, surveyReaderSAXContact);
             contactList = surveyReaderSAXContact.getContact();
 
-        } catch (Exception e)
-        {
-            throw new DaoXmlException("Ошибка обработки файла "+e.getMessage());
+        } catch (Exception e) {
+            throw new DaoXmlException("Ошибка обработки файла " + e.getMessage());
 
         }
-        return contactList ;
+        return contactList;
     }
 
-    private File fileXml() throws DaoXmlException {
-        File file = new File(fileName);
-        if (!file.exists()) {
-            throw new DaoXmlException("Отсутствует файл.");
-        }
-        return file;
-    }
 
 }

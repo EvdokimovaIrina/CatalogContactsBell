@@ -63,9 +63,9 @@ public class ViewController extends View {
 
     }
 
-    private void initializeParser(TypesOfParsers typesOfParsers){
+    private void initializeParser(TypesOfParsers typesOfParsers) {
         FactoryMethodSelecting selectingAParcer = new FactoryMethodSelecting();
-        AbstractFactoryDao factoryDao= selectingAParcer.factoryDao(typesOfParsers);
+        AbstractFactoryDao factoryDao = selectingAParcer.factoryDao(typesOfParsers);
         CrudDAO<Group> groupCrudDAO = factoryDao.createDao(Group.class);
         controller.getContactService().setCrudDAOContact(factoryDao.createDao(Contact.class));
         controller.getContactService().setCrudDAOGroup(groupCrudDAO);
@@ -82,11 +82,12 @@ public class ViewController extends View {
             System.out.println("2 - создать новую группу");
             System.out.println("3 - вывести список контактов");
             System.out.println("4 - вывести список контактов по группе");
-            System.out.println("5 - вывести список групп");
-            System.out.println("6 - изменить существующий контакт");
-            System.out.println("7 - изменить существующую группу");
-            System.out.println("8 - удалить контакт");
-            System.out.println("9 - удалить группу");
+            System.out.println("5 - найти контакт по наименованию");
+            System.out.println("6 - вывести список групп");
+            System.out.println("7 - изменить существующий контакт");
+            System.out.println("8 - изменить существующую группу");
+            System.out.println("9 - удалить контакт");
+            System.out.println("10 - удалить группу");
             System.out.println("0 - выход");
             try {
 
@@ -115,18 +116,22 @@ public class ViewController extends View {
                 showContactListFromGroup();
                 return true;
             case 5:
-                showGroupList();
+                findByName();
                 return true;
             case 6:
-                changeContact();
+                showGroupList();
                 return true;
             case 7:
-                changeGroup();
+                showContactList();
+                changeContact();
                 return true;
             case 8:
-                deletContact();
+                changeGroup();
                 return true;
             case 9:
+                deletContact();
+                return true;
+            case 10:
                 deletGroup();
                 return true;
             case 0:
@@ -134,6 +139,13 @@ public class ViewController extends View {
             default:
                 return true;
         }
+    }
+
+    private void findByName() throws IOException {
+        System.out.println("Введите имя для поиска: ");
+        String name = reader.readLine();
+        controller.findByName(name);
+        changeContact();
     }
 
     public void addContact() throws IOException {
@@ -168,7 +180,7 @@ public class ViewController extends View {
 
     public void changeContact() throws IOException {
         while (true) {
-            controller.showContactList(null);
+
             System.out.println("Укажите номер контакта:");
             System.out.println("для отмены выберите 0:");
             String strReader = reader.readLine();
@@ -180,6 +192,7 @@ public class ViewController extends View {
             showMenuContact(numberContact);
         }
     }
+
 
     public void showMenuContact(int numberContact) {
         boolean continueCycle = true;

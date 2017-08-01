@@ -106,4 +106,8 @@ public class ControllerImpl implements Controller{
     public GroupService getGroupService() {
         return groupService;
     }
+
+    public void findByName(String name) {
+        contactService.findByName(name);
+    }
 }

@@ -47,7 +47,11 @@ public interface CrudDAO<T> {
      *
      * @name имя объекта
      */
-    T findTheName(String name);
+    List<T> findByName(String name) throws DaoXmlException;
 
+    /**
+     * Формирует новый номер объекта
+     *
+     */
     int toFormANewId() throws DaoXmlException;;
 }
