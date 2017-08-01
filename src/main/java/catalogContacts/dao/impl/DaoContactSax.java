@@ -3,13 +3,23 @@ package catalogContacts.dao.impl;
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.model.Contact;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  */
 public class DaoContactSax implements CrudDAO<Contact> {
+
+    private final String fileName = "ContactList.xml";
 
     public void create(Contact object) {
 
@@ -27,8 +37,9 @@ public class DaoContactSax implements CrudDAO<Contact> {
         return null;
     }
 
-    public List<Contact> getAll() {
-        return null;
+    public List<Contact> getAll() throws DaoXmlException {
+
+        return getListSAXParser();
     }
 
     public Contact findTheName(String name) {
@@ -39,11 +50,34 @@ public class DaoContactSax implements CrudDAO<Contact> {
         return 0;
     }
 
-    public List<Contact> xmlToListObject() {
-        return null;
+    private List<Contact> getListSAXParser() throws DaoXmlException {
+        List<Contact> contactList = new ArrayList<>();
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser saxParser  = null;
+        InputStream xmlData = null;
+        try
+        {
+            xmlData = new FileInputStream(fileXml());
+
+            saxParser  = factory.newSAXParser();
+            SurveyReaderSAXContact surveyReaderSAXContact= new SurveyReaderSAXContact();
+            saxParser.parse(xmlData,surveyReaderSAXContact);
+            contactList = surveyReaderSAXContact.getContact();
+
+        } catch (Exception e)
+        {
+            throw new DaoXmlException("Ошибка обработки файла "+e.getMessage());
+
+        }
+        return contactList ;
     }
 
-    public Contact getContact() {
-        return null;
+    private File fileXml() throws DaoXmlException {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            throw new DaoXmlException("Отсутствует файл.");
+        }
+        return file;
     }
+
 }
