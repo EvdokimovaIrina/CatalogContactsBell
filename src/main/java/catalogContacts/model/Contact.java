@@ -1,5 +1,8 @@
 package catalogContacts.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,12 +10,10 @@ import java.util.List;
 
 public class Contact implements Serializable {
 
-    private String fio;
-
     private int number;
+    private String fio;
     private List<Group> groupList = new ArrayList<>();
     private List<ContactDetails> contactDetailsList = new ArrayList<>();
-
     public Contact() {
 
     }
@@ -43,10 +44,6 @@ public class Contact implements Serializable {
         this.number = number;
     }
 
-    public List<Group> getGroupList() {
-        return groupList;
-    }
-
     public String getFio() {
         return fio;
     }
@@ -55,19 +52,19 @@ public class Contact implements Serializable {
         this.fio = fio;
     }
 
-    public List<Group> getGroup() {
+    public List<Group> getGroupList() {
         return groupList;
-    }
-
-    public List<ContactDetails> getContactDetailsList() {
-        return contactDetailsList;
     }
 
     public void setGroupList(List<Group> groupList) {
         this.groupList = groupList;
     }
 
-    public void setContactDetailsList(List<ContactDetails> contactDetailList) {
-        this.contactDetailsList = contactDetailList;
+    public List<ContactDetails> getContactDetailsList() {
+        return contactDetailsList;
+    }
+
+    public void setContactDetailsList(List<ContactDetails> contactDetailsList) {
+        this.contactDetailsList = contactDetailsList;
     }
 }

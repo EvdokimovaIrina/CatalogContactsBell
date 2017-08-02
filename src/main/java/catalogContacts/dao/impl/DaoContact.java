@@ -96,21 +96,13 @@ public abstract class DaoContact implements CrudDAO<Contact> {
         }
     }
 
-    public Contact getObject(int id) throws DaoXmlException {
-        return null;
-    }
+    abstract public Contact getObject(int id) throws DaoXmlException ;
 
-    public List<Contact> getAll() throws DaoXmlException {
-        return null;
-    }
+    abstract public List<Contact> getAll() throws DaoXmlException;
 
-    public List<Contact> findByName(String name) throws DaoXmlException {
-        return null;
-    }
+    abstract public List<Contact> findByName(String name) throws DaoXmlException;
 
-    public int toFormANewId() throws DaoXmlException {
-        return 0;
-    }
+    abstract public int toFormANewId() throws DaoXmlException;
 
     List<Contact> xmlToListObject() throws DaoXmlException {
         List<Contact> contactList = new ArrayList<>();
@@ -207,7 +199,7 @@ public abstract class DaoContact implements CrudDAO<Contact> {
 
     }
 
-    private void saveToXML(List<Contact> contactList) throws DaoXmlException {
+    void saveToXML(List<Contact> contactList) throws DaoXmlException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             Document document = factory.newDocumentBuilder().newDocument();

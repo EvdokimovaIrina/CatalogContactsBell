@@ -49,7 +49,7 @@ public class SurveyReaderSAXGroup extends DefaultHandler {
         if (str.contains("\n")){
             return;
         }
-        if (thisElement.equals("id")) {
+        if (thisElement.equals("idGroup")) {
             int id = 0;
             try {
                 id = new Integer(str);
@@ -59,7 +59,7 @@ public class SurveyReaderSAXGroup extends DefaultHandler {
             group.setNumber(id);
         }
 
-        if (thisElement.equals("name")) {
+        if (thisElement.equals("nameGroup")) {
             String name = str;
             group.setName(name);
         }

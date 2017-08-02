@@ -23,12 +23,10 @@ public class DaoContactDOM extends DaoContact {
 
             return nodeContact;
 
-
         } catch (XPathExpressionException e) {
             throw new DaoXmlException("Ошибка при получении списока контактов." + e.getMessage());
 
         }
-
     }
 
     @Override

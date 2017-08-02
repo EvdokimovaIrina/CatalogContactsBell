@@ -49,7 +49,7 @@ public class DaoGroupDOM extends DaoGroup {
     public int toFormANewId() throws DaoXmlException {
         Document doc;
         doc = getDocumentParse();
-        NodeList nodeList = getNodeListDocByCondition(doc, "//id");
+        NodeList nodeList = getNodeListDocByCondition(doc, "//idGroup");
         int max = 0;
         for (int i = 0; i < nodeList.getLength(); i++) {
             try {
@@ -86,13 +86,13 @@ public class DaoGroupDOM extends DaoGroup {
 
                 String idStr = null;
                 try {
-                    idStr = (String) xpath.compile("./id").evaluate(node, XPathConstants.STRING);
+                    idStr = (String) xpath.compile("./idGroup").evaluate(node, XPathConstants.STRING);
                     int id = 0;
                     try {
                         id = Integer.parseInt(idStr);
                     } catch (Exception ignored) {
                     }
-                    String name = (String) xpath.compile("./name").evaluate(node, XPathConstants.STRING);
+                    String name = (String) xpath.compile("./nameGroup").evaluate(node, XPathConstants.STRING);
                     Group group = new Group(name, id);
                     groupList.add(group);
                 } catch (XPathExpressionException e) {

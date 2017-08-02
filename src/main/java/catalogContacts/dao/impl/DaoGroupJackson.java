@@ -1,49 +1,82 @@
 package catalogContacts.dao.impl;
 
-import catalogContacts.dao.CrudDAO;
+
+import catalogContacts.dao.entityForJackson.GroupListJackson;
 import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.model.Group;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
  *
  */
-public class DaoGroupJackson implements CrudDAO<Group>{
+public class DaoGroupJackson extends DaoGroup{
 
-    public void create(Group object) {
+    public Group getObject(int id) throws DaoXmlException {
 
-    }
-
-    public void update(Group object) {
-
-    }
-
-    public void delete(int number) {
-
-    }
-
-    public Group getObject(int id) {
+        GroupListJackson groupListJackson = getGroupListJackson();
+        for (Group group: groupListJackson.getGroup()) {
+            if (group.getNumber()==id){
+                return group;
+            }
+        }
         return null;
     }
 
-    public List<Group> getAll() {
-        return null;
+    public List<Group> getAll() throws DaoXmlException {
+        List<Group> groupList = xmlToListObject();
+        return  groupList;
     }
 
-    public List<Group> findByName(String name) {
-        return null;
+    public List<Group> findByName(String name) throws DaoXmlException {
+        List<Group> groupList = null;
+        GroupListJackson groupListJackson = getGroupListJackson();
+        for (Group group: groupListJackson.getGroup()) {
+            if (group.getName().contains(name)){
+                groupList.add(group);
+            }
+        }
+        return groupList;
     }
 
     public int toFormANewId() throws DaoXmlException {
-        return 0;
+        GroupListJackson groupListJackson = getGroupListJackson();
+        int max = 0;
+        for (Group group : groupListJackson.getGroup()) {
+            int id = group.getNumber();
+            if (max < id) {
+                max = id;
+            }
+        }
+        return max;
     }
 
-    public List<Group> xmlToListObject() {
-        return null;
+    public List<Group> xmlToListObject() throws DaoXmlException {
+        List<Group> groupList = groupListJacksonToGroupList();
+        return groupList;
     }
 
-    public Group getGroup() {
-        return null;
+    private List<Group> groupListJacksonToGroupList() throws DaoXmlException {
+
+        return getGroupListJackson().getGroup();
+    }
+
+    private GroupListJackson getGroupListJackson() throws DaoXmlException {
+        GroupListJackson groupListJackson = null;
+        try {
+            ObjectMapper objectMapper = new XmlMapper();
+            groupListJackson = objectMapper.readValue(StringUtils.toEncodedString(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8), GroupListJackson.class);
+
+        } catch (IOException | NullPointerException e) {
+            throw new DaoXmlException("Ошибка чтения данных");
+        }
+        return groupListJackson;
     }
 }

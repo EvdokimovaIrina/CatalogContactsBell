@@ -1,5 +1,7 @@
 package catalogContacts.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +10,11 @@ import java.util.List;
  * Created by iren on 12.07.2017.
  */
 public class Group implements Serializable {
-    private String name;
+    @JacksonXmlProperty(localName = "idGroup")
     private int number;
+    @JacksonXmlProperty(localName = "nameGroup")
+    private String name;
+
 
     public Group(){
     }

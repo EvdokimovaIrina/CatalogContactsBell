@@ -58,7 +58,7 @@ abstract class DaoGroup implements CrudDAO<Group>{
 
         try {
 
-            Node nodegroup = getNodeDocByCondition(doc, "/groupList/group[id='" + group.getNumber() + "']");
+            Node nodegroup = getNodeDocByCondition(doc, "/groupList/group[idGroup='" + group.getNumber() + "']");
             if (nodegroup == null) {
                 throw new DaoXmlException("Данные не сохранены");
             }
@@ -74,7 +74,7 @@ abstract class DaoGroup implements CrudDAO<Group>{
     public void delete(int number) throws DaoXmlException {
         Document doc = getDocumentParse();
         try {
-            Node node = getNodeDocByCondition(doc, "/groupList/group[id='" + number + "']");
+            Node node = getNodeDocByCondition(doc, "/groupList/group[idGroup='" + number + "']");
             doc.removeChild(node);
             saveDocumentToFile(doc);
         } catch (TransformerException e) {
@@ -90,7 +90,7 @@ abstract class DaoGroup implements CrudDAO<Group>{
         return null;
     }
 
-    public List<Group> findByName(String name) {
+    public List<Group> findByName(String name) throws DaoXmlException {
         return null;
     }
 
@@ -144,13 +144,13 @@ abstract class DaoGroup implements CrudDAO<Group>{
         Element groupO = document.createElement("group");
         groupListO.appendChild(groupO);
 
-        Element id = document.createElement("id");
+        Element id = document.createElement("idGroup");
         id.setTextContent(String.valueOf(group.getNumber()));
         groupO.appendChild(id);
 
-        Element name = document.createElement("name");
-        name.setTextContent(group.getName());
-        groupO.appendChild(name);
+        Element nameGroup = document.createElement("nameGroup");
+        nameGroup.setTextContent(group.getName());
+        groupO.appendChild(nameGroup);
 
     }
 
