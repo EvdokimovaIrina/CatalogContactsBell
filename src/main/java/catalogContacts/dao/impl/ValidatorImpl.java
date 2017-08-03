@@ -1,6 +1,6 @@
 package catalogContacts.dao.impl;
 
-import catalogContacts.dao.Validator123;
+import catalogContacts.dao.Validator;
 import catalogContacts.dao.exception.DaoXmlException;
 import org.xml.sax.SAXException;
 
@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  *
  */
-public class ValidatorImpl implements Validator123 {
+public class ValidatorImpl implements Validator {
     public boolean isXmlCorrect() {
         try {
             if (checkXMLforXSD("ContactList.xml", "src\\main\\java\\catalogContacts\\resources\\ContactSchema.xsd") && checkXMLforXSD("GroupList.xml", "src\\main\\java\\catalogContacts\\resources\\GroupSchema.xsd")) {

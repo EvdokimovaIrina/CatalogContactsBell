@@ -2,7 +2,7 @@ package catalogContacts;
 
 import catalogContacts.controller.impl.ControllerImpl;
 import catalogContacts.controller.*;
-import catalogContacts.dao.Validator123;
+import catalogContacts.dao.Validator;
 import catalogContacts.dao.impl.ValidatorImpl;
 import catalogContacts.service.impl.ContactServiceImpl;
 import catalogContacts.service.impl.GroupServiceImpl;
@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
 
         //Валидация файлов хранилища посредством xsd
-        Validator123 validXML = new ValidatorImpl();
+        Validator validXML = new ValidatorImpl();
         if (!validXML.isXmlCorrect()){
             System.exit(1);
         }
