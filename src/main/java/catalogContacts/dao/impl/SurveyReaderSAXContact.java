@@ -1,6 +1,5 @@
 package catalogContacts.dao.impl;
 
-import catalogContacts.dao.exception.DaoXmlException;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
 import catalogContacts.model.Group;
@@ -37,15 +36,15 @@ public class SurveyReaderSAXContact extends DefaultHandler {
         thisElement = qName;
         if (qName.equals("contact")) {
             contact = new Contact();
-            System.out.println("contact");
+
         }
         if (qName.equals("contactDetailsList")) {
             contactDetails = new ContactDetails();
-            System.out.println("contactDetailsList");
+
         }
         if (qName.equals("groupList")) {
             group = new Group();
-            System.out.println("groupList");
+
         }
     }
 
@@ -125,7 +124,6 @@ public class SurveyReaderSAXContact extends DefaultHandler {
             group.setName(nameGroup);
         }
 
-        System.out.println(str);
     }
 }
 
