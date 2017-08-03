@@ -19,16 +19,17 @@ public class SurveyReaderSAXContact extends DefaultHandler {
     private Contact contact = null;
     private List<Contact> contactList = new ArrayList<>();
     private String thisElement = "";
-    private ContactDetails contactDetails=null;
+    private ContactDetails contactDetails = null;
     private Group group = null;
     private List<ContactDetails> contactDetailsesList = new ArrayList<>();
     private List<Group> groupList = new ArrayList<>();
 
-    public List<Contact> getContact(){
+    public List<Contact> getContact() {
         return contactList;
     }
+
     public SurveyReaderSAXContact() {
-       super();
+        super();
     }
 
     @Override
@@ -37,12 +38,21 @@ public class SurveyReaderSAXContact extends DefaultHandler {
         if (qName.equals("contact")) {
             contact = new Contact();
 
+
         }
         if (qName.equals("contactDetailsList")) {
-            contactDetails = new ContactDetails();
+            contactDetailsesList = new ArrayList<>();
 
         }
         if (qName.equals("groupList")) {
+            groupList = new ArrayList<>();
+
+        }
+        if (qName.equals("contactDetails")) {
+            contactDetails = new ContactDetails();
+
+        }
+        if (qName.equals("group")) {
             group = new Group();
 
         }
@@ -54,15 +64,17 @@ public class SurveyReaderSAXContact extends DefaultHandler {
             contact.setContactDetailsList(contactDetailsesList);
             contact.setGroupList(groupList);
             contactList.add(contact);
+            contactDetailsesList = new ArrayList<>();
+            groupList = new ArrayList<>();
 
         }
-        if (qName.equals("contactDetailsList")) {
-            if(!(contactDetails.getValue()==null)){
+        if (qName.equals("contactDetails")) {
+            if (!(contactDetails.getValue() == null)) {
                 contactDetailsesList.add(contactDetails);
             }
         }
-        if (qName.equals("groupList")) {
-            if(!(group.getName()==null)){
+        if (qName.equals("group")) {
+            if (!(group.getName() == null)) {
                 groupList.add(group);
             }
         }
@@ -72,7 +84,7 @@ public class SurveyReaderSAXContact extends DefaultHandler {
     public void characters(char[] ch, int start, int length) throws SAXException {
         super.characters(ch, start, length);
         String str = new String(ch, start, length);
-        if (str.contains("\n")){
+        if (str.contains("\n")) {
             return;
         }
         if (thisElement.equals("id")) {
@@ -80,48 +92,54 @@ public class SurveyReaderSAXContact extends DefaultHandler {
             try {
                 id = new Integer(str);
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 return;
             }
             contact.setNumber(id);
+
         }
 
         if (thisElement.equals("name")) {
             String name = str;
-            contact.setFio( name);
+            contact.setFio(name);
+
         }
 
         if (thisElement.equals("type")) {
-            TypeContact typeContact=null;
+            TypeContact typeContact = null;
             try {
                 typeContact = TypeContact.valueOf(str);
 
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 return;
             }
             contactDetails.setType(typeContact);
+
         }
 
         if (thisElement.equals("value")) {
             String value = str;
             contactDetails.setValue(value);
 
+
         }
 
         if (thisElement.equals("idGroup")) {
-            int  idGroup= 0;
+            int idGroup = 0;
             try {
                 idGroup = new Integer(str);
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 return;
             }
             group.setNumber(idGroup);
+
         }
 
         if (thisElement.equals("nameGroup")) {
             String nameGroup = str;
             group.setName(nameGroup);
+
         }
 
     }
