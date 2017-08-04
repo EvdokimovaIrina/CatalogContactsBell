@@ -22,6 +22,12 @@
             <version>3.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.4.1207.jre6</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -49,8 +55,89 @@
                     </archive>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>9.4.1212.jre7</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <driver>org.postgresql</driver>
+                    <url>jdbc:postgressql://localhost:5432:CatalogContacs</url>
+                    <username>postgres</username>
+                    <password>31415926</password>
+                </configuration>
+
+
+                <executions>
+                    <execution>
+                        <id>drop-db-before-if-any</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <url>jdbc:postgressql://localhost:5432:test</url>
+                            <autocommit>true</autocommit>
+                            <sqlCommand>drop database CatalogContacs</sqlCommand>
+                            <onError>continue</onError>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-db</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <url>jdbc:postgressql://localhost:5432:CatalogContacs</url>
+
+                            <autocommit>true</autocommit>
+                            <sqlCommand>create database CatalogContacs</sqlCommand>
+                        </configuration>
+                    </execution>
+
+
+                    <execution>
+                        <id>create-schema</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>src/main/sql/CreatingTables.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-data</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+
+                        <configuration>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>src/main/sql/CreatDataTables.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
+
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
-
 </project>
