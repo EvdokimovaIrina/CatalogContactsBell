@@ -25,7 +25,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.4.1207.jre6</version>
+            <version>9.4.1212.jre7</version>
         </dependency>
 
     </dependencies>
@@ -70,7 +70,7 @@
                 </dependencies>
 
                 <configuration>
-                    <driver>org.postgresql</driver>
+                    <driver>org.postgresql.Driver</driver>
                     <url>jdbc:postgressql://localhost:5432:CatalogContacs</url>
                     <username>postgres</username>
                     <password>31415926</password>
@@ -78,14 +78,15 @@
 
 
                 <executions>
-                    <execution>
-                        <id>drop-db-before-if-any</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <url>jdbc:postgressql://localhost:5432:test</url>
+                    <!-- <execution>
+                         <id>drop-db-before-if-any</id>
+                         <phase>process-test-resources</phase>
+                         <goals>
+                             <goal>execute</goal>
+                         </goals>
+                         <configuration>
+
+                            <url>jdbc:postgresql://localhost/test</url>
                             <autocommit>true</autocommit>
                             <sqlCommand>drop database CatalogContacs</sqlCommand>
                             <onError>continue</onError>
@@ -100,12 +101,11 @@
                         </goals>
                         <configuration>
                             <url>jdbc:postgressql://localhost:5432:CatalogContacs</url>
-
                             <autocommit>true</autocommit>
                             <sqlCommand>create database CatalogContacs</sqlCommand>
                         </configuration>
                     </execution>
-
+                    -->
 
                     <execution>
                         <id>create-schema</id>
@@ -116,26 +116,18 @@
                         <configuration>
                             <autocommit>true</autocommit>
                             <srcFiles>
+                                <!--<srcFile>src/main/sql/DrobEndCreateBase.sql</srcFile>-->
                                 <srcFile>src/main/sql/CreatingTables.sql</srcFile>
+                                <srcFile>src/main/sql/FillingOutTables.sql</srcFile>
+                                <srcFile>src/main/sql/ChangeDataTables.sql</srcFile>
+                                <srcFile>src/main/sql/ChangeUser.sql</srcFile>
+                                <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>
+
                             </srcFiles>
                         </configuration>
                     </execution>
 
-                    <execution>
-                        <id>create-data</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
 
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/main/sql/CreatDataTables.sql</srcFile>
-                            </srcFiles>
-                        </configuration>
-
-                    </execution>
                 </executions>
             </plugin>
         </plugins>
