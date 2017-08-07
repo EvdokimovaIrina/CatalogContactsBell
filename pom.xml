@@ -25,7 +25,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.4.1212.jre7</version>
+            <version>42.1.4</version>
         </dependency>
 
     </dependencies>
@@ -65,50 +65,50 @@
                     <dependency>
                         <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>
-                        <version>9.4.1212.jre7</version>
+                        <version>42.1.4</version>
                     </dependency>
                 </dependencies>
 
                 <configuration>
                     <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgressql://localhost:5432:CatalogContacs</url>
+                    <url>jdbc:postgresql://localhost/catalogcontacs</url>
                     <username>postgres</username>
                     <password>31415926</password>
                 </configuration>
 
 
                 <executions>
-                    <!-- <execution>
-                         <id>drop-db-before-if-any</id>
-                         <phase>process-test-resources</phase>
-                         <goals>
-                             <goal>execute</goal>
-                         </goals>
-                         <configuration>
-
-                            <url>jdbc:postgresql://localhost/test</url>
-                            <autocommit>true</autocommit>
-                            <sqlCommand>drop database CatalogContacs</sqlCommand>
-                            <onError>continue</onError>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>create-db</id>
+                    <!--<execution>
+                        <id>drop-db-before-if-any</id>
                         <phase>process-test-resources</phase>
                         <goals>
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <url>jdbc:postgressql://localhost:5432:CatalogContacs</url>
-                            <autocommit>true</autocommit>
-                            <sqlCommand>create database CatalogContacs</sqlCommand>
-                        </configuration>
-                    </execution>
-                    -->
 
-                    <execution>
-                        <id>create-schema</id>
+                           <url>jdbc:postgresql://localhost/test</url>
+                           <autocommit>true</autocommit>
+                           <sqlCommand>drop database CatalogContacs</sqlCommand>
+                           <onError>continue</onError>
+                       </configuration>
+                   </execution>
+
+                   <execution>
+                       <id>create-db</id>
+                       <phase>process-test-resources</phase>
+                       <goals>
+                           <goal>execute</goal>
+                       </goals>
+                       <configuration>
+                           <url>jdbc:postgressql://localhost:5432:CatalogContacs</url>
+                           <autocommit>true</autocommit>
+                           <sqlCommand>create database CatalogContacs</sqlCommand>
+                       </configuration>
+                   </execution>-->
+
+
+                    <!-- <execution>
+                        <id>create-db</id>
                         <phase>process-test-resources</phase>
                         <goals>
                             <goal>execute</goal>
@@ -116,16 +116,28 @@
                         <configuration>
                             <autocommit>true</autocommit>
                             <srcFiles>
-                                <!--<srcFile>src/main/sql/DrobEndCreateBase.sql</srcFile>-->
-                                <srcFile>src/main/sql/CreatingTables.sql</srcFile>
-                                <srcFile>src/main/sql/FillingOutTables.sql</srcFile>
-                                <srcFile>src/main/sql/ChangeDataTables.sql</srcFile>
-                                <srcFile>src/main/sql/ChangeUser.sql</srcFile>
-                                <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>
-
+                                  <srcFile>src/main/sql/DrobEndCreateBase2.sql</srcFile>
                             </srcFiles>
                         </configuration>
-                    </execution>
+                    </execution>-->
+
+                     <execution>
+                         <id>create-schema</id>
+                         <phase>process-test-resources</phase>
+                         <goals>
+                             <goal>execute</goal>
+                         </goals>
+                         <configuration>
+                             <autocommit>true</autocommit>
+                             <srcFiles>
+                                 <srcFile>src/main/sql/CreatingTables.sql</srcFile>
+                                 <srcFile>src/main/sql/FillingOutTables.sql</srcFile>
+                                 <srcFile>src/main/sql/ChangeDataTables.sql</srcFile>
+                                 <srcFile>src/main/sql/ChangeUser.sql</srcFile>
+                                 <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>
+                             </srcFiles>
+                         </configuration>
+                     </execution>
 
 
                 </executions>
