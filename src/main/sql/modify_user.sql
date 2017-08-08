@@ -3,7 +3,7 @@
 CREATE OR REPLACE FUNCTION InsertUser(u_login VARCHAR,u_password VARCHAR) RETURNS BOOLEAN AS
 $BODY$
 BEGIN
-    INSERT INTO "TUser" (user_login,
+    INSERT INTO "t_user" (user_login,
                             user_password)
          VALUES (
          u_login,
@@ -20,7 +20,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION ChangeUser(u_id INT,u_login VARCHAR,u_password VARCHAR) RETURNS BOOLEAN AS
 $BODY$
 BEGIN
-    UPDATE "TUser" SET user_login = u_login, user_password = u_password  WHERE user_id=u_id;
+    UPDATE "t_user" SET user_login = u_login, user_password = u_password  WHERE user_id=u_id;
     RETURN TRUE;
 EXCEPTION
  WHEN unique_violation THEN
@@ -34,7 +34,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION DeleteUser(u_id INT) RETURNS VOID AS
 $BODY$
 BEGIN
-    DELETE FROM "TUser"
+    DELETE FROM "t_user"
           WHERE user_id = u_id;
 END
 $BODY$
@@ -54,20 +54,20 @@ $BODY$
 LANGUAGE 'plpgsql';
 
 CREATE TRIGGER trig_delete_user
-  BEFORE DELETE ON "TUser" FOR EACH ROW EXECUTE PROCEDURE DeleteDataUser();
+  BEFORE DELETE ON "t_user" FOR EACH ROW EXECUTE PROCEDURE DeleteDataUser();
 
 --Получение данных пользователя
 
 -- получение пользователя, а если id не указан, то всех пользователей
-CREATE OR REPLACE FUNCTION getUsers(u_id INT DEFAULT NULL) RETURNS SETOF "TUser" AS
+CREATE OR REPLACE FUNCTION getUsers(u_id INT DEFAULT NULL) RETURNS SETOF "t_user" AS
 $BODY$
 DECLARE
-  r "TUser";
+  r "t_user";
 BEGIN
     FOR r IN
         SELECT
               *
-        FROM "TUser"
+        FROM "t_user"
             WHERE (u_id=NULL OR (user_id = u_id))
     LOOP
         RETURN NEXT r;
@@ -86,7 +86,7 @@ $BODY$
 DECLARE
 i INT;
 BEGIN
-    SELECT count(*) FROM "TUser" INTO i;
+    SELECT count(*) FROM "t_user" INTO i;
     return i;
 END;
 $BODY$
@@ -104,7 +104,7 @@ FOR r IN
         u.user_login,
         count(DISTINCT contact_id)  AS count_contact,
         count(DISTINCT group_id) AS count_group
-    FROM "TUser" u
+    FROM "t_user" u
     LEFT JOIN "Contact" c ON u.user_id=c.user_id
     LEFT JOIN "Group" g ON u.user_id=g.user_id
     GROUP BY u.user_id
@@ -128,7 +128,7 @@ BEGIN
     SELECT
         u.user_id as id,
         count(DISTINCT contact_id)  AS count_contact
-    FROM "TUser" u
+    FROM "t_user" u
     LEFT JOIN "Contact" c ON u.user_id=c.user_id
     GROUP BY u.user_id) As t
     INTO i;
@@ -147,7 +147,7 @@ BEGIN
     SELECT
         u.user_id,
         count(DISTINCT group_id)  AS count_group
-    FROM "TUser" u
+    FROM "t_user" u
     LEFT JOIN "Group" c ON u.user_id=c.user_id
     GROUP BY u.user_id) As t
     INTO i;
@@ -167,7 +167,7 @@ BEGIN
         u.user_id,
         u.user_login,
         count(DISTINCT contact_id)  AS count_contact
-    FROM "TUser" u
+    FROM "t_user" u
     LEFT JOIN "Contact" c ON u.user_id=c.user_id
     GROUP BY u.user_id HAVING count(DISTINCT contact_id)<n
     LOOP
