@@ -19,7 +19,7 @@ CREATE TABLE "Contact" (
       FOREIGN KEY (user_id) REFERENCES "TUser" (user_id)
 );
 
-CREATE UNIQUE INDEX contact_name_idx ON "Contact" (contact_name);
+CREATE INDEX contact_name_idx ON "Contact" (contact_name);
 CREATE INDEX fk_user_contact_idx ON "Contact" (user_id);
 
 CREATE TABLE "Group" (
@@ -30,7 +30,7 @@ CREATE TABLE "Group" (
       FOREIGN KEY (user_id) REFERENCES "TUser" (user_id)
 );
 
-CREATE UNIQUE INDEX group_name_idx ON "Group" (group_name);
+CREATE INDEX group_name_idx ON "Group" (group_name);
 CREATE INDEX fk_user_group_idx ON "Group" (user_id);
 
 CREATE TABLE "Contact_group"(
@@ -57,3 +57,4 @@ CREATE TABLE "ContactDetails" (
 );
 
 CREATE INDEX fk_contact_d_idx ON "ContactDetails" (contact_id);
+ 
