@@ -78,36 +78,7 @@
 
 
                 <executions>
-                    <!--<execution>
-                        <id>drop-db-before-if-any</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-
-                           <url>jdbc:postgresql://localhost/test</url>
-                           <autocommit>true</autocommit>
-                           <sqlCommand>drop database CatalogContacs</sqlCommand>
-                           <onError>continue</onError>
-                       </configuration>
-                   </execution>
-
-                   <execution>
-                       <id>create-db</id>
-                       <phase>process-test-resources</phase>
-                       <goals>
-                           <goal>execute</goal>
-                       </goals>
-                       <configuration>
-                           <url>jdbc:postgressql://localhost:5432:CatalogContacs</url>
-                           <autocommit>true</autocommit>
-                           <sqlCommand>create database CatalogContacs</sqlCommand>
-                       </configuration>
-                   </execution>-->
-
-
-                    <!-- <execution>
+                    <execution>
                         <id>create-db</id>
                         <phase>process-test-resources</phase>
                         <goals>
@@ -116,10 +87,10 @@
                         <configuration>
                             <autocommit>true</autocommit>
                             <srcFiles>
-                                  <srcFile>src/main/sql/DrobEndCreateBase2.sql</srcFile>
+                                  <srcFile>src/main/sql/DrobEndCreateBase.sql</srcFile>
                             </srcFiles>
                         </configuration>
-                    </execution>-->
+                    </execution>
 
                     <execution>
                         <id>create-schema</id>
@@ -131,10 +102,10 @@
                             <autocommit>true</autocommit>
                             <srcFiles>
                                 <srcFile>src/main/sql/CreatingTables.sql</srcFile>
-                                <!-- <srcFile>src/main/sql/FillingOutTables.sql</srcFile>
+                                 <srcFile>src/main/sql/FillingOutTables.sql</srcFile>
                                  <srcFile>src/main/sql/ChangeDataTables.sql</srcFile>
-                                 <srcFile>src/main/sql/ChangeUser.sql</srcFile>
-                                 <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>-->
+                                 <srcFile>src/main/sql/modify_user.sql</srcFile>
+                                 <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>
                             </srcFiles>
                         </configuration>
                     </execution>
