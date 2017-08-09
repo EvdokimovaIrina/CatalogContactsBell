@@ -1,0 +1,1 @@
+CREATE SEQUENCE t_user_id_seq; CREATE SEQUENCE contact_id_seq; CREATE SEQUENCE group_id_seq; CREATE SEQUENCE contact_details_id_seq;
