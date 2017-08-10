@@ -58,6 +58,19 @@ CREATE TRIGGER trig_delete_user
 
 --Получение данных пользователя
 
+--Поиск пользователя в базе
+
+CREATE OR REPLACE FUNCTION getUserID(u_login VARCHAR,u_password VARCHAR) RETURNS INT AS
+$BODY$
+DECLARE
+  r INT;
+BEGIN
+    SELECT count(*) FROM "t_user" INTO i;
+    return i;
+END
+$BODY$
+LANGUAGE plpgsql;
+
 -- получение пользователя, а если id не указан, то всех пользователей
 CREATE OR REPLACE FUNCTION getUsers(u_id INT DEFAULT NULL) RETURNS SETOF "t_user" AS
 $BODY$

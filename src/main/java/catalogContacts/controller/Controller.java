@@ -1,5 +1,6 @@
 package catalogContacts.controller;
 
+import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.GroupService;
@@ -108,4 +109,7 @@ public interface Controller {
     GroupService getGroupService();
 
     void findByName(String name);
+
+    void setUserID(String login,String password) throws DaoException;
+
 }

@@ -1,8 +1,7 @@
 package catalogContacts.service;
 
 import catalogContacts.dao.CrudDAO;
-import catalogContacts.dao.exception.DaoXmlException;
-import catalogContacts.dao.factory.AbstractFactoryDao;
+import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
 import catalogContacts.model.TypeContact;
@@ -27,4 +26,5 @@ public interface ContactService {
     void setCrudDAOContact(CrudDAO<Contact> crudDAO);
     void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup);
     void findByName(String name);
+    void setUserID(String login,String password) throws DaoException;
 }

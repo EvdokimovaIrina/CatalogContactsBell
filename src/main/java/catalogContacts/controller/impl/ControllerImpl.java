@@ -1,6 +1,7 @@
 package catalogContacts.controller.impl;
 
 import catalogContacts.controller.Controller;
+import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.impl.ContactServiceImpl;
@@ -110,4 +111,11 @@ public class ControllerImpl implements Controller{
     public void findByName(String name) {
         contactService.findByName(name);
     }
+
+    public void setUserID(String login,String password) throws DaoException {
+        contactService.setUserID(login,password);
+
+    }
+
+
 }

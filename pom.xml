@@ -28,6 +28,12 @@
             <version>42.1.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -69,28 +75,66 @@
                     </dependency>
                 </dependencies>
 
-                <configuration>
+               <configuration>
                     <driver>org.postgresql.Driver</driver>
                     <url>jdbc:postgresql://localhost/catalogcontacs</url>
                     <username>postgres</username>
                     <password>31415926</password>
                 </configuration>
 
-
                 <executions>
-                    <execution>
-                        <id>create-db</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                  <srcFile>src/main/sql/DrobEndCreateBase.sql</srcFile>
-                            </srcFiles>
-                        </configuration>
+                   <!-- <execution>
+                    <id>drop-db-before-test-if-any</id>
+                    <phase>process-test-resources</phase>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <configuration>
+                        <autocommit>true</autocommit>
+                        <sqlCommand>drop database catalogcontacs</sqlCommand>
+                        <onError>continue</onError>
+                    </configuration>
                     </execution>
+
+                    <execution>
+                    <id>create-db</id>
+                    <phase>process-test-resources</phase>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <configuration>
+                        <autocommit>true</autocommit>
+                        <sqlCommand>create database catalogcontacs</sqlCommand>
+                    </configuration>
+                    </execution>
+
+                      <execution>
+                         <id>drop-and-creat-db</id>
+                         <phase>process-test-resources</phase>
+                         <goals>
+                             <goal>execute</goal>
+                         </goals>
+                         <configuration>
+                             <autocommit>true</autocommit>
+                             <srcFiles>
+                                 <srcFile>src/main/sql/DrobEndCreateBase.sql</srcFile>
+                             </srcFiles>
+                         </configuration>
+                    </execution>
+
+                     <execution>
+                         <id>creat-db</id>
+                         <phase>process-test-resources</phase>
+                         <goals>
+                             <goal>execute</goal>
+                         </goals>
+                         <configuration>
+                             <autocommit>true</autocommit>
+                             <srcFiles>
+                                   <srcFile>src/main/sql/CreateBase.sql</srcFile>
+                             </srcFiles>
+                         </configuration>
+                     </execution>-->
 
                     <execution>
                         <id>create-schema</id>
@@ -101,11 +145,16 @@
                         <configuration>
                             <autocommit>true</autocommit>
                             <srcFiles>
-                                <srcFile>src/main/sql/CreatingTables.sql</srcFile>
-                                 <srcFile>src/main/sql/FillingOutTables.sql</srcFile>
-                                 <srcFile>src/main/sql/ChangeDataTables.sql</srcFile>
-                                 <srcFile>src/main/sql/modify_user.sql</srcFile>
-                                 <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>
+                                <srcFile>src/main/sql/sequence.sql</srcFile>
+                                <srcFile>src/main/sql/CreatingTables_1.sql</srcFile>
+                                <srcFile>src/main/sql/CreatingTables_2.sql</srcFile>
+                                <srcFile>src/main/sql/FillingOutTables_1.sql</srcFile>
+                                <srcFile>src/main/sql/FillingOutTables_2.sql</srcFile>
+                                <srcFile>src/main/sql/modify_user.sql</srcFile>
+                                <srcFile>src/main/sql/ChangeDataTables.sql</srcFile>
+                                <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>
+                                <!--File>src/main/sql/ChangeDataTables.sql</srcFile>
+                                <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>-->
                             </srcFiles>
                         </configuration>
                     </execution>

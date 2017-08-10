@@ -1,11 +1,9 @@
 package catalogContacts.service.impl;
 
 import catalogContacts.dao.CrudDAO;
-import catalogContacts.dao.exception.DaoXmlException;
-import catalogContacts.dao.factory.AbstractFactoryDao;
+import catalogContacts.dao.exception.DaoException;
 import catalogContacts.event.Event;
 import catalogContacts.event.Observer;
-import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
 import catalogContacts.event.TypeEvent;
 import catalogContacts.service.GroupService;
@@ -57,7 +55,7 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
         }
     }
 
-    private void notifyObserverWithAneError(DaoXmlException e) {
+    private void notifyObserverWithAneError(DaoException e) {
         notifyObserver(TypeEvent.ERROR, e.getMessage(), null);
     }
     ////////
@@ -74,7 +72,7 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
             crudDAOGroup.create(group);
             notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
 
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 
@@ -85,7 +83,7 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
             crudDAOGroup.delete(numberGroup);
             notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
 
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 
@@ -97,7 +95,7 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
             group.setName(value);
             crudDAOGroup.update(group);
 
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 
@@ -106,7 +104,7 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
     public void showGroupList() {
         try {
             notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 
@@ -117,7 +115,7 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
         Group group = null;
         try {
             group = crudDAOGroup.getObject(number);
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 

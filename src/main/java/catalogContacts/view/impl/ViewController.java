@@ -1,10 +1,8 @@
 package catalogContacts.view.impl;
 
 import catalogContacts.controller.*;
-import catalogContacts.dao.CrudDAO;
-import catalogContacts.dao.TypesOfParsers;
-import catalogContacts.dao.factory.AbstractFactoryDao;
-import catalogContacts.dao.factory.FactoryMethodSelecting;
+import catalogContacts.dao.exception.DaoException;
+import catalogContacts.dao.impl.GetDataFromBDImpl;
 import catalogContacts.model.*;
 import catalogContacts.view.ValidView;
 import catalogContacts.view.View;
@@ -27,49 +25,28 @@ public class ViewController extends View {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public boolean isSelectingAParcer() {
-
+    public void selectingAUser() throws DaoException {
         while (true) {
-            System.out.println("Выберите реализацию xml-парсера");
-            System.out.println("1 - DOM");
-            System.out.println("2 - SAX");
-            System.out.println("3 - на основе библиотеки Jackson");
-            System.out.println("0 - выход");
+
+            System.out.println("Введите свой логин, и затем пароль. Для отмены укажите 0:");
+
             try {
                 String strReader = reader.readLine();
-                int selectedAction = valid.actionValid(strReader);
-                if (selectedAction == 0) {
-                    return false;
+                if (strReader.equals("0")) {
+                    System.exit(1);
                 }
-                if (selectedAction < 0) {
-                    continue;
-                }
-                switch (selectedAction) {
-                    case 1:
-                        initializeParser(TypesOfParsers.DOM);
-                        return true;
-                    case 2:
-                        initializeParser(TypesOfParsers.SAX);
-                        return true;
-                    case 3:
-                        initializeParser(TypesOfParsers.JACKSON);
-                        return true;
-                }
+                String login = strReader;
+                strReader = reader.readLine();
+
+                String passwor = strReader;
+
+                controller.setUserID(login,passwor);
+
             } catch (IOException e) {
-                System.out.println("Не известная команда!");
-                return false;
+                e.getMessage();
+
             }
         }
-
-    }
-
-    private void initializeParser(TypesOfParsers typesOfParsers) {
-        FactoryMethodSelecting selectingAParcer = new FactoryMethodSelecting();
-        AbstractFactoryDao factoryDao = selectingAParcer.factoryDao(typesOfParsers);
-        CrudDAO<Group> groupCrudDAO = factoryDao.createDao(Group.class);
-        controller.getContactService().setCrudDAOContact(factoryDao.createDao(Contact.class));
-        controller.getContactService().setCrudDAOGroup(groupCrudDAO);
-        controller.getGroupService().setCrudDAOGroup(groupCrudDAO);
     }
 
     ////////////////////////

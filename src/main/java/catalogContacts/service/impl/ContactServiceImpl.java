@@ -1,15 +1,13 @@
 package catalogContacts.service.impl;
 
 import catalogContacts.dao.CrudDAO;
-import catalogContacts.dao.exception.DaoXmlException;
-import catalogContacts.dao.factory.AbstractFactoryDao;
+import catalogContacts.dao.exception.DaoException;
 import catalogContacts.event.Event;
 import catalogContacts.event.Observer;
 import catalogContacts.event.TypeEvent;
 import catalogContacts.model.*;
 import catalogContacts.service.ContactService;
 
-import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,20 +34,11 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
     }
     //////
 
-
-    public void setCrudDAOContact(CrudDAO<Contact> crudDAOContact) {
-        this.crudDAOContact = crudDAOContact;
-    }
-
-    public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
-        this.crudDAOGroup = crudDAOGroup;
-    }
-
     public void findByName(String name) {
         try {
             List<Contact> contactList = crudDAOContact.findByName(name);
             notifyObserver(TypeEvent.showContactList, contactList, null);
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             e.printStackTrace();
         }
     }
@@ -74,7 +63,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
         }
     }
 
-    private void notifyObserverWithAneError(DaoXmlException e) {
+    private void notifyObserverWithAneError(DaoException e) {
         notifyObserver(TypeEvent.ERROR, e.getMessage(), null);
     }
     ////////
@@ -102,7 +91,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
             crudDAOContact.update(contact);
             notifyObserver(TypeEvent.showContactDetails, contact, mapDetails);
 
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
     }
@@ -115,7 +104,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
             List<Contact> contactList = crudDAOContact.getAll();
             notifyObserver(TypeEvent.showContactList, contactList, null);
 
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
     }
@@ -126,7 +115,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
             crudDAOContact.delete(numberContact);
 
             notifyObserver(TypeEvent.showContactList, crudDAOContact.getAll(), null);
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 
@@ -144,7 +133,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
                 notifyObserver(TypeEvent.errorNumber, null, null);
             }
             crudDAOContact.update(contact);
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 
@@ -161,7 +150,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
                 notifyObserver(TypeEvent.errorNumber, null, null);
             }
             crudDAOContact.update(contact);
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
     }
@@ -170,7 +159,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
         if (numberGroup == null) {
             try {
                 notifyObserver(TypeEvent.showContactList, crudDAOContact.getAll(), null);
-            } catch (DaoXmlException e) {
+            } catch (DaoException e) {
                 notifyObserverWithAneError(e);
             }
         } else {
@@ -188,14 +177,14 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
                     list.add(contact);
                 }
             }
-        } catch (DaoXmlException ignored) {
+        } catch (DaoException ignored) {
 
         }
         return list;
     }
 
 
-    public Contact getContactByNumber(int numberContact) throws DaoXmlException {
+    public Contact getContactByNumber(int numberContact) throws DaoException {
         Contact contact = crudDAOContact.getObject(numberContact);
 
         return contact;
@@ -208,7 +197,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
 
             notifyObserver(TypeEvent.showContactData, contact, null);
 
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
     }
@@ -223,7 +212,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
                 notifyObserver(TypeEvent.showContactData, contact, null);
             }
 
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 
@@ -240,7 +229,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
                 crudDAOContact.update(contact);
                 notifyObserver(TypeEvent.showContactData, contact, null);
             }
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 
@@ -257,17 +246,29 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
                 notifyObserver(TypeEvent.showContactData, contact, null);
             }
 
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void setUserID(String login,String password) throws DaoException {
+        crudDAOContact.getGetDataFromBD().setUserIDFromDB(login,password);
+    }
+
+    public void setCrudDAOContact(CrudDAO<Contact> crudDAOContact) {
+        this.crudDAOContact = crudDAOContact;
+    }
+
+    public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
+        this.crudDAOGroup = crudDAOGroup;
     }
 
     public Group getGroupByNumber(int numberGroup) {
         Group group = null;
         try {
             group = crudDAOGroup.getObject(numberGroup);
-        } catch (DaoXmlException e) {
+        } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
 

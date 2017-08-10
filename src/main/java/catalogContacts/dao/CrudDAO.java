@@ -1,9 +1,7 @@
 package catalogContacts.dao;
 
-import catalogContacts.dao.exception.DaoXmlException;
-import catalogContacts.model.Contact;
+import catalogContacts.dao.exception.DaoException;
 
-import javax.xml.xpath.XPathExpressionException;
 import java.util.List;
 
 /**
@@ -14,44 +12,60 @@ public interface CrudDAO<T> {
      * Запись нового объекта в хранилище
      * @param object объект для записи
      */
-    void create(T object) throws DaoXmlException;
+    void create(T object) throws DaoException;
 
     /**
      * Изменение существующего объекта в хранилище
      * @param object объект сведения по которому изменились
      */
-    void update(T object) throws DaoXmlException;
+    void update(T object) throws DaoException;
 
     /**
      * Удаление данных по объекту из хранилища
      * @number объект данные по которому нужно удалить
      */
-    void delete(int number) throws DaoXmlException;
+    void delete(int number) throws DaoException;
 
     /**
      * Получает данные по запрошенному объекту из хранилища
      * @param id номер объекта
      * @return возвращает объект, см указанным типом
      */
-    T getObject(int id) throws DaoXmlException;
+    T getObject(int id) throws DaoException;
 
     /**
      * Получает список всех объектов указанного типа
      *
      * @return список объектов указанного типа
      */
-    List<T> getAll() throws DaoXmlException;
+    List<T> getAll() throws DaoException;
 
     /**
      * Находит объект по заданному имени
      *
      * @name имя объекта
      */
-    List<T> findByName(String name) throws DaoXmlException;
+    List<T> findByName(String name) throws DaoException;
 
     /**
      * Формирует новый номер объекта
      *
      */
-    int toFormANewId() throws DaoXmlException;;
+    int toFormANewId() throws DaoException;;
+
+    /**
+     * Устанавливаем ID пользователя для выбора данных из базы
+     *
+     *@userID id пользователя который манипулирует со списком контактов
+     */
+    //void setUserID(int userID);
+
+    /**
+     * Устанавливаем парметр для парсинга данных из БД
+     *
+     *@getDataFromBD класс с методами для парсинга
+     */
+    void setGetDataFromBD(GetDataFromBD getDataFromBD);
+
+    GetDataFromBD getGetDataFromBD();
 }
