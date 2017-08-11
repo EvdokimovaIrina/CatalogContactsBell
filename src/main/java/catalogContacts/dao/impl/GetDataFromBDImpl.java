@@ -1,4 +1,4 @@
-package catalogContacts.dao.impl1;
+package catalogContacts.dao.impl;
 
 import catalogContacts.dao.GetDataFromBD;
 import catalogContacts.dao.exception.DaoException;
