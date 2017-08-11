@@ -1,7 +1,6 @@
-package catalogContacts.dao.implDAO;
+package catalogContacts.dao.impl;
 
 import catalogContacts.dao.CrudDAO;
-import catalogContacts.dao.GetDataFromBD;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.User;
 

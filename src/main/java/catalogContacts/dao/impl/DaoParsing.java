@@ -1,4 +1,4 @@
-package catalogContacts.dao.implDAO;
+package catalogContacts.dao.impl;
 
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.mappers.ModelMapper;

@@ -1,8 +1,7 @@
-package catalogContacts.dao.implDAO;
+package catalogContacts.dao.impl;
 
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.GetDataFromBD;
 import catalogContacts.model.Group;
 
 import java.sql.SQLException;

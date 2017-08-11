@@ -1,10 +1,8 @@
-package catalogContacts.dao.implDAO;
+package catalogContacts.dao.impl;
 
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.GetDataFromBD;
 import catalogContacts.dao.mappers.ModelMapper;
-import catalogContacts.dao.mappers.impl.ModelMapperContact;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
 import catalogContacts.model.User;
