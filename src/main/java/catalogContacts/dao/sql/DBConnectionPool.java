@@ -28,7 +28,7 @@ public class DBConnectionPool {
         connectionPool.setUrl(dbUrl);
         connectionPool.setUsername(username);
         connectionPool.setPassword(password);
-        connectionPool.setInitialSize(2);
+        connectionPool.setInitialSize(3);
     }
 
     //////

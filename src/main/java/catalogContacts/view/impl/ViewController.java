@@ -2,7 +2,6 @@ package catalogContacts.view.impl;
 
 import catalogContacts.controller.*;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.impl.GetDataFromBDImpl;
 import catalogContacts.model.*;
 import catalogContacts.view.ValidView;
 import catalogContacts.view.View;

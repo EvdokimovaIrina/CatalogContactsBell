@@ -1,8 +1,7 @@
-package catalogContacts.dao.impl;
+package catalogContacts.dao.impl1;
 
 import catalogContacts.dao.GetDataFromBD;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.sql.DBConnectionPool;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
 import catalogContacts.model.TypeContact;
