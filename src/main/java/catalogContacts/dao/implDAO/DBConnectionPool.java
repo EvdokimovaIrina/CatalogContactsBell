@@ -1,4 +1,4 @@
-package catalogContacts.dao.sql;
+package catalogContacts.dao.implDAO;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
