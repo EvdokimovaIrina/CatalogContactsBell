@@ -60,4 +60,7 @@ public class ViewOutput extends View {
 
     }
 
+    public void run() {
+
+    }
 }

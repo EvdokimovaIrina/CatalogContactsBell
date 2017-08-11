@@ -60,12 +60,4 @@ public interface CrudDAO<T> {
      */
     //void setUserID(int userID);
 
-    /**
-     * Устанавливаем парметр для парсинга данных из БД
-     *
-     *@getDataFromBD класс с методами для парсинга
-     */
-    void setGetDataFromBD(GetDataFromBD getDataFromBD);
-
-    GetDataFromBD getGetDataFromBD();
 }

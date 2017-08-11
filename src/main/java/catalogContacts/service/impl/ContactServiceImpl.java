@@ -45,22 +45,28 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
 
     //работа с наблюдателями
     public void addObserver(Observer observer) {
-        if (!ObserversList.contains(observer)) {
-            ObserversList.add(observer);
-        }
+
+            if (!ObserversList.contains(observer)) {
+                ObserversList.add(observer);
+            }
+
     }
 
     public void removeObserver(Observer observer) {
-        if (ObserversList.contains(observer)) {
-            ObserversList.remove(observer);
-        }
+
+            if (ObserversList.contains(observer)) {
+                ObserversList.remove(observer);
+            }
+
     }
 
 
     public void notifyObserver(TypeEvent typeEvent, Object mainObject, Object value) {
-        for (Observer observer : ObserversList) {
-            observer.handleEvent(new Event(typeEvent, mainObject, value));
-        }
+
+            for (Observer observer : ObserversList) {
+                observer.handleEvent(new Event(typeEvent, mainObject, value));
+            }
+
     }
 
     private void notifyObserverWithAneError(DaoException e) {
@@ -253,7 +259,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
     }
 
     public void setUserID(String login,String password) throws DaoException {
-        crudDAOContact.getGetDataFromBD().setUserIDFromDB(login,password);
+        //crudDAOContact.getGetDataFromBD().setUserIDFromDB(login,password);
     }
 
     public void setCrudDAOContact(CrudDAO<Contact> crudDAOContact) {

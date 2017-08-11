@@ -22,6 +22,12 @@ public class ViewController extends View {
 
     public ViewController() {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
+        // Запускаем поток
+    }
+
+    @Override
+    public void run() {
+        displayMainMenu();
     }
 
     public void selectingAUser() throws DaoException {

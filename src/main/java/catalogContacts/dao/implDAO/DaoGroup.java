@@ -5,12 +5,18 @@ import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.GetDataFromBD;
 import catalogContacts.model.Group;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
  *
  */
-public class DaoGroup implements CrudDAO<Group> {
+public class DaoGroup extends DaoParsing implements CrudDAO<Group> {
+
+    public DaoGroup() throws SQLException {
+        super();
+    }
+
     public void create(Group object) throws DaoException {
 
     }
@@ -39,15 +45,5 @@ public class DaoGroup implements CrudDAO<Group> {
         return 0;
     }
 
-    public void setUserID(int userID) {
 
-    }
-
-    public void setGetDataFromBD(GetDataFromBD getDataFromBD) {
-
-    }
-
-    public GetDataFromBD getGetDataFromBD() {
-        return null;
-    }
 }

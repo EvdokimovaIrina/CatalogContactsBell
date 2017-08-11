@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by iren on 23.07.2017.
  */
-public abstract class View implements Observer {
+public abstract class View  implements Observer,Runnable {
 
     public void handleEvent(Event event) {
         //  showContactDetails

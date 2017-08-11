@@ -3,12 +3,8 @@ package catalogContacts;
 import catalogContacts.controller.impl.ControllerImpl;
 import catalogContacts.controller.*;
 import catalogContacts.dao.CrudDAO;
-import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.impl1.DaoContact;
-import catalogContacts.dao.impl1.DaoGroup;
-import catalogContacts.dao.GetDataFromBD;
-import catalogContacts.dao.impl1.GetDataFromBDImpl;
-import catalogContacts.dao.sql.DBConnectionPool;
+import catalogContacts.dao.implDAO.DaoContact;
+import catalogContacts.dao.implDAO.DaoGroup;
 import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
 import catalogContacts.service.impl.ContactServiceImpl;
@@ -17,7 +13,6 @@ import catalogContacts.view.impl.ValidViewImpl;
 import catalogContacts.view.impl.ViewController;
 import catalogContacts.view.impl.ViewOutput;
 
-import java.sql.SQLException;
 
 /**
  * Created by iren on 13.07.2017.
@@ -28,42 +23,27 @@ public class Main {
 
 
         ViewController viewInput = setParametersController();
+        Thread thread = new Thread(viewInput);
+        thread.start();
 
+        ViewController viewInput2 = setParametersController();
+        Thread thread2 = new Thread(viewInput);
+        thread2.start();
 
         //Запустим основное меню программы
-        viewInput.displayMainMenu();
+       // viewInput.displayMainMenu();
 
     }
 
     //Установим нужные параметры в контроллерах
     public static ViewController setParametersController() {
 
-        GetDataFromBD getDataFromBD = new GetDataFromBDImpl();
-
-        try {
-            getDataFromBD.setConnection(DBConnectionPool.getInstance().getConnectionPool().getConnection());
-        } catch (SQLException e) {
-            e.getMessage();
-            System.exit(1);
-        }
 
         ViewController viewInput = new ViewController();
-        //Авторизация пользователя
-        try {
-            viewInput.selectingAUser();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-        Integer userID = getDataFromBD.getUserID();
-        if(userID==null | userID==0){
-            System.exit(1);
-        }
 
         ContactServiceImpl contactService = ContactServiceImpl.getInstance();
         CrudDAO<Contact> crudDAOContact = new DaoContact();
-        crudDAOContact.setGetDataFromBD(getDataFromBD);
         CrudDAO<Group> crudDAOGroup = new DaoGroup();
-        crudDAOGroup.setGetDataFromBD(getDataFromBD);
         contactService.setCrudDAOContact(crudDAOContact);
         contactService.setCrudDAOGroup(crudDAOGroup);
 

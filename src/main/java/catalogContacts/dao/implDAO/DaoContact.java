@@ -3,15 +3,28 @@ package catalogContacts.dao.implDAO;
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.GetDataFromBD;
+import catalogContacts.dao.mappers.ModelMapper;
+import catalogContacts.dao.mappers.impl.ModelMapperContact;
 import catalogContacts.model.Contact;
+import catalogContacts.model.ContactDetails;
+import catalogContacts.model.User;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  */
-public class DaoContact implements CrudDAO<Contact>{
-     private GetDataFromBD getDataFromBD;
+public class DaoContact extends DaoParsing implements CrudDAO<Contact>{
+    private User user;
+    private ModelMapper<Contact> modelMapperContact;
+
+    public DaoContact() throws SQLException {
+        super();
+    }
+
     public void create(Contact object) throws DaoException {
 
     }
@@ -29,7 +42,28 @@ public class DaoContact implements CrudDAO<Contact>{
     }
 
     public List<Contact> getAll() throws DaoException {
-       return getDataFromBD.getAllContact();
+        List<Contact> contactList = new ArrayList<>();
+
+        try {
+            List param=new ArrayList();
+            param.add(user.getId());
+            ResultSet result = getResult("SELECT * FROM getlistcontact(?)",param);
+            while (result.next()) {
+                Contact contact = modelMapperContact.creatObject(result);
+                contact.setContactDetailsList(getContactDetailsList(contact));
+                contactList.add(contact);
+            }
+
+            return contactList;
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка получения данных "+e.getMessage());
+        }
+
+    }
+
+    private List <ContactDetails> getContactDetailsList(Contact contact){
+        List<ContactDetails> contactDetailses = new ArrayList<>();
+        return contactDetailses;
     }
 
     public List<Contact> findByName(String name) throws DaoException {
@@ -40,11 +74,5 @@ public class DaoContact implements CrudDAO<Contact>{
         return 0;
     }
 
-    public void setGetDataFromBD(GetDataFromBD getDataFromBD) {
-        this.getDataFromBD = getDataFromBD;
-    }
 
-    public GetDataFromBD getGetDataFromBD() {
-        return getDataFromBD;
-    }
 }
