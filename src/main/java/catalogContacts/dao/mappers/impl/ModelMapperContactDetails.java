@@ -23,7 +23,7 @@ public class ModelMapperContactDetails implements ModelMapper <ContactDetails>{
 
             }
         } catch (SQLException|IllegalArgumentException e) {
-                throw new DaoException("Ошибка получения контактной информации");
+                throw new DaoException("Ошибка получения контактной информации",e);
         }
         return null;
     }
@@ -38,7 +38,7 @@ public class ModelMapperContactDetails implements ModelMapper <ContactDetails>{
 
             }
         } catch (SQLException|IllegalArgumentException e) {
-            throw new DaoException("Ошибка получения контактной информации");
+            throw new DaoException("Ошибка получения контактной информации",e);
         }
         return contactDetailsList;
     }

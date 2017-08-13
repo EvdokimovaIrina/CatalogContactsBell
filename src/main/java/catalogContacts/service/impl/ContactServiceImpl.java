@@ -275,7 +275,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
             }
 
         } catch (DaoException e) {
-            e.printStackTrace();
+            notifyObserverWithAneError(e);
         }
 
     }

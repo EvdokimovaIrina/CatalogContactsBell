@@ -21,7 +21,7 @@ public class ModelMapperContact implements ModelMapper<Contact>{
                 return contact;
             }
         } catch (SQLException e) {
-        throw new DaoException("Ошибка получения контакта "+e.getMessage());
+        throw new DaoException("Ошибка получения контакта "+e.getMessage(),e);
         }
         return null;
     }
@@ -34,7 +34,7 @@ public class ModelMapperContact implements ModelMapper<Contact>{
                 contactList.add(contact);
             }
         } catch (SQLException e) {
-            throw new DaoException("Ошибка получения контактов "+e.getMessage());
+            throw new DaoException("Ошибка получения контактов "+e.getMessage(),e);
         }
         return contactList;
     }

@@ -32,7 +32,7 @@ public abstract class DaoParsing {
             return preparedStatement.executeQuery();
 
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при получении данных "+e.getMessage());
+            throw new DaoException("Ошибка при получении данных ",e);
         }
     }
 
@@ -40,7 +40,7 @@ public abstract class DaoParsing {
         try {
             connection = DBConnectionPool.getInstance().getConnectionPool().getConnection();
         } catch (SQLException e) {
-           throw new DaoException("Ошибка подключения к БД "+e.getMessage());
+           throw new DaoException("Ошибка подключения к БД ",e);
         }
     }
 

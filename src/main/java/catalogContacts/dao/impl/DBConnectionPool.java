@@ -32,7 +32,7 @@ public class DBConnectionPool {
             inputStream.close();
 
         } catch (IOException | NullPointerException e) {
-            throw  new DaoException("Ошибка при считывании файла параметров подключения к БД "+e.getMessage());
+            throw  new DaoException("Ошибка при считывании файла параметров подключения к БД ",e);
         }
         connectionPool = new BasicDataSource();
         connectionPool.setDriverClassName(properties.getProperty("db.driverClassName"));

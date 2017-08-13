@@ -22,7 +22,7 @@ public class ModelMapperGroup implements ModelMapper<Group> {
                 return group;
             }
         } catch (SQLException e) {
-            throw new DaoException("Ошибка получения группы "+e.getMessage());
+            throw new DaoException("Ошибка получения группы ",e);
         }
         return null;
     }
@@ -35,7 +35,7 @@ public class ModelMapperGroup implements ModelMapper<Group> {
                 groupList.add(group);
             }
         } catch (SQLException e) {
-            throw new DaoException("Ошибка получения групп "+e.getMessage());
+            throw new DaoException("Ошибка получения групп ",e);
         }
         return groupList;
     }

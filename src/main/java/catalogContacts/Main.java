@@ -65,7 +65,8 @@ public class Main {
             crudDAOUser = new DaoUser();
 
         } catch (DaoException e) {
-            e.getMessage();
+            e.printStackTrace();
+            System.exit(1);
         }
 
 

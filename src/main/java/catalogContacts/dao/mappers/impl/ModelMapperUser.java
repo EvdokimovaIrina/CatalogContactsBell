@@ -21,7 +21,7 @@ public class ModelMapperUser implements ModelMapper<User>{
                 return user;
             }
         } catch (SQLException e) {
-            throw new DaoException("Ошибка получения контакта "+e.getMessage());
+            throw new DaoException("Ошибка получения контакта ",e);
         }
         return null;
     }
@@ -34,7 +34,7 @@ public class ModelMapperUser implements ModelMapper<User>{
                 groupList.add(group);
             }
         } catch (SQLException e) {
-            throw new DaoException("Ошибка получения групп "+e.getMessage());
+            throw new DaoException("Ошибка получения групп ",e);
         }
         return groupList;
     }
