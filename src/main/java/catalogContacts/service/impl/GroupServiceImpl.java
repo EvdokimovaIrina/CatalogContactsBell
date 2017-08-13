@@ -68,7 +68,6 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
     public void saveGroup(Group group) {
 
         try {
-            group.setNumber(crudDAOGroup.toFormANewId());
             crudDAOGroup.create(group);
             notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
 

@@ -26,5 +26,5 @@ public interface ContactService {
     void setCrudDAOContact(CrudDAO<Contact> crudDAO);
     void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup);
     void findByName(String name);
-    void setUserID(String login,String password) throws DaoException;
+
 }

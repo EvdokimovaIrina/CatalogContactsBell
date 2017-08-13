@@ -1,0 +1,4 @@
+CREATE DATABASE bd_delet;
+DROP DATABASE CatalogContacs;
+CREATE DATABASE CatalogContacs;
+DROP DATABASE bd_delet;

@@ -9,11 +9,16 @@ import java.io.Serializable;
 
 public class ContactDetails implements Serializable {
     @JacksonXmlProperty(localName = "type")
-    private String t1;
+    private int id;
     private TypeContact type;
     @JacksonXmlProperty(localName = "value")
     private String value;
 
+    public ContactDetails(int id,TypeContact type, String value){
+        this.id = id;
+        this.type = type;
+        this.value = value;
+    }
     public ContactDetails(TypeContact type, String value){
         this.type = type;
         this.value = value;
@@ -36,5 +41,13 @@ public class ContactDetails implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

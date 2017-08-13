@@ -110,6 +110,6 @@ public interface Controller {
 
     void findByName(String name);
 
-    void setUserID(String login,String password) throws DaoException;
+    void setUserThread(String login,String password) throws DaoException;
 
 }

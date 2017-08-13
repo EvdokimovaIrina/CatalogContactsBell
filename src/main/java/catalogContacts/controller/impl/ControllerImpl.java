@@ -4,6 +4,7 @@ import catalogContacts.controller.Controller;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
+import catalogContacts.service.UserService;
 import catalogContacts.service.impl.ContactServiceImpl;
 import catalogContacts.service.GroupService;
 import catalogContacts.service.impl.GroupServiceImpl;
@@ -16,11 +17,12 @@ import java.util.Map;
 public class ControllerImpl implements Controller{
     private ContactService contactService;
     private GroupService groupService;
+    private UserService userService;
 
-    public ControllerImpl(ContactServiceImpl contactService,GroupServiceImpl groupService) {
+    public ControllerImpl(ContactServiceImpl contactService,GroupServiceImpl groupService,UserService userService) {
         this.contactService = contactService;
         this.groupService =groupService;
-
+        this.userService = userService;
     }
 
     public ControllerImpl() {
@@ -112,8 +114,8 @@ public class ControllerImpl implements Controller{
         contactService.findByName(name);
     }
 
-    public void setUserID(String login,String password) throws DaoException {
-        contactService.setUserID(login,password);
+    public void setUserThread(String login,String password) throws DaoException {
+        userService.setUserThread(login,password);
 
     }
 

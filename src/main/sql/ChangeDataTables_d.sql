@@ -126,6 +126,17 @@ END
 $BODY$
 LANGUAGE 'plpgsql';
 
+--Удаление группы
+
+CREATE OR REPLACE FUNCTION DeleteGroup(g_id INT) RETURNS VOID AS
+$BODY$
+BEGIN
+    DELETE FROM "Group"
+          WHERE group_id = g_id;
+END
+$BODY$
+LANGUAGE 'plpgsql';
+
 
 CREATE OR REPLACE FUNCTION DeleteDataContact() RETURNS TRIGGER AS
 $BODY$
@@ -142,4 +153,17 @@ LANGUAGE 'plpgsql';
 CREATE TRIGGER trig_delete_contact
   BEFORE DELETE ON "Contact" FOR EACH ROW EXECUTE PROCEDURE DeleteDataContact();
 
+CREATE OR REPLACE FUNCTION DeleteDataContact() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    DELETE FROM "ContactDetails"
+          WHERE contact_id = OLD.contact_id;
+    DELETE FROM "Contact_group"
+          WHERE contact_id = OLD.contact_id;
+          RETURN OLD;
+END
+$BODY$
+LANGUAGE 'plpgsql';
 
+CREATE TRIGGER trig_delete_contact
+  BEFORE DELETE ON "Contact" FOR EACH ROW EXECUTE PROCEDURE DeleteDataContact();

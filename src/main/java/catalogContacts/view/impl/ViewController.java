@@ -3,6 +3,7 @@ package catalogContacts.view.impl;
 import catalogContacts.controller.*;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.*;
+import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.view.ValidView;
 import catalogContacts.view.View;
 
@@ -27,10 +28,10 @@ public class ViewController extends View {
 
     @Override
     public void run() {
-        displayMainMenu();
+        authorizationUser();
     }
 
-    public void selectingAUser() throws DaoException {
+    public void authorizationUser() {
         while (true) {
 
             System.out.println("Введите свой логин, и затем пароль. Для отмены укажите 0:");
@@ -45,11 +46,15 @@ public class ViewController extends View {
 
                 String passwor = strReader;
 
-                controller.setUserID(login,passwor);
+                controller.setUserThread(login,passwor);
 
-            } catch (IOException e) {
-                e.getMessage();
-
+                if (SecurityContextHolder.getLoggedUser()== null){
+                    System.out.println("Авторизация не выполнена");
+                }else {
+                    displayMainMenu();
+                }
+            } catch (DaoException|IOException e){
+                System.out.println("Ошибка при авторизации "+e.getMessage());
             }
         }
     }

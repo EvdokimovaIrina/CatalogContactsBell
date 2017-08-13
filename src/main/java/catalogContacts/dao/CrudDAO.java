@@ -1,6 +1,7 @@
 package catalogContacts.dao;
 
 import catalogContacts.dao.exception.DaoException;
+import catalogContacts.model.User;
 
 import java.util.List;
 
@@ -47,17 +48,6 @@ public interface CrudDAO<T> {
      */
     List<T> findByName(String name) throws DaoException;
 
-    /**
-     * Формирует новый номер объекта
-     *
-     */
-    int toFormANewId() throws DaoException;;
 
-    /**
-     * Устанавливаем ID пользователя для выбора данных из базы
-     *
-     *@userID id пользователя который манипулирует со списком контактов
-     */
-    //void setUserID(int userID);
 
 }

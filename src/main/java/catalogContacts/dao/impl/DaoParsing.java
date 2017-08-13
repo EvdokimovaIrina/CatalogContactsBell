@@ -18,36 +18,30 @@ import java.util.List;
 public abstract class DaoParsing {
     private PreparedStatement preparedStatement = null;
     private Connection connection = null;
-    private ModelMapper<Contact> modelMapperContact;
-    private User user;
 
-    ResultSet getResult(String select,List param) throws DaoException {
+    protected ResultSet executionQuery(String select,Object... params) throws DaoException {
         try {
             preparedStatement = connection.prepareStatement(select);
-            for (int i = 0; i < param.size(); i++) {
-
-                preparedStatement.setString(i, (String) param.get(i));
+            for (int i = 0; i < params.length; i++) {
+                if (params[i] instanceof Integer){
+                    preparedStatement.setInt(i+1, (Integer) params[i]);
+                }else if (params[i] instanceof String){
+                preparedStatement.setString(i+1, (String) params[i]);
+                }
             }
-
-            ResultSet result = preparedStatement.executeQuery();
-            return result;
+            return preparedStatement.executeQuery();
 
         } catch (SQLException e) {
             throw new DaoException("Ошибка при получении данных "+e.getMessage());
         }
     }
 
-    public DaoParsing() throws SQLException {
-        modelMapperContact = new ModelMapperContact();
-        connection = DBConnectionPool.getInstance().getConnectionPool().getConnection();
-    }
-
-    public PreparedStatement getPreparedStatement() {
-        return preparedStatement;
-    }
-
-    public void setPreparedStatement(PreparedStatement preparedStatement) {
-        this.preparedStatement = preparedStatement;
+    public DaoParsing() throws DaoException {
+        try {
+            connection = DBConnectionPool.getInstance().getConnectionPool().getConnection();
+        } catch (SQLException e) {
+           throw new DaoException("Ошибка подключения к БД "+e.getMessage());
+        }
     }
 
     public Connection getConnection() {
@@ -58,19 +52,5 @@ public abstract class DaoParsing {
         this.connection = connection;
     }
 
-    public ModelMapper<Contact> getModelMapperContact() {
-        return modelMapperContact;
-    }
 
-    public void setModelMapperContact(ModelMapper<Contact> modelMapperContact) {
-        this.modelMapperContact = modelMapperContact;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

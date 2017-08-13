@@ -38,6 +38,16 @@
 
     <build>
         <finalName>Contacts</finalName>
+
+        <resources>
+            <resource>
+                <directory>/src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>../src/main/resources</directory>
+            </resource>
+        </resources>
+        
         <plugins>
 
             <plugin>
@@ -145,16 +155,14 @@
                         <configuration>
                             <autocommit>true</autocommit>
                             <srcFiles>
-                                <srcFile>src/main/sql/sequence.sql</srcFile>
-                                <srcFile>src/main/sql/CreatingTables_1.sql</srcFile>
-                                <srcFile>src/main/sql/CreatingTables_2.sql</srcFile>
-                                <srcFile>src/main/sql/FillingOutTables_1.sql</srcFile>
-                                <srcFile>src/main/sql/FillingOutTables_2.sql</srcFile>
-                                <srcFile>src/main/sql/modify_user.sql</srcFile>
-                                <srcFile>src/main/sql/ChangeDataTables.sql</srcFile>
-                                <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>
-                                <!--File>src/main/sql/ChangeDataTables.sql</srcFile>
-                                <srcFile>src/main/sql/ViewingDataFromTables.sql</srcFile>-->
+                                <srcFile>src/main/resources/sequence.sql</srcFile>
+                                <srcFile>src/main/resources/CreatingTables_1.sql</srcFile>
+                                <srcFile>src/main/resources/CreatingTables_2.sql</srcFile>
+                                <srcFile>src/main/resources/FillingOutTables_1.sql</srcFile>
+                                <srcFile>src/main/resources/FillingOutTables_2.sql</srcFile>
+                                <srcFile>src/main/resources/modify_user.sql</srcFile>
+                                <srcFile>src/main/resources/ChangeDataTables.sql</srcFile>
+                                <srcFile>src/main/resources/ViewingDataFromTables.sql</srcFile>
                             </srcFiles>
                         </configuration>
                     </execution>

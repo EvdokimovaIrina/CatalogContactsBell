@@ -60,13 +60,20 @@ CREATE TRIGGER trig_delete_user
 
 --Поиск пользователя в базе
 
-CREATE OR REPLACE FUNCTION getUserID(u_login VARCHAR,u_password VARCHAR) RETURNS INT AS
+CREATE OR REPLACE FUNCTION AuthorizationUser(u_login VARCHAR,u_password VARCHAR) RETURNS SETOF "t_user" AS
 $BODY$
 DECLARE
-  r INT;
+  r "t_user";
 BEGIN
-    SELECT count(*) FROM "t_user" INTO i;
-    return i;
+    FOR r IN
+        SELECT
+              *
+        FROM "t_user"
+            WHERE (user_login=u_login AND user_password=u_password)
+    LOOP
+        RETURN NEXT r;
+    END LOOP;
+    RETURN;
 END
 $BODY$
 LANGUAGE plpgsql;
@@ -104,6 +111,7 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql;
+
 
 --Получает сводные данные по всем пользователям
 

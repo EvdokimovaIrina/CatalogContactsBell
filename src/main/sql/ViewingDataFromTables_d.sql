@@ -19,6 +19,24 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
+-- вывод контакта
+CREATE OR REPLACE FUNCTION getGroup(g_id INT) RETURNS SETOF "Group" AS
+$BODY$
+DECLARE
+  r "Group";
+BEGIN
+    FOR r IN
+        SELECT
+              *
+        FROM "Group"
+            WHERE group_id=g_id
+    LOOP
+        RETURN NEXT r;
+    END LOOP;
+    RETURN;
+END
+$BODY$
+LANGUAGE plpgsql;
 
 -- вывод списка контактов пользователя
 
