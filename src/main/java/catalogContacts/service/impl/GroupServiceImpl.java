@@ -36,26 +36,26 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
     //////
 
     //работа с наблюдателями
-    public void addObserver(Observer observer) {
+    public synchronized void addObserver(Observer observer) {
         if (!ObserversList.contains(observer)) {
             ObserversList.add(observer);
         }
     }
 
-    public void removeObserver(Observer observer) {
+    public synchronized void removeObserver(Observer observer) {
         if (ObserversList.contains(observer)) {
             ObserversList.remove(observer);
         }
     }
 
 
-    public void notifyObserver(TypeEvent typeEvent, Object mainObject, Object value) {
+    public synchronized void notifyObserver(TypeEvent typeEvent, Object mainObject, Object value) {
         for (Observer observer : ObserversList) {
             observer.handleEvent(new Event(typeEvent, mainObject,value));
         }
     }
 
-    private void notifyObserverWithAneError(DaoException e) {
+    private synchronized void notifyObserverWithAneError(DaoException e) {
         notifyObserver(TypeEvent.ERROR, e.getMessage(), null);
     }
     ////////
@@ -68,7 +68,9 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
     public void saveGroup(Group group) {
 
         try {
-            crudDAOGroup.create(group);
+            synchronized(this) {
+                crudDAOGroup.create(group);
+            }
             notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
 
         } catch (DaoException e) {
@@ -79,7 +81,9 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
 
     public void deleteGroup(int numberGroup) {
         try {
-            crudDAOGroup.delete(numberGroup);
+            synchronized(this) {
+                crudDAOGroup.delete(numberGroup);
+            }
             notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
 
         } catch (DaoException e) {
@@ -90,9 +94,11 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
 
     public void changeGroup(int numberGroup,String value) {
         try {
-            Group group = crudDAOGroup.getObject(numberGroup);
-            group.setName(value);
-            crudDAOGroup.update(group);
+            synchronized(this) {
+                Group group = crudDAOGroup.getObject(numberGroup);
+                group.setName(value);
+                crudDAOGroup.update(group);
+            }
 
         } catch (DaoException e) {
             notifyObserverWithAneError(e);
@@ -113,7 +119,9 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
     public Group findByNumber(int number) {
         Group group = null;
         try {
-            group = crudDAOGroup.getObject(number);
+            synchronized(this) {
+                group = crudDAOGroup.getObject(number);
+            }
         } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }

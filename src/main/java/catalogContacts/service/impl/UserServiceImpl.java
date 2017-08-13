@@ -27,7 +27,10 @@ public class UserServiceImpl implements UserService {
     //////
 
     public void setUserThread(String login,String password) throws DaoException {
-        User user = crudDAOUser.authorizationUser(login,password);
+        User user;
+        synchronized(this) {
+            user = crudDAOUser.authorizationUser(login, password);
+        }
         SecurityContextHolder.setLoggedUser(user);
     }
 

@@ -69,7 +69,7 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
 
     }
 
-    private void notifyObserverWithAneError(DaoException e) {
+    private synchronized void notifyObserverWithAneError(DaoException e) {
         notifyObserver(TypeEvent.ERROR, e.getMessage(), null);
     }
     ////////
