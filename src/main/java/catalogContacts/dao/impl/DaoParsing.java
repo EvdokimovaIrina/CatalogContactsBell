@@ -38,11 +38,6 @@ public abstract class DaoParsing {
         }
     }
 
-    private ModelMapper factoryMapper(ResultSet resultSet,){
-
-
-
-    }
 
     public DaoParsing() throws DaoException {
 
