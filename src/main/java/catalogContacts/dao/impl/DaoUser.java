@@ -33,11 +33,11 @@ public class DaoUser extends DaoParsing implements CrudDAOUser<User>{
     }
 
     public User getObject(int id) throws DaoException {
-        return modelMapperUser.creatObject(executionQuery(selectGetUser,id));
+        return modelMapperUser.getObject(executionQuery(selectGetUser,id));
     }
 
     public User authorizationUser(String login,String password) throws DaoException {
-        return modelMapperUser.creatObject(executionQuery(selectAuthorizationUser,login,password));
+        return modelMapperUser.getObject(executionQuery(selectAuthorizationUser,login,password));
     }
     public List<User> getAll() throws DaoException {
         return null;

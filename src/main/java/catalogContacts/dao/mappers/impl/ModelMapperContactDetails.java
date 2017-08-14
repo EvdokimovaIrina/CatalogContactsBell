@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class ModelMapperContactDetails implements ModelMapper<ContactDetails> {
 
-    public ContactDetails creatObject(List<Map<String, String>> listMapResulSet) throws DaoException {
+    public ContactDetails getObject(List<Map<String, String>> listMapResulSet) throws DaoException {
         for (Map<String, String> mapOfList : listMapResulSet) {
             return mapToObject(mapOfList);
         }
@@ -22,7 +22,7 @@ public class ModelMapperContactDetails implements ModelMapper<ContactDetails> {
         return null;
     }
 
-    public List<ContactDetails> creatObjectList(List<Map<String, String>> listMapResulSet) throws DaoException {
+    public List<ContactDetails> getListOfObjects(List<Map<String, String>> listMapResulSet) throws DaoException {
         List<ContactDetails> contactDetailsList = new ArrayList<>();
         for (Map<String, String> mapOfList : listMapResulSet) {
             contactDetailsList.add(mapToObject(mapOfList));

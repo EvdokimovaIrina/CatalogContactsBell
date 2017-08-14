@@ -10,7 +10,7 @@ import java.util.Map;
  *
  */
 public interface ModelMapper<T> {
-    T creatObject(List<Map<String, String>> listMapResulSet) throws DaoException;
-    List<T> creatObjectList(List<Map<String, String>> listMapResulSet) throws DaoException;
+    T getObject(List<Map<String, String>> listMapResulSet) throws DaoException;
+    List<T> getListOfObjects(List<Map<String, String>> listMapResulSet) throws DaoException;
     T mapToObject(Map<String, String> mapOfList) throws DaoException;
 }

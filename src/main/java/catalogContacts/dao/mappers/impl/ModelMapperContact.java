@@ -12,14 +12,14 @@ import java.util.Map;
  *
  */
 public class ModelMapperContact implements ModelMapper<Contact> {
-    public Contact creatObject(List<Map<String, String>> listMapResulSet) throws DaoException {
+    public Contact getObject(List<Map<String, String>> listMapResulSet) throws DaoException {
         for (Map<String, String> mapOfList : listMapResulSet) {
             return mapToObject(mapOfList);
         }
         return null;
     }
 
-    public List<Contact> creatObjectList(List<Map<String, String>> listMapResulSet) throws DaoException {
+    public List<Contact> getListOfObjects(List<Map<String, String>> listMapResulSet) throws DaoException {
         List<Contact> contactList = new ArrayList<>();
 
         for (Map<String, String> mapOfList : listMapResulSet) {

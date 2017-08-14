@@ -121,28 +121,28 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
     }
 
     public Contact getObject(int id) throws DaoException {
-        Contact contact = modelMapperContact.creatObject(executionQuery(selectGetContact, id));
+        Contact contact = modelMapperContact.getObject(executionQuery(selectGetContact, id));
         contact.setContactDetailsList(getContactDetailsList(contact));
         contact.setGroupList(getGroupListInContact(contact));
         return contact;
     }
 
     public List<Contact> getAll() throws DaoException {
-        return modelMapperContact.creatObjectList(executionQuery(selectGetContactList,
+        return modelMapperContact.getListOfObjects(executionQuery(selectGetContactList,
                 SecurityContextHolder.getLoggedUser().getId(), ""));
 
     }
 
     private List<ContactDetails> getContactDetailsList(Contact contact) throws DaoException {
-        return modelMapperContactDetails.creatObjectList(executionQuery(selectGetContactDetails, contact.getNumber()));
+        return modelMapperContactDetails.getListOfObjects(executionQuery(selectGetContactDetails, contact.getNumber()));
     }
 
     private List<Group> getGroupListInContact(Contact contact) throws DaoException {
-        return modelMapperGroup.creatObjectList(executionQuery(selectGetListGroupInContact, contact.getNumber()));
+        return modelMapperGroup.getListOfObjects(executionQuery(selectGetListGroupInContact, contact.getNumber()));
     }
 
     public List<Contact> findByName(String name) throws DaoException {
-        return modelMapperContact.creatObjectList(executionQuery(selectGetContactList, SecurityContextHolder.getLoggedUser().getId(), name));
+        return modelMapperContact.getListOfObjects(executionQuery(selectGetContactList, SecurityContextHolder.getLoggedUser().getId(), name));
     }
 
 }

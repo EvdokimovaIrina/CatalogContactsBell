@@ -37,16 +37,16 @@ public class DaoGroup extends DaoParsing implements CrudDAO<Group> {
     }
 
     public Group getObject(int id) throws DaoException {
-        return modelMapperGroup.creatObject(executionQuery(selectGetGroup,id));
+        return modelMapperGroup.getObject(executionQuery(selectGetGroup,id));
     }
 
     public List<Group> getAll() throws DaoException {
-        return modelMapperGroup.creatObjectList(executionQuery(selectGetListGroup,
+        return modelMapperGroup.getListOfObjects(executionQuery(selectGetListGroup,
                 SecurityContextHolder.getLoggedUser().getId(),""));
     }
 
     public List<Group> findByName(String name) throws DaoException {
-        return modelMapperGroup.creatObjectList(executionQuery(selectGetListGroup,
+        return modelMapperGroup.getListOfObjects(executionQuery(selectGetListGroup,
                 SecurityContextHolder.getLoggedUser().getId(),name));
     }
 

@@ -10,25 +10,27 @@ import catalogContacts.service.UserService;
  *
  */
 public class UserServiceImpl implements UserService {
-    private static UserServiceImpl instance;
+
     private CrudDAOUser<User> crudDAOUser;
 
     // Singleton
+
     private UserServiceImpl() {
-
     }
 
-    public static synchronized UserServiceImpl getInstance() {
-        if (instance == null) {
-            instance = new UserServiceImpl();
-        }
-        return instance;
+    public static UserServiceImpl getInstance() {
+        return UserServiceImplHolder.instance;
     }
+
+    private static class UserServiceImplHolder {
+        private static final UserServiceImpl instance = new UserServiceImpl();
+    }
+
     //////
 
-    public void setUserThread(String login,String password) throws DaoException {
+    public void setUserThread(String login, String password) throws DaoException {
         User user;
-        synchronized(this) {
+        synchronized (this) {
             user = crudDAOUser.authorizationUser(login, password);
         }
         SecurityContextHolder.setLoggedUser(user);

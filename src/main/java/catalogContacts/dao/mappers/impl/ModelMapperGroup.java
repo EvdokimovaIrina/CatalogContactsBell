@@ -13,14 +13,14 @@ import java.util.Map;
  */
 public class ModelMapperGroup implements ModelMapper<Group> {
 
-    public Group creatObject(List<Map<String, String>> listMapResulSet) throws DaoException {
+    public Group getObject(List<Map<String, String>> listMapResulSet) throws DaoException {
         for (Map<String, String> mapOfList : listMapResulSet) {
             return mapToObject(mapOfList);
         }
         return null;
     }
 
-    public List<Group> creatObjectList(List<Map<String, String>> listMapResulSet) throws DaoException {
+    public List<Group> getListOfObjects(List<Map<String, String>> listMapResulSet) throws DaoException {
         List<Group> groupList = new ArrayList<>();
         for (Map<String, String> mapOfList : listMapResulSet) {
             groupList.add(mapToObject(mapOfList));

@@ -18,21 +18,21 @@ import java.util.List;
 public final class GroupServiceImpl implements GroupService, Observer.Observable {
     private static GroupServiceImpl instance;
     private CrudDAO<Group> crudDAOGroup;
-
     private List<Observer> ObserversList = new ArrayList<>();
 
     // Singleton
+
     private GroupServiceImpl() {
-
     }
 
-    public static synchronized GroupServiceImpl getInstance() {
-        if (instance == null) {
-            instance = new GroupServiceImpl();
-            instance.addObserver(new ViewOutput());
-        }
-        return instance;
+    public static GroupServiceImpl getInstance() {
+        return GroupServiceImplHolder.instance;
     }
+
+    private static class GroupServiceImplHolder {
+        private static final GroupServiceImpl instance = new GroupServiceImpl();
+    }
+
     //////
 
     //работа с наблюдателями
@@ -51,13 +51,14 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
 
     public synchronized void notifyObserver(TypeEvent typeEvent, Object mainObject, Object value) {
         for (Observer observer : ObserversList) {
-            observer.handleEvent(new Event(typeEvent, mainObject,value));
+            observer.handleEvent(new Event(typeEvent, mainObject, value));
         }
     }
 
     private synchronized void notifyObserverWithAneError(DaoException e) {
         notifyObserver(TypeEvent.ERROR, e.getMessage(), null);
     }
+
     ////////
     public void addGroup(String name) {
         Group group = new Group(name);
@@ -68,10 +69,10 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
     public void saveGroup(Group group) {
 
         try {
-            synchronized(this) {
+            synchronized (this) {
                 crudDAOGroup.create(group);
             }
-            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
+            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(), null);
 
         } catch (DaoException e) {
             notifyObserverWithAneError(e);
@@ -81,10 +82,10 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
 
     public void deleteGroup(int numberGroup) {
         try {
-            synchronized(this) {
+            synchronized (this) {
                 crudDAOGroup.delete(numberGroup);
             }
-            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
+            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(), null);
 
         } catch (DaoException e) {
             notifyObserverWithAneError(e);
@@ -92,9 +93,9 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
 
     }
 
-    public void changeGroup(int numberGroup,String value) {
+    public void changeGroup(int numberGroup, String value) {
         try {
-            synchronized(this) {
+            synchronized (this) {
                 Group group = crudDAOGroup.getObject(numberGroup);
                 group.setName(value);
                 crudDAOGroup.update(group);
@@ -108,7 +109,7 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
 
     public void showGroupList() {
         try {
-            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(),null);
+            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(), null);
         } catch (DaoException e) {
             notifyObserverWithAneError(e);
         }
@@ -119,7 +120,7 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
     public Group findByNumber(int number) {
         Group group = null;
         try {
-            synchronized(this) {
+            synchronized (this) {
                 group = crudDAOGroup.getObject(number);
             }
         } catch (DaoException e) {
@@ -129,7 +130,7 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
         return group;
     }
 
-     public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
+    public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
         this.crudDAOGroup = crudDAOGroup;
     }
 }

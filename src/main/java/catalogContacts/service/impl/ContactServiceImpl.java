@@ -22,16 +22,18 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
     private List<Observer> ObserversList = new ArrayList<>();
 
     // Singleton
+
     private ContactServiceImpl() {
-
     }
 
-    public static synchronized ContactServiceImpl getInstance() {
-        if (instance == null) {
-            instance = new ContactServiceImpl();
-        }
-        return instance;
+    public static ContactServiceImpl getInstance() {
+        return ContactServiceImplHolder.instance;
     }
+
+    private static class ContactServiceImplHolder {
+        private static final ContactServiceImpl instance = new ContactServiceImpl();
+    }
+
     //////
 
     public synchronized void findByName(String name) {
