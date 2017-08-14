@@ -18,12 +18,12 @@ public class ViewOutput extends View {
 
         System.out.println("*************************");
         for (Contact contact : contactList) {
-            showContact(contact);
+            System.out.println(contact.getNumber() + " " + contact.getFio());
         }
     }
 
     @Override
-    public void showContact(Contact contact) {
+    public void showContactData(Contact contact) {
 
         System.out.println(contact.getNumber() + " " + contact.getFio());
         for (ContactDetails contactDetails : contact.getContactDetailsList()) {

@@ -29,8 +29,8 @@ public abstract class View  implements Observer,Runnable {
                 showContactDetails((Contact) event.getMainObject(), (Map) event.getValue());
                 break;
             case showContactData:
-                if (event.getMainObject().getClass().getName() == "Contact") {
-                    showContact((Contact) event.getMainObject());
+                if (event.getMainObject().getClass()==Contact.class) {
+                    showContactData((Contact) event.getMainObject());
                 } else {
                     System.out.println("Ошибка получения данных контакта");
                 }
@@ -53,7 +53,7 @@ public abstract class View  implements Observer,Runnable {
 
     }
 
-    public void showContact(Contact contact) {
+    public void showContactData(Contact contact) {
 
     }
 

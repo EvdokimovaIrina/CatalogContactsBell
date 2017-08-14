@@ -71,7 +71,7 @@ public class ViewController extends View {
             System.out.println("4 - вывести список контактов по группе");
             System.out.println("5 - найти контакт по наименованию");
             System.out.println("6 - вывести список групп");
-            System.out.println("7 - изменить существующий контакт");
+            System.out.println("7 - просмотреть(изменить) существующий контакт");
             System.out.println("8 - изменить существующую группу");
             System.out.println("9 - удалить контакт");
             System.out.println("10 - удалить группу");
