@@ -36,14 +36,13 @@ public class Main {
         Thread thread = new Thread(viewInput);
         thread.start();
 
-       /* ViewController viewInput2 = setParametersController();
+        ViewController viewInput2 = setParametersController();
         Thread thread2 = new Thread(viewInput);
         thread2.start();
 
         ViewController viewInput3 = setParametersController();
         Thread thread3 = new Thread(viewInput);
         thread3.start();
-        */
 
     }
 
