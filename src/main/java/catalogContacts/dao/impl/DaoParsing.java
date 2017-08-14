@@ -11,45 +11,41 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  */
 public abstract class DaoParsing {
-    private PreparedStatement preparedStatement = null;
-    private Connection connection = null;
 
-    protected ResultSet executionQuery(String select,Object... params) throws DaoException {
-        try {
-            preparedStatement = connection.prepareStatement(select);
+    protected ResultSet executionQuery(String select, Object... params) throws DaoException {
+        try (Connection connection = DBConnectionPool.getInstance().getConnectionPool().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(select)
+        ) {
             for (int i = 0; i < params.length; i++) {
-                if (params[i] instanceof Integer){
-                    preparedStatement.setInt(i+1, (Integer) params[i]);
-                }else if (params[i] instanceof String){
-                preparedStatement.setString(i+1, (String) params[i]);
+                if (params[i] instanceof Integer) {
+                    preparedStatement.setInt(i + 1, (Integer) params[i]);
+                } else if (params[i] instanceof String) {
+                    preparedStatement.setString(i + 1, (String) params[i]);
                 }
             }
-            return preparedStatement.executeQuery();
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet;
 
         } catch (SQLException e) {
-            throw new DaoException("Ошибка при получении данных ",e);
+            throw new DaoException("Ошибка при получении данных ", e);
         }
+    }
+
+    private ModelMapper factoryMapper(ResultSet resultSet,){
+
+
+
     }
 
     public DaoParsing() throws DaoException {
-        try {
-            connection = DBConnectionPool.getInstance().getConnectionPool().getConnection();
-        } catch (SQLException e) {
-           throw new DaoException("Ошибка подключения к БД ",e);
-        }
-    }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
     }
 
 
