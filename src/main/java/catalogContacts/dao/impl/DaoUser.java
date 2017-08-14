@@ -5,9 +5,6 @@ import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.mappers.ModelMapper;
 import catalogContacts.dao.mappers.impl.ModelMapperUser;
 import catalogContacts.model.User;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -36,13 +33,11 @@ public class DaoUser extends DaoParsing implements CrudDAOUser<User>{
     }
 
     public User getObject(int id) throws DaoException {
-        ResultSet result = executionQuery(selectGetUser,id);
-        return modelMapperUser.creatObject(result);
+        return modelMapperUser.creatObject(executionQuery(selectGetUser,id));
     }
 
     public User authorizationUser(String login,String password) throws DaoException {
-        ResultSet result = executionQuery(selectAuthorizationUser,login,password);
-        return modelMapperUser.creatObject(result);
+        return modelMapperUser.creatObject(executionQuery(selectAuthorizationUser,login,password));
     }
     public List<User> getAll() throws DaoException {
         return null;

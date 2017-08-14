@@ -4,40 +4,40 @@ import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.mappers.ModelMapper;
 import catalogContacts.model.User;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  */
 public class ModelMapperUser implements ModelMapper<User>{
-    public User creatObject(ResultSet result) throws DaoException {
-        try {
-            while (result.next()) {
 
-                User user = new User(result.getInt("user_id"),result.getString("user_login"),result.getString("user_password"));
-                return user;
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Ошибка получения контакта ",e);
+    public User creatObject(List<Map<String, String>> listMapResulSet) throws DaoException {
+        for (Map<String, String> mapOfList : listMapResulSet) {
+            return mapToObject(mapOfList);
         }
         return null;
     }
 
-    public List<User> creatObjectList(ResultSet result) throws DaoException {
-        List<User> groupList=new ArrayList<>();
-        try {
-            while (result.next()) {
-                User group = new User(result.getInt("user_id"),result.getString("user_login"),result.getString("user_password"));
-                groupList.add(group);
-            }
-        } catch (SQLException e) {
-            throw new DaoException("Ошибка получения групп ",e);
+    public List<User> creatObjectList(List<Map<String, String>> listMapResulSet) throws DaoException {
+        List<User> contactList = new ArrayList<>();
+
+        for (Map<String, String> mapOfList : listMapResulSet) {
+            contactList.add(mapToObject(mapOfList));
         }
-        return groupList;
+        return contactList;
     }
 
-
+    public User mapToObject(Map<String, String> mapOfList) throws DaoException {
+        try {
+            int id = Integer.parseInt(mapOfList.get("user_id"));
+            String login = mapOfList.get("user_login");
+            String password = mapOfList.get("user_password");
+            User user = new User(id,login,password);
+            return user;
+        } catch (NumberFormatException | NullPointerException e) {
+            throw new DaoException("Ошибка получения данных пользователя" + e.getMessage(), e);
+        }
+    }
 }

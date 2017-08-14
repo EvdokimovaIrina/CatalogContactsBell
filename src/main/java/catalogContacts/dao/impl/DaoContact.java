@@ -18,7 +18,7 @@ import java.util.List;
 /**
  *
  */
-public class DaoContact extends DaoParsing implements CrudDAO<Contact>{
+public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
     private ModelMapper<Contact> modelMapperContact;
     private ModelMapper<ContactDetails> modelMapperContactDetails;
     private ModelMapper<Group> modelMapperGroup;
@@ -45,12 +45,12 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact>{
 
     public void create(Contact contact) throws DaoException {
         //запишем новый контакт
-        executionQuery(selectInsertContact, SecurityContextHolder.getLoggedUser().getId(),contact.getFio());
+        executionQuery(selectInsertContact, SecurityContextHolder.getLoggedUser().getId(), contact.getFio());
     }
 
 
     public void update(Contact contact) throws DaoException {
-        executionQuery(selectChangeContact,SecurityContextHolder.getLoggedUser().getId(),contact.getFio());
+        executionQuery(selectChangeContact, SecurityContextHolder.getLoggedUser().getId(), contact.getFio());
         changeContactDetails(contact);
         changeGroupToContact(contact);
 
@@ -59,10 +59,10 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact>{
     private void changeContactDetails(Contact contact) throws DaoException {
         //получим список контактной информации и сравним его с тем что записано в контакте,
         //если не совпадает, то запишем её в БД
-        ResultSet result =null;
+        ResultSet result = null;
         List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
         List<ContactDetails> contactDetailsListBD = getContactDetailsList(contact);
-        for (ContactDetails contactDetails: contactDetailsList) {
+        for (ContactDetails contactDetails : contactDetailsList) {
             boolean isIdFound = false;
             Iterator<ContactDetails> iter = contactDetailsListBD.iterator();
             while (iter.hasNext()) {
@@ -71,81 +71,78 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact>{
                     isIdFound = true;
                     if ((contactDetails.getId() != contactDetailsBD.getId() |
                             contactDetails.getId() != contactDetailsBD.getId())) {
-                        executionQuery(selectChangeContactDetails,contactDetails.getId(),contactDetails.getType().toString(),contactDetails.getValue());
+                        executionQuery(selectChangeContactDetails, contactDetails.getId(), contactDetails.getType().toString(), contactDetails.getValue());
                     }
                     iter.remove();
                     break;
                 }
             }
 
-            if(!(isIdFound)){
-                executionQuery(selectInsertContactDetails,contact.getNumber(),contactDetails.getType().toString(),contactDetails.getValue());
+            if (!(isIdFound)) {
+                executionQuery(selectInsertContactDetails, contact.getNumber(), contactDetails.getType().toString(), contactDetails.getValue());
             }
         }
 
         //те контакты, что остались лишними в листе из БД удалим, т.к. их не нашлось в основном списке и это означает, что их удалили из контакта
-        for (ContactDetails contactDetailsBD: contactDetailsListBD ) {
-            executionQuery(selectDeleteContactDetails,contactDetailsBD.getId());
+        for (ContactDetails contactDetailsBD : contactDetailsListBD) {
+            executionQuery(selectDeleteContactDetails, contactDetailsBD.getId());
         }
     }
 
     private void changeGroupToContact(Contact contact) throws DaoException {
         //получим список контактной информации и сравним его с тем что записано в контакте,
         //если не совпадает, то запишем её в БД
-        ResultSet result =null;
+        ResultSet result = null;
         List<Group> groupListBD = getGroupListInContact(contact);
-        for (Group group: contact.getGroupList()) {
+        for (Group group : contact.getGroupList()) {
             boolean isIdFound = false;
             Iterator<Group> iter = groupListBD.iterator();
             while (iter.hasNext()) {
                 Group groupBD = iter.next();
                 if (group.getNumber() == groupBD.getNumber()) {
-                    {   iter.remove();
+                    {
+                        iter.remove();
                         break;
                     }
                 }
             }
-            if(!(isIdFound)){
-                executionQuery(selectInsertGroupInContact,contact.getNumber(),group.getNumber());
+            if (!(isIdFound)) {
+                executionQuery(selectInsertGroupInContact, contact.getNumber(), group.getNumber());
             }
         }
         //те группы, что остались лишними в листе из БД удалим, т.к. их не нашлось в основном списке и это означает, что их удалили из контакта
-        for (Group groupBD: groupListBD ) {
-            executionQuery(selectDeleteGroupFromContact,groupBD.getNumber(),contact.getNumber());
+        for (Group groupBD : groupListBD) {
+            executionQuery(selectDeleteGroupFromContact, groupBD.getNumber(), contact.getNumber());
         }
     }
 
     public void delete(int number) throws DaoException {
-        executionQuery(selectDeleteContact,number);
+        executionQuery(selectDeleteContact, number);
     }
 
     public Contact getObject(int id) throws DaoException {
-        ResultSet result = executionQuery(selectGetContact,id);
-        Contact contact = modelMapperContact.creatObject(result);
+        Contact contact = modelMapperContact.creatObject(executionQuery(selectGetContact, id));
         contact.setContactDetailsList(getContactDetailsList(contact));
         contact.setGroupList(getGroupListInContact(contact));
         return contact;
     }
 
     public List<Contact> getAll() throws DaoException {
-        ResultSet result = executionQuery(selectGetContactList,SecurityContextHolder.getLoggedUser().getId(),"");
-        return modelMapperContact.creatObjectList(result);
+        return modelMapperContact.creatObjectList(executionQuery(selectGetContactList,
+                SecurityContextHolder.getLoggedUser().getId(), ""));
 
     }
 
     private List<ContactDetails> getContactDetailsList(Contact contact) throws DaoException {
-        ResultSet result = executionQuery(selectGetContactDetails,contact.getNumber());
-        return modelMapperContactDetails.creatObjectList(result);
+        return modelMapperContactDetails.creatObjectList(executionQuery(selectGetContactDetails, contact.getNumber()));
     }
 
     private List<Group> getGroupListInContact(Contact contact) throws DaoException {
-        ResultSet result = executionQuery(selectGetListGroupInContact,contact.getNumber());
-        return modelMapperGroup.creatObjectList(result);
+        return modelMapperGroup.creatObjectList(executionQuery(selectGetListGroupInContact, contact.getNumber()));
     }
 
     public List<Contact> findByName(String name) throws DaoException {
-        ResultSet result = executionQuery(selectGetContactList,SecurityContextHolder.getLoggedUser().getId(),name);
-        return modelMapperContact.creatObjectList(result);
+        return modelMapperContact.creatObjectList(executionQuery(selectGetContactList, SecurityContextHolder.getLoggedUser().getId(), name));
     }
 
 }

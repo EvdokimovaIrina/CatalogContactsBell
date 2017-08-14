@@ -2,8 +2,6 @@ package catalogContacts.dao.impl;
 
 import catalogContacts.dao.exception.DaoException;
 import org.apache.commons.dbcp2.BasicDataSource;
-
-import javax.xml.ws.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;

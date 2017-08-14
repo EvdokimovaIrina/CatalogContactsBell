@@ -2,8 +2,6 @@ package catalogContacts.service.impl;
 
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.impl.DaoGroup;
-import catalogContacts.dao.impl.DaoUser;
 import catalogContacts.event.Event;
 import catalogContacts.event.Observer;
 import catalogContacts.event.TypeEvent;

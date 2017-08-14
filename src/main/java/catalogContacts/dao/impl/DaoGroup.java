@@ -6,7 +6,6 @@ import catalogContacts.dao.mappers.ModelMapper;
 import catalogContacts.dao.mappers.impl.ModelMapperGroup;
 import catalogContacts.model.Group;
 import catalogContacts.context.SecurityContextHolder;
-import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -38,18 +37,17 @@ public class DaoGroup extends DaoParsing implements CrudDAO<Group> {
     }
 
     public Group getObject(int id) throws DaoException {
-        ResultSet result = executionQuery(selectGetGroup,id);
-        return modelMapperGroup.creatObject(result);
+        return modelMapperGroup.creatObject(executionQuery(selectGetGroup,id));
     }
 
     public List<Group> getAll() throws DaoException {
-        ResultSet result = executionQuery(selectGetListGroup,SecurityContextHolder.getLoggedUser().getId(),"");
-        return modelMapperGroup.creatObjectList(result);
+        return modelMapperGroup.creatObjectList(executionQuery(selectGetListGroup,
+                SecurityContextHolder.getLoggedUser().getId(),""));
     }
 
     public List<Group> findByName(String name) throws DaoException {
-        ResultSet result = executionQuery(selectGetListGroup,SecurityContextHolder.getLoggedUser().getId(),name);
-        return modelMapperGroup.creatObjectList(result);
+        return modelMapperGroup.creatObjectList(executionQuery(selectGetListGroup,
+                SecurityContextHolder.getLoggedUser().getId(),name));
     }
 
 }
