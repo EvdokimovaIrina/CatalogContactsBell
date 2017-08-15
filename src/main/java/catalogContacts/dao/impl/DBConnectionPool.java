@@ -14,7 +14,7 @@ public class DBConnectionPool {
     private BasicDataSource connectionPool;
 
     // Singleton
-    public static synchronized DBConnectionPool getInstance() throws DaoException {
+    public static DBConnectionPool getInstance() throws DaoException {
 
         if (instance == null) {
             synchronized (DBConnectionPool.class) {
