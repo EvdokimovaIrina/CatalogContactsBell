@@ -15,8 +15,13 @@ public class DBConnectionPool {
 
     // Singleton
     public static synchronized DBConnectionPool getInstance() throws DaoException {
+
         if (instance == null) {
-            instance = new DBConnectionPool();
+            synchronized (DBConnectionPool.class) {
+                if (instance == null) {
+                    instance = new DBConnectionPool();
+                }
+            }
         }
         return instance;
     }
