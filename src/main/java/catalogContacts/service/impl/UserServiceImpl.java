@@ -6,6 +6,8 @@ import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.User;
 import catalogContacts.service.UserService;
 
+import java.util.List;
+
 /**
  *
  */
@@ -50,6 +52,46 @@ public class UserServiceImpl implements UserService {
             quantity = crudDAOUser.numberOfUsers();
         }
         return quantity;
+    }
+
+    public float averageUserContact() throws DaoException {
+        float quantity=0;
+        synchronized (this) {
+            quantity = crudDAOUser.averageUserContact();
+        }
+        return quantity;
+    }
+
+    public float averageUserGroup() throws DaoException {
+        float quantity=0;
+        synchronized (this) {
+            quantity = crudDAOUser.averageUserGroup();
+        }
+        return quantity;
+    }
+
+    public List<User> inactiveUsersList(int n) throws DaoException {
+        List<User> userList;
+        synchronized (this) {
+            userList = crudDAOUser.inactiveUsers(n);
+        }
+        return userList;
+    }
+
+    public List<User> countingUserContact() throws DaoException {
+        List<User> userList;
+        synchronized (this) {
+            userList = crudDAOUser.CountingUserContact();
+        }
+        return userList;
+    }
+
+    public List<User> countingUserGroup() throws DaoException {
+        List<User> userList;
+        synchronized (this) {
+            userList = crudDAOUser.CountingUserGroup();
+        }
+        return userList;
     }
 
     public void setCrudDAOUser(CrudDAOUser<User> crudDAOUser) {

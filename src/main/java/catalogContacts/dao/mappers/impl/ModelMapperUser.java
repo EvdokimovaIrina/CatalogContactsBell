@@ -33,11 +33,23 @@ public class ModelMapperUser implements ModelMapper<User>{
         try {
             int id = Integer.parseInt(mapOfList.get("user_id"));
             String login = mapOfList.get("user_login");
-            String password = mapOfList.get("user_password");
-            User user = new User(id,login,password);
+            String password="";
+            if (mapOfList.containsKey("user_password")){
+                password = mapOfList.get("user_password");
+            }
+            User user = new User(id,login,password,0,0);
+
+            if (mapOfList.containsKey("count_contact")){
+                user.setQuantityContact(Integer.parseInt(mapOfList.get("count_contact")));
+            }
+
+            if (mapOfList.containsKey("count_group")){
+                user.setQuantityGroup(Integer.parseInt(mapOfList.get("count_group")));
+            }
+
             return user;
         } catch (NumberFormatException | NullPointerException e) {
-            throw new DaoException("Ошибка получения данных пользователя" + e.getMessage(), e);
+            throw new DaoException("Ошибка получения данных пользователя " + e.getMessage(), e);
         }
     }
 }

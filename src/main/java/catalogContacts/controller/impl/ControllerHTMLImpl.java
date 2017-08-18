@@ -180,7 +180,7 @@ public class ControllerHTMLImpl implements Controller {
                 "<p>Введите имя пользователя: <input required type=\"text\" name=\"login\"></p>" +
                 "<p>Введите пароль: <input required type=\"password\" name=\"password\"></p>" +
                 "<input type=\"submit\" value=\"Войти\" />" +
-                "<p><a href=userStatistic.jsp> Просмотреть статистику </a></p>" +
+                "<p><a href=userStatistic.jsp> Посмотреть статистику </a></p>" +
                 "</form>" +
                 "</body></html>";
         return strHtml;

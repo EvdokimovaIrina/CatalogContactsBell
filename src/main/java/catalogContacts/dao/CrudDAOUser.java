@@ -21,4 +21,9 @@ public interface CrudDAOUser<U> extends CrudDAO<U> {
 
     List<U> userList();
     int numberOfUsers() throws DaoException;
+    float averageUserContact() throws DaoException;
+    float averageUserGroup() throws DaoException;
+    List<User> inactiveUsers(int n) throws DaoException;
+    List<User> CountingUserContact() throws DaoException;
+    List<User> CountingUserGroup() throws DaoException;
 }

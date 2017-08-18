@@ -1,8 +1,8 @@
 <%@ page import="catalogContacts.controller.impl.ControllerJSPImpl" %>
 <%@ page import="catalogContacts.controller.ControllerJSP" %>
 <%@ page import="catalogContacts.dao.exception.DaoException" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page errorPage="ShowError.jsp" %>
+<%@ page import="catalogContacts.service.UserService" %>
+<%@ page import="catalogContacts.service.impl.UserServiceImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -10,16 +10,15 @@
     <title>Общее количество пользователей</title>
 </head>
 <body>
-<% ControllerJSP controllerJSP = new ControllerJSPImpl();
+<% UserService userService = UserServiceImpl.getInstance();
     String quantity="";
     try {
-        quantity = String.valueOf(controllerJSP.numberOfUsers());
+        quantity = String.valueOf(userService.numberOfUsers());
     }catch (DaoException e){
-        throw new RuntimeException(e.getMessage());
+        quantity=e.getMessage();
     }
-
 %>
-Общее количество пользователей:
-<%= quantity %><br>
+Общее количество пользователей: <%= quantity %>
+
 </body>
 </html>
