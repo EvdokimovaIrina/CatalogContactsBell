@@ -14,6 +14,7 @@ import catalogContacts.context.SecurityContextHolder;
 import java.sql.ResultSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -128,8 +129,12 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
     }
 
     public List<Contact> getAll() throws DaoException {
-        return modelMapperContact.getListOfObjects(executionQuery(selectGetContactList,
-                SecurityContextHolder.getLoggedUser().getId(), ""));
+        try {
+            List<Map<String,String>> listMapResulSet = executionQuery(selectGetContactList, SecurityContextHolder.getLoggedUser().getId(), "");
+            return modelMapperContact.getListOfObjects(listMapResulSet);
+        }catch (NullPointerException e){
+            throw new DaoException("Ошибка получения списка контактов ",e);
+        }
 
     }
 

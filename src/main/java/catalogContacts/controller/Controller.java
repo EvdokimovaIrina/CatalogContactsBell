@@ -48,21 +48,21 @@ public interface Controller {
     void deleteGroupToContact(int numberContact, int numberGroup);
 
     /**
-     * Redirect to the service to list the contacts
+     * Gets the list of contacts
      * @param numberGroup Group number, if you want to list the contacts of the group. If the entire list, then the null value
      */
-    void showContactList(Integer numberGroup);
+    String showContactListStr(int idUser, Integer numberGroup) throws DaoException;
 
     /**
      * Redirect to the service for displaying contact information
      * @param numberContact Number of the contact whose personal information needs to be displayed
      */
-    void showDetails(Integer numberContact);
+    String showDetails(Integer numberContact) throws DaoException;
 
     /**
-     *Redirect to the service to list the group
+     *Gets the list of group
      */
-    void showGroupList();
+    String showGroupList(int idUser) throws DaoException ;
 
     /**
      * Redirect to a service to remove a contact from the list
@@ -110,6 +110,9 @@ public interface Controller {
 
     void findByName(String name);
 
-    void setUserThread(String login,String password) throws DaoException;
+    boolean isSetUserThread(String login, String password) throws DaoException ;
 
+    String getMainMenuHTML();
+
+    String getAuthorizationHTML();
 }

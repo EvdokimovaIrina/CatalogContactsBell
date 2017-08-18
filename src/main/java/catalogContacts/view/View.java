@@ -1,5 +1,6 @@
 package catalogContacts.view;
 
+import catalogContacts.dao.exception.DaoException;
 import catalogContacts.event.Event;
 import catalogContacts.event.Observer;
 import catalogContacts.model.*;
@@ -75,9 +76,9 @@ public abstract class View  implements Observer,Runnable {
 
     public void addGroup() throws IOException{}
 
-    public void showContactList(){}
+    public void showContactList() throws DaoException {}
 
-    public void showContactListFromGroup() throws IOException{}
+    public void showContactListFromGroup() throws IOException, DaoException {}
 
     public void showGroupList(){}
 

@@ -10,5 +10,7 @@ import catalogContacts.model.User;
  */
 public interface UserService {
     void setUserThread(String login,String password) throws DaoException;
+    void setUserThread(int id) throws DaoException;
     void setCrudDAOUser(CrudDAOUser<User> crudDAOUser);
+    int numberOfUsers() throws DaoException;
 }

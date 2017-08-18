@@ -16,7 +16,7 @@ import java.util.Map;
  * Created by iren on 20.07.2017.
  */
 public final class ContactServiceImpl implements ContactService, Observer.Observable {
-    private static ContactServiceImpl instance;
+   // private static ContactServiceImpl instance;
     private CrudDAO<Contact> crudDAOContact;
     private CrudDAO<Group> crudDAOGroup;
     private List<Observer> ObserversList = new ArrayList<>();
@@ -78,8 +78,8 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
     //добавление контакта
     public void addContact(String name) {
         Contact contact = new Contact(name);
-        contact.setContactDetailsList(new ArrayList<>());
-        contact.setGroupList(new ArrayList<>());
+       // contact.setContactDetailsList(new ArrayList<>());
+        //contact.setGroupList(new ArrayList<>());
         saveContact(contact);
     }
 
@@ -174,16 +174,12 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
         }
     }
 
-    public void showContactList(Integer numberGroup) {
+    public List<Contact> showContactList(Integer numberGroup) throws DaoException {
         if (numberGroup == null) {
-            try {
-                notifyObserver(TypeEvent.showContactList, crudDAOContact.getAll(), null);
-            } catch (DaoException e) {
-                notifyObserverWithAneError(e);
-            }
+            return crudDAOContact.getAll();
         } else {
             Group group = GroupServiceImpl.getInstance().findByNumber(numberGroup);
-            notifyObserver(TypeEvent.showContactListFromGroup, contactListFromGroup(group), group);
+            return contactListFromGroup(group);
         }
     }
 
@@ -212,16 +208,11 @@ public final class ContactServiceImpl implements ContactService, Observer.Observ
         return contact;
     }
 
-    public void showContactDetails(int numberContact) {
+    public List<ContactDetails> showContactDetails(int numberContact) throws DaoException {
 
-        try {
             Contact contact = getContactByNumber(numberContact);
 
-            notifyObserver(TypeEvent.showContactData, contact, null);
-
-        } catch (DaoException e) {
-            notifyObserverWithAneError(e);
-        }
+            return contact.getContactDetailsList();
     }
 
     public void changeContact(int numberContact, String value) {

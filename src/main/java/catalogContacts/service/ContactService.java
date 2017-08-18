@@ -3,8 +3,11 @@ package catalogContacts.service;
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Contact;
+import catalogContacts.model.ContactDetails;
 import catalogContacts.model.Group;
 import catalogContacts.model.TypeContact;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,8 +21,8 @@ public interface ContactService {
     void deleteContact(int numberContact);
     void deleteContactDetails(int numberContact,int numberContactDetails);
     void ChangeSelectedContactDetails(int numberContact,int numberContactDetails,String value);
-    void showContactList(Integer numberGroup);
-    void showContactDetails(int numberContact);
+    List<Contact> showContactList(Integer numberGroup) throws DaoException;
+    List<ContactDetails> showContactDetails(int numberContact) throws DaoException;
     void changeContact(int numberContact,String value);
     void addGroupToContact(int numberContact, int numberGroup);
     void deleteGroupToContact(int numberContact, int numberGroup);

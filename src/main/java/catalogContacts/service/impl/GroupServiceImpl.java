@@ -107,12 +107,8 @@ public final class GroupServiceImpl implements GroupService, Observer.Observable
 
     }
 
-    public void showGroupList() {
-        try {
-            notifyObserver(TypeEvent.showGroupList, crudDAOGroup.getAll(), null);
-        } catch (DaoException e) {
-            notifyObserverWithAneError(e);
-        }
+    public List<Group> showGroupList() throws DaoException {
+        return crudDAOGroup.getAll();
 
     }
 

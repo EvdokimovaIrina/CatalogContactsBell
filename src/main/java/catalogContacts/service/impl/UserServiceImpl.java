@@ -36,7 +36,26 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.setLoggedUser(user);
     }
 
+    public void setUserThread(int id) throws DaoException {
+        User user;
+        synchronized (this) {
+            user = crudDAOUser.getObject(id);
+        }
+        SecurityContextHolder.setLoggedUser(user);
+    }
+
+    public int numberOfUsers() throws DaoException {
+        int quantity=0;
+        synchronized (this) {
+            quantity = crudDAOUser.numberOfUsers();
+        }
+        return quantity;
+    }
+
     public void setCrudDAOUser(CrudDAOUser<User> crudDAOUser) {
         this.crudDAOUser = crudDAOUser;
     }
+
+
+
 }

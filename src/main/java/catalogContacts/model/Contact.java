@@ -1,8 +1,5 @@
 package catalogContacts.model;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,4 +64,6 @@ public class Contact implements Serializable {
     public void setContactDetailsList(List<ContactDetails> contactDetailsList) {
         this.contactDetailsList = contactDetailsList;
     }
+
+
 }

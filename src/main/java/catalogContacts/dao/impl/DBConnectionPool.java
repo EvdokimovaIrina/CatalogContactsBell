@@ -10,7 +10,7 @@ import java.util.Properties;
  *
  */
 public class DBConnectionPool {
-    private static DBConnectionPool instance;
+    private volatile static DBConnectionPool instance;
     private BasicDataSource connectionPool;
 
     // Singleton
@@ -28,7 +28,7 @@ public class DBConnectionPool {
 
     public DBConnectionPool() throws DaoException {
         Properties properties = new Properties();
-        try {
+       /* try {
 
             InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("config.properties");
             properties.load(inputStream);
@@ -37,11 +37,17 @@ public class DBConnectionPool {
         } catch (IOException | NullPointerException e) {
             throw  new DaoException("Ошибка при считывании файла параметров подключения к БД ",e);
         }
+*/
         connectionPool = new BasicDataSource();
-        connectionPool.setDriverClassName(properties.getProperty("db.driverClassName"));
+       /* connectionPool.setDriverClassName(properties.getProperty("db.driverClassName"));
         connectionPool.setUrl(properties.getProperty("db.dbUrl"));
         connectionPool.setUsername(properties.getProperty("db.username"));
-        connectionPool.setPassword(properties.getProperty("db.password"));
+        connectionPool.setPassword(properties.getProperty("db.password"));*/
+        connectionPool.setDriverClassName("org.postgresql.Driver");
+        connectionPool.setUrl("jdbc:postgresql://localhost/catalogcontacs");
+        connectionPool.setUsername("postgres");
+        connectionPool.setPassword("31415926");
+
         connectionPool.setInitialSize(3);
     }
 
