@@ -1,9 +1,7 @@
 package catalogContacts.servlet;
 
-
 import catalogContacts.controller.impl.ControllerHTMLImpl;
 import catalogContacts.dao.exception.DaoException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +25,7 @@ public class MainServlet extends HttpServlet {
             String login = request.getParameter("login");
             String password = request.getParameter("password");
             if (login != null & password != null) {
+
                 if (controllerHTML.isSetUserThread(login, password)) {
                     out.println(controllerHTML.getMainMenuHTML());
                 } else {

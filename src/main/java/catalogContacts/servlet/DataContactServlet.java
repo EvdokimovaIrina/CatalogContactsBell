@@ -4,7 +4,6 @@ import catalogContacts.controller.impl.ControllerHTMLImpl;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
-import catalogContacts.service.UserService;
 import catalogContacts.service.impl.ContactServiceImpl;
 import catalogContacts.service.impl.UserServiceImpl;
 
@@ -67,6 +66,9 @@ public class DataContactServlet extends HttpServlet {
                 break;
             case "deletedetails":
                 contactService.deleteContactDetails(idContact, Integer.parseInt(request.getParameter("iddetails")));
+                break;
+            case "changecontactname":
+                contactService.changeContact(idContact, request.getParameter("newnamecontact"));
                 break;
         }
     }

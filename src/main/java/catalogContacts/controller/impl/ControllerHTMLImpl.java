@@ -48,7 +48,12 @@ public class ControllerHTMLImpl implements Controller {
         List<Contact> contactList = contactService.showContactList(numberGroup);
         int idUser = SecurityContextHolder.getLoggedUser().getId();
         String strHtml = "<!DOCTYPE HTML>" +
-                "<html><body><p>Контакты</p></body></html>" +
+                "<html><body>" +
+                "<form action=\"menu\" method=\"POST\">" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"submit\" value=\"На главное меню\" />" +
+                "</form><br>"+
+                "<p><h3>Контакты</h3></p></body></html>" +
                 "<table>" +
                 "<tbody>";
 
@@ -71,9 +76,11 @@ public class ControllerHTMLImpl implements Controller {
         strHtml = strHtml + "</tbody>" +
                 "</table>" +
                 "<form action=\"contacts\" method=\"POST\">" +
-                "<input type=\"text\" name=\"namecontact\"/>" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
                 "<input type=\"hidden\" name=\"buttonaction\"  value=\"add\"/>" +
+                "<p></p>"+
+                "<p><h4>Новый контакт:</h4></p>"+
+                "<input type=\"text\" name=\"namecontact\"/>  " +
                 "<input type=\"submit\" value=\"Добавить\" />" +
                 "</form>";
         return strHtml;
@@ -90,7 +97,7 @@ public class ControllerHTMLImpl implements Controller {
             strHtml = strHtml +
                     "<tr> " +
                     "<form action=\"datacontact\" method=\"POST\">" +
-                    "<td>" + contactDetails.getType() + "</td>" +
+                    "<td>" + contactDetails.getType() + ": </td>" +
                     "<td>" + contactDetails.getValue() + "</td>" +
                     "<td><input type=\"hidden\" name=\"iddetails\" value=\"" + contactDetails.getId() + "\"/></td>" +
                     "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
@@ -174,7 +181,21 @@ public class ControllerHTMLImpl implements Controller {
         Contact contact = contactService.getContactByNumber(numberContact);
         int idUser = SecurityContextHolder.getLoggedUser().getId();
         String strHtml = "<!DOCTYPE HTML>" +
-                "<html><body><p><h2> " + contact.getFio() + " </h2></p></body></html>" +
+                "<html><body>" +
+                "<form action=\"menu\" method=\"POST\">" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"submit\" value=\"На главное меню\" />" +
+                "</form><br>"+
+                "<p><h2> " + contact.getFio() + " </h2></p></body></html>" +
+                "<form action=\"datacontact\" method=\"POST\">" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/>" +
+                "<input type=\"text\" name=\"newnamecontact\"/>" +
+                "<td><input type=\"hidden\" name=\"buttonaction\" value=\"changecontactname\"/></td>" +
+                "<input type=\"submit\" value=\"изменить наименование\" />" +
+                "</form><br>"+
+
+
                 showContactDetailsList(contact, idUser) +
                 showGroupListContact(contact, idUser);
         return strHtml;
@@ -185,7 +206,12 @@ public class ControllerHTMLImpl implements Controller {
         int idUser = SecurityContextHolder.getLoggedUser().getId();
         List<Group> groupList = groupService.showGroupList();
         String strHtml = "<!DOCTYPE HTML>" +
-                "<html><body><p>Группы:</p></body></html>" +
+                "<html><body>" +
+                "<form action=\"menu\" method=\"POST\">" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"submit\" value=\"На главное меню\" />" +
+                "</form><br>"+
+                "<p><h3>Группы:</h3></p></body></html>" +
                 "<form action=\"groups\" method=\"POST\">" +
                 "<table>" +
                 "<tbody>";
@@ -238,7 +264,7 @@ public class ControllerHTMLImpl implements Controller {
                 "<title>Авторизация</title></head>" +
                 "<body>" +
                 "<form action=\"menu\" method=\"POST\">" +
-                "<p>Для просмотра контактов необходимо авторизоваться</p>" +
+                "<p><h3>Для просмотра контактов укажите регистрационные данные:</h3></p>" +
                 "<p>Введите имя пользователя: <input required type=\"text\" name=\"login\"></p>" +
                 "<p>Введите пароль: <input required type=\"password\" name=\"password\"></p>" +
                 "<input type=\"submit\" value=\"Войти\" />" +

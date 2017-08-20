@@ -4,9 +4,6 @@ import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.impl.DaoContact;
 import catalogContacts.dao.impl.DaoGroup;
-import catalogContacts.event.Event;
-import catalogContacts.event.Observer;
-import catalogContacts.event.TypeEvent;
 import catalogContacts.model.*;
 import catalogContacts.service.ContactService;
 
@@ -22,7 +19,6 @@ public final class ContactServiceImpl implements ContactService {
     // private static ContactServiceImpl instance;
     private CrudDAO<Contact> crudDAOContact;
     private CrudDAO<Group> crudDAOGroup;
-    private List<Observer> ObserversList = new ArrayList<>();
 
     // Singleton
 

@@ -3,14 +3,11 @@ package catalogContacts.service.impl;
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.impl.DaoGroup;
-import catalogContacts.event.Event;
-import catalogContacts.event.Observer;
-import catalogContacts.model.Group;
-import catalogContacts.event.TypeEvent;
-import catalogContacts.service.GroupService;
-import catalogContacts.view.impl.ViewOutput;
 
-import java.util.ArrayList;
+import catalogContacts.model.Group;
+
+import catalogContacts.service.GroupService;
+
 import java.util.List;
 
 /**
@@ -19,7 +16,6 @@ import java.util.List;
 public final class GroupServiceImpl implements GroupService{
     private static GroupServiceImpl instance;
     private CrudDAO<Group> crudDAOGroup;
-    private List<Observer> ObserversList = new ArrayList<>();
 
     // Singleton
 

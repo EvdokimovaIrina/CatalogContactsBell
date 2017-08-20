@@ -2,8 +2,6 @@ package catalogContacts.servlet;
 
 import catalogContacts.controller.impl.ControllerHTMLImpl;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.service.GroupService;
-import catalogContacts.service.impl.ContactServiceImpl;
 import catalogContacts.service.impl.GroupServiceImpl;
 import catalogContacts.service.impl.UserServiceImpl;
 
