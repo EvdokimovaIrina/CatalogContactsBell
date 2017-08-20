@@ -1,17 +1,17 @@
 package catalogContacts.dao.impl;
 
 import catalogContacts.dao.exception.DaoException;
-import org.apache.commons.dbcp2.BasicDataSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 
 /**
  *
  */
 public class DBConnectionPool {
     private volatile static DBConnectionPool instance;
-    private BasicDataSource connectionPool;
+    private DataSource connectionPool;
 
     // Singleton
     public static DBConnectionPool getInstance() throws DaoException {
@@ -27,32 +27,17 @@ public class DBConnectionPool {
     }
 
     public DBConnectionPool() throws DaoException {
-        Properties properties = new Properties();
-       /* try {
-
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("config.properties");
-            properties.load(inputStream);
-            inputStream.close();
-
-        } catch (IOException | NullPointerException e) {
-            throw  new DaoException("Ошибка при считывании файла параметров подключения к БД ",e);
+        InitialContext initContext = null;
+        try {
+            initContext = new InitialContext();
+            connectionPool = (DataSource) initContext.lookup("java:comp/env/jdbc/catalogcontacs");
+        } catch (NamingException e) {
+            throw new DaoException("Ошибка подключения к БД. "+e);
         }
-*/
-        connectionPool = new BasicDataSource();
-       /* connectionPool.setDriverClassName(properties.getProperty("db.driverClassName"));
-        connectionPool.setUrl(properties.getProperty("db.dbUrl"));
-        connectionPool.setUsername(properties.getProperty("db.username"));
-        connectionPool.setPassword(properties.getProperty("db.password"));*/
-        connectionPool.setDriverClassName("org.postgresql.Driver");
-        connectionPool.setUrl("jdbc:postgresql://localhost/catalogcontacs");
-        connectionPool.setUsername("postgres");
-        connectionPool.setPassword("31415926");
-
-        connectionPool.setInitialSize(3);
     }
 
     //////
-    public BasicDataSource getConnectionPool() {
+    public DataSource getConnectionPool() {
         return connectionPool;
     }
 }

@@ -30,7 +30,7 @@ public class ListContactServlet extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
         PrintWriter out = response.getWriter();
         String iduserStr = request.getParameter("iduser");
-        if (iduserStr==null){
+        if (iduserStr == null) {
             out.println("Ошибка авторизации");
             return;
         }
@@ -43,14 +43,14 @@ public class ListContactServlet extends HttpServlet {
             }
             out.println(ControllerHTMLImpl.getInstance().showContactListStr(null));
 
-        } catch (DaoException|NumberFormatException e) {
+        } catch (DaoException | NumberFormatException e) {
             out.println(e.getMessage());
         }
 
     }
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
-        switch (buttonAction){
+        switch (buttonAction) {
             case "add":
                 ContactServiceImpl.getInstance().addContact(request.getParameter("namecontact"));
                 break;
