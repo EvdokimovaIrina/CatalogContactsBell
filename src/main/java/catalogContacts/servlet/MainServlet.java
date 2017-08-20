@@ -17,10 +17,10 @@ import java.io.PrintWriter;
  */
 @WebServlet("/menu")
 public class MainServlet extends HttpServlet {
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
         PrintWriter out = response.getWriter();
-        //setAttribute
         try {
             ControllerHTMLImpl controllerHTML = new ControllerHTMLImpl();
 
@@ -34,11 +34,12 @@ public class MainServlet extends HttpServlet {
                 }
             }
         } catch (DaoException e) {
-            throw new ServletException(e);
+            out.println(e.getMessage());
         }
 
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }

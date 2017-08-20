@@ -2,11 +2,7 @@ package catalogContacts.controller.impl;
 
 import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.controller.Controller;
-import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.impl.DaoContact;
-import catalogContacts.dao.impl.DaoGroup;
-import catalogContacts.dao.impl.DaoUser;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
 import catalogContacts.model.Group;
@@ -18,6 +14,7 @@ import catalogContacts.service.impl.ContactServiceImpl;
 import catalogContacts.service.impl.GroupServiceImpl;
 import catalogContacts.service.impl.UserServiceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,122 +26,188 @@ public class ControllerHTMLImpl implements Controller {
     private GroupService groupService;
     private UserService userService;
 
-    public ControllerHTMLImpl() throws DaoException {
+
+    // Singleton
+    public ControllerHTMLImpl() {
         this.contactService = ContactServiceImpl.getInstance();
-
-        CrudDAO<Group> crudDAOGroup = new DaoGroup();
-
-        this.contactService.setCrudDAOContact(new DaoContact());
-        this.contactService.setCrudDAOGroup(new DaoGroup());
-
         this.groupService = GroupServiceImpl.getInstance();
-        this.groupService.setCrudDAOGroup(crudDAOGroup);
-
         this.userService = UserServiceImpl.getInstance();
-        this.userService.setCrudDAOUser(new DaoUser());
     }
 
-    public void addContact(String name) {
-
+    public static ControllerHTMLImpl getInstance() {
+        return ControllerHTMLImplHolder.instance;
     }
 
-    public void addGroup(String name) {
-
+    private static class ControllerHTMLImplHolder {
+        private static final ControllerHTMLImpl instance = new ControllerHTMLImpl();
     }
 
-    public void addDetails(int number, Map<TypeContact, String> mapDetails) {
+    //////
 
-    }
-
-    public void addGroupToContact(int numberContact, int numberGroup) {
-
-    }
-
-    public void deleteGroupToContact(int numberContact, int numberGroup) {
-
-    }
-
-   public String showContactListStr(int idUser, Integer numberGroup) throws DaoException {
-        userService.setUserThread(idUser);
+    public String showContactListStr(Integer numberGroup) throws DaoException {
         List<Contact> contactList = contactService.showContactList(numberGroup);
+        int idUser = SecurityContextHolder.getLoggedUser().getId();
         String strHtml = "<!DOCTYPE HTML>" +
-                "<html><body><p>Список контактов</p></body></html>" +
+                "<html><body><p>Контакты</p></body></html>" +
                 "<table>" +
                 "<tbody>";
-        for (Contact contact:contactList) {
-            strHtml = strHtml+"<tr> " +
-                    "<td>"+contact.getFio()+"</td>" +
+
+        for (Contact contact : contactList) {
+            strHtml = strHtml + "<tr> " +
+                    "<form action=\"datacontact\" method=\"POST\">" +
+                    "<td>" + contact.getFio() + "</td>" +
                     "<td><input type=\"submit\" value=\"Просмотреть\" /></td>" +
-                    "<td><input type=\"hidden\" name=\"idcontact\" value=\""+contact.getNumber()+"\"/></td>"+
-                    "</tr>" ;
+                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
+                    "</form>" +
+                    "<form action=\"contacts\" method=\"POST\">" +
+                    "<td><input type=\"hidden\" name=\"buttonaction\" value=\"delete\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                    "<td><input type=\"submit\" value=\"Удалить\"></td>" +
+                    "</form>" +
+                    "</tr>";
         }
-        strHtml = strHtml+"</tbody>" +
+        strHtml = strHtml + "</tbody>" +
+                "</table>" +
+                "<form action=\"contacts\" method=\"POST\">" +
+                "<input type=\"text\" name=\"namecontact\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"buttonaction\"  value=\"add\"/>" +
+                "<input type=\"submit\" value=\"Добавить\" />" +
+                "</form>";
+        return strHtml;
+    }
+
+
+    private String showContactDetailsList(Contact contact, int idUser) throws DaoException {
+
+        List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
+        String strHtml = "<p><h4>Контактная информация:</h4></p>" +
+                "<table>" +
+                "<tbody>";
+        for (ContactDetails contactDetails : contactDetailsList) {
+            strHtml = strHtml +
+                    "<tr> " +
+                    "<form action=\"datacontact\" method=\"POST\">" +
+                    "<td>" + contactDetails.getType() + "</td>" +
+                    "<td>" + contactDetails.getValue() + "</td>" +
+                    "<td><input type=\"hidden\" name=\"iddetails\" value=\"" + contactDetails.getId() + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"buttonaction\" value=\"deletedetails\"/></td>" +
+                    "<td><input type=\"submit\" value=\"Удалить\"></td>" +
+                    "</form>" +
+                    "</tr>";
+        }
+        strHtml = strHtml +
+                "</tbody>" +
+                "</table>" +
+                "<p>Добавить контактную информацию:</p>" +
+                "<form action=\"datacontact\" method=\"POST\">" +
+                "<p> Тип: <select required name=\"type\" >";
+        TypeContact[] typeContactArray = TypeContact.values();
+        for (TypeContact type : typeContactArray) {
+            strHtml = strHtml + "<option value=\"" + type.name() + "\">" + type.name() + "</option>";
+        }
+        strHtml = strHtml +
+                "</select>  Значение: <input type=\"text\" name=\"value\">"+
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/>" +
+                "<td><input type=\"hidden\" name=\"buttonaction\" value=\"adddetails\"/></td>" +
+                "<input type=\"submit\" value=\"Добавить\"></p>" +
+                "</form>";
+
+
+        return strHtml;
+    }
+
+    private String showGroupListContact(Contact contact, int idUser) throws DaoException {
+        List<Group> groupList = contact.getGroupList();
+        List<Integer> listId = new ArrayList<>();
+        String strHtml = "<p><h4>Группы контактов:</h4></p>" +
+                "<table>" +
+                "<tbody>";
+        for (Group group : groupList) {
+            listId.add(group.getNumber());
+            strHtml = strHtml +
+                    "<tr> " +
+                    "<form action=\"datacontact\" method=\"POST\">" +
+                    "<td>" + group.getName() + "</td>" +
+                    "<td><input type=\"hidden\" name=\"idgroup\" value=\"" + group.getNumber() + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"buttonaction\" value=\"deletegroup\"/></td>" +
+                    "<td><input type=\"submit\" value=\"Удалить\"></td>" +
+                    "</form>" +
+                    "</tr>";
+        }
+
+        strHtml = strHtml +
+                "</table>" +
+                "</tbody>" +
+                "<p>Добавить группу:</p>" +
+                "<form id=\"groupAddForm\" action=\"datacontact\" method=\"POST\">" +
+                "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
+                "<td><input type=\"hidden\" name=\"buttonaction\" value=\"addgroup\"/></td>" +
+                "<p><select required name=\"idgroup\">";
+
+        List<Group> groupListALL = groupService.showGroupList();
+        for (Group group : groupListALL) {
+            if (!(listId.contains(group.getNumber()))) {
+                strHtml = strHtml +
+                        "<option value=\"" + group.getNumber() + "\">" + group.getName() + "</option>";
+            }
+        }
+        strHtml = strHtml +
+                "</select>" +
+                "<input type=\"submit\" value=\"Добавить группу\"></p>" +
+                "</form>" +
+                "</tbody>" +
                 "</table>";
+
         return strHtml;
     }
 
     public String showDetails(Integer numberContact) throws DaoException {
-
-        List<ContactDetails> contactDetailsList = contactService.showContactDetails(numberContact);
+        Contact contact = contactService.getContactByNumber(numberContact);
+        int idUser = SecurityContextHolder.getLoggedUser().getId();
         String strHtml = "<!DOCTYPE HTML>" +
-                "<html><body><p>Список контактов</p></body></html>" +
-                "<table>" +
-                "<tbody>" +
-                "<form action=\"datacontact\" method=\"POST\">";
-        for (ContactDetails contactDetails:contactDetailsList) {
-            strHtml = strHtml+"<tr> " +
-                    "<td>"+contactDetails.getType()+"</td>" +
-                    "<td>"+contactDetails.getValue()+"</td>" +
-                    "<td><input type=\"hidden\" name=\"id\" value=\""+contactDetails.getId()+"\"/></td>"+
-                    "<td><input type=\"hidden\" name=\"idcontact\" value=\""+numberContact+"\"/></td>"+
-                    "</tr>" ;
-        }
-        strHtml = strHtml+"</form></tbody>" +
-                "</table>";
+                "<html><body><p><h2> " + contact.getFio() + " </h2></p></body></html>" +
+                showContactDetailsList(contact, idUser) +
+                showGroupListContact(contact, idUser);
         return strHtml;
     }
 
-    public String showGroupList(int idUser) throws DaoException {
-        userService.setUserThread(idUser);
+
+    public String showGroupList() throws DaoException {
+        int idUser = SecurityContextHolder.getLoggedUser().getId();
         List<Group> groupList = groupService.showGroupList();
         String strHtml = "<!DOCTYPE HTML>" +
-                "<html><body><p>Список групп</p></body></html>" +
+                "<html><body><p>Группы:</p></body></html>" +
+                "<form action=\"groups\" method=\"POST\">" +
                 "<table>" +
                 "<tbody>";
-        for (Group group:groupList) {
-            strHtml = strHtml+"<tr> " +
-                    "<td>"+group.getName()+"</td>" +
-                    "<input type=\"hidden\" name=\"idcontact\" value=\""+group.getNumber()+"\"/>"+
-                    "</tr>" ;
+        for (Group group : groupList) {
+            strHtml = strHtml + "<tr> " +
+                    "<td>" + group.getName() + "</td>" +
+                    "<input type=\"hidden\" name=\"idgroup\" value=\"" + group.getNumber() + "\"/>" +
+                    "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                    "<td><input type=\"hidden\" name=\"buttonaction\" value=\"delete\"/></td>" +
+                    "<input type=\"submit\" value=\"Удалить\" />" +
+                    "</tr>";
         }
-        strHtml = strHtml+"</tbody>" +
-                "</table>";
+        strHtml = strHtml + "</tbody>" +
+                "</table>" +
+                "<input type=\"text\" name=\"namegroup\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"buttonaction\"  value=\"add\"/>" +
+                "<input type=\"submit\" value=\"Добавить\" />" +
+                "</form>";
         return strHtml;
     }
 
-    public void deletContact(int numberContact) {
-
-    }
-
-    public void deletContactDetails(int numberContact, int numberContactDetails) {
-
-    }
-
-    public void ChangeSelectedContactDetails(int numberContact, int numberContactDetails, String value) {
-
-    }
-
-    public void deletGroup(int numberGroup) {
-
-    }
-
-    public void changeGroup(int numberGroup, String value) {
-
-    }
-
-    public void changeContact(int numberContact, String value) {
-
-    }
 
     public ContactService getContactService() {
         return null;
@@ -159,17 +222,16 @@ public class ControllerHTMLImpl implements Controller {
     }
 
     public boolean isSetUserThread(String login, String password) throws DaoException {
-        userService.setUserThread(login,password);
-        if (SecurityContextHolder.getLoggedUser()== null){
+        userService.setUserThread(login, password);
+        if (SecurityContextHolder.getLoggedUser() == null) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }
 
 
-
-    public String getAuthorizationHTML(){
+    public String getAuthorizationHTML() {
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><head>" +
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">" +
@@ -186,7 +248,7 @@ public class ControllerHTMLImpl implements Controller {
         return strHtml;
     }
 
-    public String getMainMenuHTML(){
+    public String getMainMenuHTML() {
         int idUser = SecurityContextHolder.getLoggedUser().getId();
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><head>" +
@@ -194,11 +256,12 @@ public class ControllerHTMLImpl implements Controller {
                 "<title>Меню</title></head>" +
                 "<body>" +
                 "<form action=\"contacts\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\""+idUser+"\"/>"+
-                "<input type=\"submit\" value=\"Показать список контактов\" />" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"submit\" value=\"Cписок контактов\" />" +
                 "</form>" +
                 "<form action=\"groups\" method=\"POST\">" +
-                "<input type=\"submit\" value=\"Показать список групп\" />" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"submit\" value=\"Список групп\" />" +
                 "</form>" +
                 "</body></html>";
         return strHtml;

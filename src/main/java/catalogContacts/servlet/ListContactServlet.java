@@ -1,8 +1,9 @@
 package catalogContacts.servlet;
 
-import catalogContacts.controller.Controller;
 import catalogContacts.controller.impl.ControllerHTMLImpl;
 import catalogContacts.dao.exception.DaoException;
+import catalogContacts.service.impl.ContactServiceImpl;
+import catalogContacts.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,15 +29,34 @@ public class ListContactServlet extends HttpServlet {
 
         response.setContentType("text/html;charset=utf-8");
         PrintWriter out = response.getWriter();
-
+        String iduserStr = request.getParameter("iduser");
+        if (iduserStr==null){
+            out.println("Ошибка авторизации");
+            return;
+        }
+        String buttonAction = request.getParameter("buttonaction");
         try {
-            int iduser = Integer.parseInt(request.getParameter("iduser"));
-            ControllerHTMLImpl controllerHTML = new ControllerHTMLImpl();
-            out.println(controllerHTML.showContactListStr(iduser,null));
+            UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
 
-        } catch (DaoException e) {
-            throw new ServletException(e);
+            if (buttonAction != null) {
+                selectingTheActionForTheButton(buttonAction, request);
+            }
+            out.println(ControllerHTMLImpl.getInstance().showContactListStr(null));
+
+        } catch (DaoException|NumberFormatException e) {
+            out.println(e.getMessage());
         }
 
+    }
+
+    private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
+        switch (buttonAction){
+            case "add":
+                ContactServiceImpl.getInstance().addContact(request.getParameter("namecontact"));
+                break;
+            case "delete":
+                ContactServiceImpl.getInstance().deleteContact(Integer.parseInt(request.getParameter("idcontact")));
+                break;
+        }
     }
 }

@@ -1,5 +1,3 @@
-<%@ page import="catalogContacts.controller.impl.ControllerJSPImpl" %>
-<%@ page import="catalogContacts.controller.ControllerJSP" %>
 <%@ page import="catalogContacts.dao.exception.DaoException" %>
 <%@ page import="catalogContacts.service.UserService" %>
 <%@ page import="catalogContacts.service.impl.UserServiceImpl" %>

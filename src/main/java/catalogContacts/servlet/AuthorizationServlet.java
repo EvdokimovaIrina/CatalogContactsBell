@@ -15,17 +15,17 @@ import java.io.IOException;
  */
 @WebServlet("/home")
 public class AuthorizationServlet extends HttpServlet {
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
-        try {
-            ControllerHTMLImpl controllerHTML = new ControllerHTMLImpl();
+
+            ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
             response.getWriter().println(controllerHTML.getAuthorizationHTML());
-        } catch (DaoException e) {
-            throw new ServletException(e);
-        }
+
     }
 }

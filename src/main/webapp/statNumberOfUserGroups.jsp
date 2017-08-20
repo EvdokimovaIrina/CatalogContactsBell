@@ -27,10 +27,10 @@
         UserService userService = UserServiceImpl.getInstance();
         try {
             for (User user : userService.countingUserGroup()) {%>
-    <tr>
-        <td><%= user.getLogin() %></td>
-        <td><%= user.getQuantityGroup() %></td>
-    </tr>
+            <tr>
+                 <td><%= user.getLogin() %></td>
+                 <td><%= user.getQuantityGroup() %></td>
+            </tr>
     <% }
     }        catch (DaoException e) {%>
     <%= e.getMessage() %>

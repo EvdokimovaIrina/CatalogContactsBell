@@ -101,10 +101,9 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
             while (iter.hasNext()) {
                 Group groupBD = iter.next();
                 if (group.getNumber() == groupBD.getNumber()) {
-                    {
-                        iter.remove();
-                        break;
-                    }
+                    isIdFound = true;
+                    iter.remove();
+                    break;
                 }
             }
             if (!(isIdFound)) {
@@ -130,10 +129,10 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
 
     public List<Contact> getAll() throws DaoException {
         try {
-            List<Map<String,String>> listMapResulSet = executionQuery(selectGetContactList, SecurityContextHolder.getLoggedUser().getId(), "");
+            List<Map<String, String>> listMapResulSet = executionQuery(selectGetContactList, SecurityContextHolder.getLoggedUser().getId(), "");
             return modelMapperContact.getListOfObjects(listMapResulSet);
-        }catch (NullPointerException e){
-            throw new DaoException("Ошибка получения списка контактов ",e);
+        } catch (NullPointerException e) {
+            throw new DaoException("Ошибка получения списка контактов ", e);
         }
 
     }

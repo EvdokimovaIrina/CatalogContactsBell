@@ -3,6 +3,7 @@ package catalogContacts.service.impl;
 import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.dao.CrudDAOUser;
 import catalogContacts.dao.exception.DaoException;
+import catalogContacts.dao.impl.DaoUser;
 import catalogContacts.model.User;
 import catalogContacts.service.UserService;
 
@@ -18,6 +19,11 @@ public class UserServiceImpl implements UserService {
     // Singleton
 
     private UserServiceImpl() {
+        try {
+            crudDAOUser = new DaoUser();
+        } catch (DaoException e) {
+            crudDAOUser=null;
+        }
     }
 
     public static UserServiceImpl getInstance() {

@@ -15,19 +15,20 @@ import java.util.Map;
  */
 public interface ContactService {
 
-    void addContact(String name);
-    void addContactDetails(int numberContact,Map<TypeContact,String> mapDetails);
-    void saveContact(Contact contact);
-    void deleteContact(int numberContact);
-    void deleteContactDetails(int numberContact,int numberContactDetails);
-    void ChangeSelectedContactDetails(int numberContact,int numberContactDetails,String value);
+    void addContact(String name) throws DaoException;
+    void addContactDetails(int numberContact,Map<TypeContact,String> mapDetails) throws DaoException;
+    void saveContact(Contact contact) throws DaoException;
+    void deleteContact(int numberContact) throws DaoException;
+    void deleteContactDetails(int numberContact,int numberContactDetails) throws DaoException;
+    void ChangeSelectedContactDetails(int numberContact,int numberContactDetails,String value) throws DaoException;
     List<Contact> showContactList(Integer numberGroup) throws DaoException;
     List<ContactDetails> showContactDetails(int numberContact) throws DaoException;
-    void changeContact(int numberContact,String value);
-    void addGroupToContact(int numberContact, int numberGroup);
-    void deleteGroupToContact(int numberContact, int numberGroup);
+    Contact getContactByNumber(int numberContact) throws DaoException;
+    void changeContact(int numberContact,String value) throws DaoException;
+    void addGroupToContact(int numberContact, int numberGroup) throws DaoException;
+    void deleteGroupToContact(int numberContact, int numberGroup) throws DaoException;
     void setCrudDAOContact(CrudDAO<Contact> crudDAO);
     void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup);
-    void findByName(String name);
+    List<Contact> findByName(String name) throws DaoException;
 
 }
