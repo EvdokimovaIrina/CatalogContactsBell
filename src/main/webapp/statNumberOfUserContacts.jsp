@@ -21,12 +21,14 @@
     <%
     UserService userService = UserServiceImpl.getInstance();
     try {
+        synchronized(this) {
         for (User user : userService.countingUserContact()) {%>
         <tr>
             <td><%= user.getLogin() %></td>
             <td><%= user.getQuantityContact() %></td>
         </tr>
         <% }
+        }
 }        catch (DaoException e) {%>
         <%= e.getMessage() %>
         <% }%>

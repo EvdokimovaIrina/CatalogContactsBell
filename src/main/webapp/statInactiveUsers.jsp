@@ -14,12 +14,14 @@
     UserService userService = UserServiceImpl.getInstance();
     String quantity = "";
     try {
-        for (User user : userService.inactiveUsersList(10)) {%>
+        synchronized (this) {
+            for (User user : userService.inactiveUsersList(10)) {%>
         <%= user.getLogin() %><br>
 
-    <% }
-    } catch (DaoException e) {%>
-        <%= e.getMessage() %>
+        <% }
+             }
+        } catch (DaoException e) {%>
+<%= e.getMessage() %>
 <% }%>
 
 </body>

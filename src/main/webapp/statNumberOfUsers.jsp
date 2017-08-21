@@ -11,7 +11,9 @@
 <% UserService userService = UserServiceImpl.getInstance();
     String quantity="";
     try {
-        quantity = String.valueOf(userService.numberOfUsers());
+        synchronized(this) {
+            quantity = String.valueOf(userService.numberOfUsers());
+        }
     }catch (DaoException e){
         quantity=e.getMessage();
     }

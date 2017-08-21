@@ -26,13 +26,15 @@
     <%
         UserService userService = UserServiceImpl.getInstance();
         try {
+            synchronized(this) {
             for (User user : userService.countingUserGroup()) {%>
             <tr>
                  <td><%= user.getLogin() %></td>
                  <td><%= user.getQuantityGroup() %></td>
             </tr>
-    <% }
-    }        catch (DaoException e) {%>
+         <% }
+        }
+        }  catch (DaoException e) {%>
     <%= e.getMessage() %>
     <% }%>
     </tbody>

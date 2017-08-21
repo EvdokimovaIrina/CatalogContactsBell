@@ -10,7 +10,9 @@
 <% UserService userService = UserServiceImpl.getInstance();
     String quantity="";
     try {
-        quantity = String.valueOf(userService.averageUserContact());
+        synchronized(this) {
+            quantity = String.valueOf(userService.averageUserContact());
+        }
     }catch (DaoException e){
         quantity=e.getMessage();
     }
