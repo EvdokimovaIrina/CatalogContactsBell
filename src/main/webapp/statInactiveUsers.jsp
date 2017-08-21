@@ -21,7 +21,7 @@
         <% }
              }
         } catch (DaoException e) {%>
-<%= e.getMessage() %>
+<%= "Ошибка получения данных" %>
 <% }%>
 
 </body>

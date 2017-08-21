@@ -40,7 +40,7 @@ public class ListGroup extends HttpServlet {
                 out.println(controllerHTML.showGroupList());
             }
         } catch (DaoException | NumberFormatException e) {
-            out.println(e.getMessage());
+            out.println("Ошибка получения данных");
         }
 
     }

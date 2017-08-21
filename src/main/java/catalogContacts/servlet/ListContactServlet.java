@@ -47,7 +47,7 @@ public class ListContactServlet extends HttpServlet {
                 }
             }
         } catch (DaoException | NumberFormatException e) {
-            out.println(e.getMessage());
+            out.println("Ошибка получения данных");
         }
     }
 

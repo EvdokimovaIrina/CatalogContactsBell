@@ -15,7 +15,7 @@
             quantity = String.valueOf(userService.numberOfUsers());
         }
     }catch (DaoException e){
-        quantity=e.getMessage();
+        quantity="Ошибка получения данных";
     }
 %>
 Общее количество пользователей: <%= quantity %>

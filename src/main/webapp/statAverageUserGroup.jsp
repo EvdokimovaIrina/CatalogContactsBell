@@ -14,7 +14,7 @@
             quantity = String.valueOf(userService.averageUserGroup());
         }
     }catch (DaoException e){
-        quantity=e.getMessage();
+        quantity="Ошибка получения данных";
     }
 %>
 Среднее количество пользователей в группах: <%= quantity %>

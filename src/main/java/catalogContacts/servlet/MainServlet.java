@@ -23,20 +23,24 @@ public class MainServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
-
-            String login = request.getParameter("login");
-            String password = request.getParameter("password");
-            if (login != null & password != null) {
-                synchronized (this) {
-                    if (controllerHTML.isSetUserThread(login, password)) {
-                        out.println(controllerHTML.getMainMenuHTML());
-                    } else {
-                        out.println("Авторизация не выполнена");
+            String iduserStr = request.getParameter("iduser");
+            synchronized (this) {
+                if (iduserStr == null) {
+                    String login = request.getParameter("login");
+                    String password = request.getParameter("password");
+                    if (login != null & password != null) {
+                        if (controllerHTML.isSetUserThread(login, password)) {
+                            out.println(controllerHTML.getMainMenuHTML());
+                        } else {
+                            out.println("Авторизация не выполнена");
+                        }
                     }
+                } else {
+                    out.println(controllerHTML.getMainMenuHTML());
                 }
             }
         } catch (DaoException e) {
-            out.println(e.getMessage());
+            out.println("Ошибка получения данных");
         }
 
     }

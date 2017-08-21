@@ -46,7 +46,7 @@ public class DataContactServlet extends HttpServlet {
                 out.println(controllerHTML.showDetails(Integer.parseInt(request.getParameter("idcontact"))));
             }
         } catch (DaoException | NumberFormatException e) {
-            out.println(e.getMessage() + ". " + e.getCause().getMessage());
+            out.println("Ошибка получения данных");
         }
 
     }

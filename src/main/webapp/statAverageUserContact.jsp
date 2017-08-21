@@ -14,7 +14,7 @@
             quantity = String.valueOf(userService.averageUserContact());
         }
     }catch (DaoException e){
-        quantity=e.getMessage();
+        quantity="Ошибка получения данных";
     }
 %>
 Среднее количество контактов у пользователей: <%= quantity %>
