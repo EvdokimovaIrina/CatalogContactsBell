@@ -31,7 +31,7 @@ public interface Controller {
      */
     String showGroupList() throws DaoException ;
 
-    void findByName(String name);
+    String findByName(String name) throws DaoException;
 
     boolean isSetUserThread(String login, String password) throws DaoException ;
 

@@ -28,6 +28,7 @@ public final class ContactServiceImpl implements ContactService {
                 crudDAOContact = new DaoContact();
                 crudDAOGroup = new DaoGroup();
             }
+
         } catch (DaoException e) {
             crudDAOContact = null;
             crudDAOGroup = null;

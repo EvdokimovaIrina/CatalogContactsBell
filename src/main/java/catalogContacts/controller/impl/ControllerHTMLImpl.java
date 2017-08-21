@@ -44,22 +44,8 @@ public class ControllerHTMLImpl implements Controller {
 
     //////
 
-    public String showContactListStr(Integer numberGroup) throws DaoException {
-        List<Contact> contactList;
-        synchronized (this) {
-            contactList = contactService.showContactList(numberGroup);
-        }
-        int idUser = SecurityContextHolder.getLoggedUser().getId();
-        String strHtml = "<!DOCTYPE HTML>" +
-                "<html><body>" +
-                "<form action=\"menu\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
-                "<input type=\"submit\" value=\"На главное меню\" />" +
-                "</form><br>" +
-                "<p><h3>Контакты</h3></p></body></html>" +
-                "<table>" +
-                "<tbody>";
-
+    private String contactListHTML(List<Contact> contactList,int idUser){
+        String strHtml ="";
         for (Contact contact : contactList) {
             strHtml = strHtml + "<tr> " +
                     "<form action=\"datacontact\" method=\"POST\">" +
@@ -76,7 +62,49 @@ public class ControllerHTMLImpl implements Controller {
                     "</form>" +
                     "</tr>";
         }
-        strHtml = strHtml + "</tbody>" +
+        return strHtml;
+    }
+
+    private String searchForContactsHTML(int idUser){
+        return "<form action=\"contacts\" method=\"POST\">" +
+                "<input type=\"text\" name=\"searchnamecontact\"/>" +
+                "<input type=\"hidden\" name=\"buttonaction\" value=\"searchForContacts\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"submit\" value=\"Найти\" />" +
+                "</form><br>"+
+                "<form action=\"contacts\" method=\"POST\">" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "  <input type=\"submit\" value=\"Показать весь список\" />" +
+                "</form><br>";
+
+
+
+    }
+
+    public String showContactListStr(Integer numberGroup) throws DaoException {
+        List<Contact> contactList;
+        synchronized (this) {
+            contactList = contactService.showContactList(numberGroup);
+        }
+
+        String strHtml = menuListHTML(contactList);
+        return strHtml;
+    }
+
+    private String menuListHTML(List<Contact> contactList){
+        int idUser = SecurityContextHolder.getLoggedUser().getId();
+        String strHtml = "<!DOCTYPE HTML>" +
+                "<html><body>" +
+                "<form action=\"menu\" method=\"POST\">" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"submit\" value=\"На главное меню\" />" +
+                "</form><br>" +
+                "<p><h3>Контакты</h3></p></body></html>" +
+                searchForContactsHTML(idUser)+
+                "<table>" +
+                "<tbody>"+
+                contactListHTML(contactList,idUser)+
+                "</tbody>" +
                 "</table>" +
                 "<form action=\"contacts\" method=\"POST\">" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
@@ -88,7 +116,6 @@ public class ControllerHTMLImpl implements Controller {
                 "</form>";
         return strHtml;
     }
-
 
     private String showContactDetailsList(Contact contact, int idUser) throws DaoException {
         List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
@@ -246,8 +273,13 @@ public class ControllerHTMLImpl implements Controller {
 
 
 
-    public void findByName(String name) {
-
+    public String findByName(String name) throws DaoException {
+        List<Contact> contactList;
+        synchronized (this) {
+            contactList = contactService.findByName(name);
+        }
+        String strHtml = menuListHTML(contactList);
+        return strHtml;
     }
 
     public boolean isSetUserThread(String login, String password) throws DaoException {

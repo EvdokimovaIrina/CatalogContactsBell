@@ -36,29 +36,35 @@ public class ListContactServlet extends HttpServlet {
         }
         String buttonAction = request.getParameter("buttonaction");
         try {
-            UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
 
-            if (buttonAction != null) {
-                selectingTheActionForTheButton(buttonAction, request);
-            }
             synchronized (this) {
-                out.println(ControllerHTMLImpl.getInstance().showContactListStr(null));
+                UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
+                if (buttonAction != null) {
+                    out.println(selectingTheActionForTheButton(buttonAction, request, response));
+                } else {
+
+                    out.println(ControllerHTMLImpl.getInstance().showContactListStr(null));
+                }
             }
         } catch (DaoException | NumberFormatException e) {
             out.println(e.getMessage());
         }
-}
+    }
 
-    private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
-        synchronized (this) {
+    private String selectingTheActionForTheButton(String buttonAction, HttpServletRequest request, HttpServletResponse response) throws DaoException, NumberFormatException, IOException {
+
             switch (buttonAction) {
                 case "add":
                     ContactServiceImpl.getInstance().addContact(request.getParameter("namecontact"));
-                    break;
+                    return ControllerHTMLImpl.getInstance().showContactListStr(null);
                 case "delete":
                     ContactServiceImpl.getInstance().deleteContact(Integer.parseInt(request.getParameter("idcontact")));
-                    break;
+                    return ControllerHTMLImpl.getInstance().showContactListStr(null);
+                case "searchForContacts":
+                    return ControllerHTMLImpl.getInstance().findByName(request.getParameter("searchnamecontact"));
+
             }
-        }
+
+        return "";
     }
 }

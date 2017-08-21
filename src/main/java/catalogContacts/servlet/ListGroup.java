@@ -32,11 +32,11 @@ public class ListGroup extends HttpServlet {
         }
         String buttonAction = request.getParameter("buttonaction");
         try {
-            UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
-            if (buttonAction != null) {
-                selectingTheActionForTheButton(buttonAction, request);
-            }
             synchronized (this) {
+                UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
+                if (buttonAction != null) {
+                    selectingTheActionForTheButton(buttonAction, request);
+                }
                 out.println(controllerHTML.showGroupList());
             }
         } catch (DaoException | NumberFormatException e) {
@@ -46,15 +46,14 @@ public class ListGroup extends HttpServlet {
     }
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
-        synchronized (this) {
-            switch (buttonAction) {
-                case "add":
-                    GroupServiceImpl.getInstance().addGroup(request.getParameter("namegroup"));
-                    break;
-                case "delete":
-                    GroupServiceImpl.getInstance().deleteGroup(Integer.parseInt(request.getParameter("idgroup")));
-                    break;
-            }
+
+        switch (buttonAction) {
+            case "add":
+                GroupServiceImpl.getInstance().addGroup(request.getParameter("namegroup"));
+                break;
+            case "delete":
+                GroupServiceImpl.getInstance().deleteGroup(Integer.parseInt(request.getParameter("idgroup")));
+                break;
         }
     }
 

@@ -37,12 +37,12 @@ public class DataContactServlet extends HttpServlet {
         String buttonAction = request.getParameter("buttonaction");
 
         try {
-
-            UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
-            if (buttonAction != null) {
-                selectingTheActionForTheButton(buttonAction, request);
-            }
             synchronized (this) {
+                UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
+                if (buttonAction != null) {
+                    selectingTheActionForTheButton(buttonAction, request);
+                }
+
                 out.println(controllerHTML.showDetails(Integer.parseInt(request.getParameter("idcontact"))));
             }
         } catch (DaoException | NumberFormatException e) {
@@ -53,28 +53,28 @@ public class DataContactServlet extends HttpServlet {
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
         ContactService contactService = ContactServiceImpl.getInstance();
-        synchronized (this) {
+
         int idContact = Integer.parseInt(request.getParameter("idcontact"));
-            switch (buttonAction) {
-                case "addgroup":
-                    contactService.addGroupToContact(idContact, Integer.parseInt(request.getParameter("idgroup")));
-                    break;
-                case "deletegroup":
-                    contactService.deleteGroupToContact(idContact, Integer.parseInt(request.getParameter("idgroup")));
-                    break;
-                case "adddetails":
-                    Map<TypeContact, String> mapDetails = new HashMap<>();
-                    mapDetails.put(TypeContact.valueOf(request.getParameter("type")), request.getParameter("value"));
-                    contactService.addContactDetails(idContact, mapDetails);
-                    break;
-                case "deletedetails":
-                    contactService.deleteContactDetails(idContact, Integer.parseInt(request.getParameter("iddetails")));
-                    break;
-                case "changecontactname":
-                    contactService.changeContact(idContact, request.getParameter("newnamecontact"));
-                    break;
-            }
+        switch (buttonAction) {
+            case "addgroup":
+                contactService.addGroupToContact(idContact, Integer.parseInt(request.getParameter("idgroup")));
+                break;
+            case "deletegroup":
+                contactService.deleteGroupToContact(idContact, Integer.parseInt(request.getParameter("idgroup")));
+                break;
+            case "adddetails":
+                Map<TypeContact, String> mapDetails = new HashMap<>();
+                mapDetails.put(TypeContact.valueOf(request.getParameter("type")), request.getParameter("value"));
+                contactService.addContactDetails(idContact, mapDetails);
+                break;
+            case "deletedetails":
+                contactService.deleteContactDetails(idContact, Integer.parseInt(request.getParameter("iddetails")));
+                break;
+            case "changecontactname":
+                contactService.changeContact(idContact, request.getParameter("newnamecontact"));
+                break;
         }
+
     }
 
 
