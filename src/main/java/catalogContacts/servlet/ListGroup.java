@@ -21,11 +21,12 @@ public class ListGroup extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
+
         ControllerHTMLImpl controllerHTML = new ControllerHTMLImpl();
 
         PrintWriter out = response.getWriter();
         String iduserStr = request.getParameter("iduser");
-        if (iduserStr==null){
+        if (iduserStr == null) {
             out.println("Ошибка авторизации");
             return;
         }
@@ -35,26 +36,30 @@ public class ListGroup extends HttpServlet {
             if (buttonAction != null) {
                 selectingTheActionForTheButton(buttonAction, request);
             }
-            out.println(controllerHTML.showGroupList());
-
-        } catch (DaoException|NumberFormatException e) {
+            synchronized (this) {
+                out.println(controllerHTML.showGroupList());
+            }
+        } catch (DaoException | NumberFormatException e) {
             out.println(e.getMessage());
         }
+
     }
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
-        switch (buttonAction){
-            case "add":
-                GroupServiceImpl.getInstance().addGroup(request.getParameter("namegroup"));
-                break;
-            case "delete":
-                GroupServiceImpl.getInstance().deleteGroup(Integer.parseInt(request.getParameter("idgroup")));
-                break;
+        synchronized (this) {
+            switch (buttonAction) {
+                case "add":
+                    GroupServiceImpl.getInstance().addGroup(request.getParameter("namegroup"));
+                    break;
+                case "delete":
+                    GroupServiceImpl.getInstance().deleteGroup(Integer.parseInt(request.getParameter("idgroup")));
+                    break;
+            }
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request, response);
     }
 }

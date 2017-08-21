@@ -31,10 +31,6 @@ public interface Controller {
      */
     String showGroupList() throws DaoException ;
 
-    ContactService getContactService();
-
-    GroupService getGroupService();
-
     void findByName(String name);
 
     boolean isSetUserThread(String login, String password) throws DaoException ;

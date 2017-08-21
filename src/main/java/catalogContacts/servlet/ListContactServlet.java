@@ -21,12 +21,13 @@ public class ListContactServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
+
         PrintWriter out = response.getWriter();
         String iduserStr = request.getParameter("iduser");
         if (iduserStr == null) {
@@ -40,22 +41,24 @@ public class ListContactServlet extends HttpServlet {
             if (buttonAction != null) {
                 selectingTheActionForTheButton(buttonAction, request);
             }
-            out.println(ControllerHTMLImpl.getInstance().showContactListStr(null));
-
+            synchronized (this) {
+                out.println(ControllerHTMLImpl.getInstance().showContactListStr(null));
+            }
         } catch (DaoException | NumberFormatException e) {
             out.println(e.getMessage());
         }
-
-    }
+}
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
-        switch (buttonAction) {
-            case "add":
-                ContactServiceImpl.getInstance().addContact(request.getParameter("namecontact"));
-                break;
-            case "delete":
-                ContactServiceImpl.getInstance().deleteContact(Integer.parseInt(request.getParameter("idcontact")));
-                break;
+        synchronized (this) {
+            switch (buttonAction) {
+                case "add":
+                    ContactServiceImpl.getInstance().addContact(request.getParameter("namecontact"));
+                    break;
+                case "delete":
+                    ContactServiceImpl.getInstance().deleteContact(Integer.parseInt(request.getParameter("idcontact")));
+                    break;
+            }
         }
     }
 }

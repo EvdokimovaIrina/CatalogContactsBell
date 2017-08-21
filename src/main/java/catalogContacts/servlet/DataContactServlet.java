@@ -25,6 +25,7 @@ public class DataContactServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
+
         PrintWriter out = response.getWriter();
         ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
 
@@ -41,41 +42,44 @@ public class DataContactServlet extends HttpServlet {
             if (buttonAction != null) {
                 selectingTheActionForTheButton(buttonAction, request);
             }
-            out.println(controllerHTML.showDetails(Integer.parseInt(request.getParameter("idcontact"))));
-
+            synchronized (this) {
+                out.println(controllerHTML.showDetails(Integer.parseInt(request.getParameter("idcontact"))));
+            }
         } catch (DaoException | NumberFormatException e) {
-            out.println(e.getMessage()+". "+e.getCause().getMessage());
+            out.println(e.getMessage() + ". " + e.getCause().getMessage());
         }
 
     }
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
         ContactService contactService = ContactServiceImpl.getInstance();
+        synchronized (this) {
         int idContact = Integer.parseInt(request.getParameter("idcontact"));
-        switch (buttonAction) {
-            case "addgroup":
-                contactService.addGroupToContact(idContact, Integer.parseInt(request.getParameter("idgroup")));
-                break;
-            case "deletegroup":
-                contactService.deleteGroupToContact(idContact, Integer.parseInt(request.getParameter("idgroup")));
-                break;
-            case "adddetails":
-                Map<TypeContact, String> mapDetails = new HashMap<>();
-                mapDetails.put(TypeContact.valueOf(request.getParameter("type")), request.getParameter("value"));
-                contactService.addContactDetails(idContact, mapDetails);
-                break;
-            case "deletedetails":
-                contactService.deleteContactDetails(idContact, Integer.parseInt(request.getParameter("iddetails")));
-                break;
-            case "changecontactname":
-                contactService.changeContact(idContact, request.getParameter("newnamecontact"));
-                break;
+            switch (buttonAction) {
+                case "addgroup":
+                    contactService.addGroupToContact(idContact, Integer.parseInt(request.getParameter("idgroup")));
+                    break;
+                case "deletegroup":
+                    contactService.deleteGroupToContact(idContact, Integer.parseInt(request.getParameter("idgroup")));
+                    break;
+                case "adddetails":
+                    Map<TypeContact, String> mapDetails = new HashMap<>();
+                    mapDetails.put(TypeContact.valueOf(request.getParameter("type")), request.getParameter("value"));
+                    contactService.addContactDetails(idContact, mapDetails);
+                    break;
+                case "deletedetails":
+                    contactService.deleteContactDetails(idContact, Integer.parseInt(request.getParameter("iddetails")));
+                    break;
+                case "changecontactname":
+                    contactService.changeContact(idContact, request.getParameter("newnamecontact"));
+                    break;
+            }
         }
     }
 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request, response);
     }
 }

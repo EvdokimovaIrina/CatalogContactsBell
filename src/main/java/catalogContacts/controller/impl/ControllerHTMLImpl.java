@@ -45,14 +45,17 @@ public class ControllerHTMLImpl implements Controller {
     //////
 
     public String showContactListStr(Integer numberGroup) throws DaoException {
-        List<Contact> contactList = contactService.showContactList(numberGroup);
+        List<Contact> contactList;
+        synchronized (this) {
+            contactList = contactService.showContactList(numberGroup);
+        }
         int idUser = SecurityContextHolder.getLoggedUser().getId();
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><body>" +
                 "<form action=\"menu\" method=\"POST\">" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
                 "<input type=\"submit\" value=\"На главное меню\" />" +
-                "</form><br>"+
+                "</form><br>" +
                 "<p><h3>Контакты</h3></p></body></html>" +
                 "<table>" +
                 "<tbody>";
@@ -78,8 +81,8 @@ public class ControllerHTMLImpl implements Controller {
                 "<form action=\"contacts\" method=\"POST\">" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
                 "<input type=\"hidden\" name=\"buttonaction\"  value=\"add\"/>" +
-                "<p></p>"+
-                "<p><h4>Новый контакт:</h4></p>"+
+                "<p></p>" +
+                "<p><h4>Новый контакт:</h4></p>" +
                 "<input type=\"text\" name=\"namecontact\"/>  " +
                 "<input type=\"submit\" value=\"Добавить\" />" +
                 "</form>";
@@ -88,8 +91,8 @@ public class ControllerHTMLImpl implements Controller {
 
 
     private String showContactDetailsList(Contact contact, int idUser) throws DaoException {
-
         List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
+
         String strHtml = "<p><h4>Контактная информация:</h4></p>" +
                 "<table>" +
                 "<tbody>";
@@ -118,7 +121,7 @@ public class ControllerHTMLImpl implements Controller {
             strHtml = strHtml + "<option value=\"" + type.name() + "\">" + type.name() + "</option>";
         }
         strHtml = strHtml +
-                "</select>  Значение: <input type=\"text\" name=\"value\">"+
+                "</select>  Значение: <input type=\"text\" name=\"value\">" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
                 "<input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/>" +
                 "<td><input type=\"hidden\" name=\"buttonaction\" value=\"adddetails\"/></td>" +
@@ -130,6 +133,7 @@ public class ControllerHTMLImpl implements Controller {
     }
 
     private String showGroupListContact(Contact contact, int idUser) throws DaoException {
+
         List<Group> groupList = contact.getGroupList();
         List<Integer> listId = new ArrayList<>();
         String strHtml = "<p><h4>Группы контактов:</h4></p>" +
@@ -178,14 +182,17 @@ public class ControllerHTMLImpl implements Controller {
     }
 
     public String showDetails(Integer numberContact) throws DaoException {
-        Contact contact = contactService.getContactByNumber(numberContact);
+        Contact contact;
+        synchronized (this) {
+            contact = contactService.getContactByNumber(numberContact);
+        }
         int idUser = SecurityContextHolder.getLoggedUser().getId();
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><body>" +
                 "<form action=\"menu\" method=\"POST\">" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
                 "<input type=\"submit\" value=\"На главное меню\" />" +
-                "</form><br>"+
+                "</form><br>" +
                 "<p><h2> " + contact.getFio() + " </h2></p></body></html>" +
                 "<form action=\"datacontact\" method=\"POST\">" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
@@ -193,7 +200,7 @@ public class ControllerHTMLImpl implements Controller {
                 "<input type=\"text\" name=\"newnamecontact\"/>" +
                 "<td><input type=\"hidden\" name=\"buttonaction\" value=\"changecontactname\"/></td>" +
                 "<input type=\"submit\" value=\"изменить наименование\" />" +
-                "</form><br>"+
+                "</form><br>" +
 
 
                 showContactDetailsList(contact, idUser) +
@@ -204,13 +211,16 @@ public class ControllerHTMLImpl implements Controller {
 
     public String showGroupList() throws DaoException {
         int idUser = SecurityContextHolder.getLoggedUser().getId();
-        List<Group> groupList = groupService.showGroupList();
+        List<Group> groupList;
+        synchronized (this) {
+            groupList = groupService.showGroupList();
+        }
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><body>" +
                 "<form action=\"menu\" method=\"POST\">" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
                 "<input type=\"submit\" value=\"На главное меню\" />" +
-                "</form><br>"+
+                "</form><br>" +
                 "<p><h3>Группы:</h3></p></body></html>" +
                 "<form action=\"groups\" method=\"POST\">" +
                 "<table>" +
@@ -235,20 +245,15 @@ public class ControllerHTMLImpl implements Controller {
     }
 
 
-    public ContactService getContactService() {
-        return null;
-    }
-
-    public GroupService getGroupService() {
-        return null;
-    }
 
     public void findByName(String name) {
 
     }
 
     public boolean isSetUserThread(String login, String password) throws DaoException {
-        userService.setUserThread(login, password);
+        synchronized (this) {
+            userService.setUserThread(login, password);
+        }
         if (SecurityContextHolder.getLoggedUser() == null) {
             return false;
         } else {

@@ -20,7 +20,9 @@ public class UserServiceImpl implements UserService {
 
     private UserServiceImpl() {
         try {
-            crudDAOUser = new DaoUser();
+            synchronized (this) {
+                crudDAOUser = new DaoUser();
+            }
         } catch (DaoException e) {
             crudDAOUser=null;
         }

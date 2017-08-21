@@ -15,7 +15,7 @@ import java.io.IOException;
 public class AuthorizationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request, response);
     }
 
     @Override
@@ -23,7 +23,8 @@ public class AuthorizationServlet extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
 
             ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
-            response.getWriter().println(controllerHTML.getAuthorizationHTML());
-
+            synchronized(this) {
+                response.getWriter().println(controllerHTML.getAuthorizationHTML());
+            }
     }
 }

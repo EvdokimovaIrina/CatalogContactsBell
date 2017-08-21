@@ -18,28 +18,29 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
-        PrintWriter out = response.getWriter();
-        try {
-            ControllerHTMLImpl controllerHTML = new ControllerHTMLImpl();
+        synchronized (this) {
+            PrintWriter out = response.getWriter();
+            try {
+                ControllerHTMLImpl controllerHTML = new ControllerHTMLImpl();
 
-            String login = request.getParameter("login");
-            String password = request.getParameter("password");
-            if (login != null & password != null) {
+                String login = request.getParameter("login");
+                String password = request.getParameter("password");
+                if (login != null & password != null) {
 
-                if (controllerHTML.isSetUserThread(login, password)) {
-                    out.println(controllerHTML.getMainMenuHTML());
-                } else {
-                    out.println("Авторизация не выполнена");
+                    if (controllerHTML.isSetUserThread(login, password)) {
+                        out.println(controllerHTML.getMainMenuHTML());
+                    } else {
+                        out.println("Авторизация не выполнена");
+                    }
                 }
+            } catch (DaoException e) {
+                out.println(e.getMessage());
             }
-        } catch (DaoException e) {
-            out.println(e.getMessage());
         }
-
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request, response);
     }
 }
