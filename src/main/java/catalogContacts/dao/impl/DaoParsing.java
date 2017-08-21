@@ -47,7 +47,6 @@ public abstract class DaoParsing {
                 }
                 listMapResulSet.add(mapForList);
             }
-            connection.close();
             return listMapResulSet;
 
         } catch (NamingException | SQLException e) {
@@ -58,6 +57,8 @@ public abstract class DaoParsing {
 
         }
     }
+
+
 
     private void closeConnection(Connection connection) throws DaoException {
         try {
