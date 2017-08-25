@@ -1,7 +1,5 @@
 package catalogContacts.model;
 
-
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -59,7 +57,7 @@ public class Group implements Serializable {
         UserByUserId = userByUserId;
     }
 
-    @OneToMany(mappedBy = "groupByGroupId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "groupByGroupId")
     public List<ContactGroup> getContactGroupsByGroupId() {
         return contactGroupsByGroupId;
     }

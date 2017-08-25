@@ -10,6 +10,8 @@ import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
 import catalogContacts.model.Group;
 import catalogContacts.context.SecurityContextHolder;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 
 import java.sql.ResultSet;
 import java.util.Iterator;
@@ -128,12 +130,21 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
     }
 
     public List<Contact> getAll() throws DaoException {
+
+
+        List<Contact> contactList = null;
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
         try {
-            List<Map<String, String>> listMapResulSet = executionQuery(selectGetContactList, SecurityContextHolder.getLoggedUser().getId(), "");
-            return modelMapperContact.getListOfObjects(listMapResulSet);
-        } catch (NullPointerException e) {
+            session.beginTransaction().begin();
+            Criteria criteria = session.createCriteria(Contact.class);
+            contactList = (List<Contact>) criteria.list();
+            session.getTransaction().commit();
+        } catch (Exception e) {
             throw new DaoException("Ошибка получения списка контактов ", e);
+        }finally {
+            if (session != null) session.close();
         }
+        return contactList;
 
     }
 

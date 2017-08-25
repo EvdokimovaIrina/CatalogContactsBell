@@ -14,9 +14,6 @@
     <property name="dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
     <property name="swow_sql">true</property>
     <property name="hbm2ddl.auto">update</property>
-    <!--<property name="connection.url">jdbc:postgresql://localhost:5432/catalogcontacs</property>-->
-
-
 
     <mapping class="catalogContacts.model.Contact"/>
     <mapping class="catalogContacts.model.ContactDetails"/>

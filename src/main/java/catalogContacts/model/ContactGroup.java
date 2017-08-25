@@ -1,8 +1,5 @@
 package catalogContacts.model;
 
-import catalogContacts.newEntiti.ContactE;
-import catalogContacts.newEntiti.GroupE;
-
 import javax.persistence.*;
 
 /**

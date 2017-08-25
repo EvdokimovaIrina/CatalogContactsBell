@@ -6,6 +6,8 @@ import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.impl.DaoUser;
 import catalogContacts.model.User;
 import catalogContacts.service.UserService;
+import org.slf4j.*;
+
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
  *
  */
 public class UserServiceImpl implements UserService {
-
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     private CrudDAOUser<User> crudDAOUser;
 
     // Singleton

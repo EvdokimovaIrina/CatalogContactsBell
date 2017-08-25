@@ -1,8 +1,5 @@
 package catalogContacts.model;
 
-import catalogContacts.newEntiti.ContactE;
-import catalogContacts.newEntiti.GroupE;
-
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -66,7 +63,7 @@ public class User {
         this.password = password;
     }
 
-    @OneToMany(mappedBy = "userByUserId")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "userByUserId")
     public Collection<Contact> getContactsByUserId() {
         return contactsByUserId;
     }
@@ -75,7 +72,7 @@ public class User {
         this.contactsByUserId = contactsByUserId;
     }
 
-    @OneToMany(mappedBy = "userByUserId")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "userByUserId")
     public Collection<Group> getGroupsByUserId() {
         return groupsByUserId;
     }

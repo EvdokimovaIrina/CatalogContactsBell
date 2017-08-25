@@ -55,7 +55,7 @@ public class Contact implements Serializable {
         this.fio = fio;
     }
 
-    @OneToMany(mappedBy = "contactByContactId")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactByContactId")
     public List<ContactGroup> getContactGroupsByContactId() {
         return contactGroupsByContactId;
     }
@@ -64,7 +64,7 @@ public class Contact implements Serializable {
         this.contactGroupsByContactId = contactGroupsByContactId;
     }
 
-    @OneToMany(mappedBy = "contactByContactId")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "contactByContactId")
     public List<ContactDetails> getContactDetailsList() {
         return contactDetailsList;
     }
