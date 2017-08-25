@@ -143,9 +143,9 @@ public final class ContactServiceImpl implements ContactService {
         try {
             synchronized (this) {
                 for (Contact contact : crudDAOContact.getAll()) {
-                    if (contact.getGroupList().contains(group)) {
+                   /* if (contact.getGroupList().contains(group)) {
                         list.add(contact);
-                    }
+                    }*/
                 }
             }
         } catch (DaoException ignored) {
@@ -185,7 +185,7 @@ public final class ContactServiceImpl implements ContactService {
         Contact contact = getContactByNumber(numberContact);
         Group group = getGroupByNumber(numberGroup);
         if (!(contact == null) & !(group == null)) {
-            contact.getGroupList().add(group);
+            /*contact.getGroupList().add(group);*/
             synchronized (this) {
                 crudDAOContact.update(contact);
             }
@@ -196,7 +196,7 @@ public final class ContactServiceImpl implements ContactService {
 
         Contact contact = getContactByNumber(numberContact);
        if (!(contact == null)) {
-            Iterator<Group> iter = contact.getGroupList().iterator();
+            /*Iterator<Group> iter = contact.getGroupList().iterator();
             while (iter.hasNext()) {
                 Group group1 = iter.next();
                 if (group1.getNumber() == numberGroup) {
@@ -206,7 +206,7 @@ public final class ContactServiceImpl implements ContactService {
             }
             synchronized (this) {
                 crudDAOContact.update(contact);
-            }
+            }*/
         }
     }
 

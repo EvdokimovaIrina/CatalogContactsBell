@@ -1,12 +1,22 @@
 package catalogContacts.model;
 
+import catalogContacts.newEntiti.ContactE;
+import catalogContacts.newEntiti.GroupE;
+
+import javax.persistence.*;
+import java.util.Collection;
+
 /**
  *
  */
+@Entity
+@Table(name ="t_user")
 public class User {
     private int id;
     private String login;
     private String password;
+    private Collection<Contact> contactsByUserId;
+    private Collection<Group> groupsByUserId;
     private int quantityContact;
     private int quantityGroup;
 
@@ -26,7 +36,8 @@ public class User {
         this.quantityContact = quantityContact;
         this.quantityGroup = quantityGroup;
     }
-
+    @Id
+    @Column(name = "user_id")
     public int getId() {
         return id;
     }
@@ -35,6 +46,8 @@ public class User {
         this.id = id;
     }
 
+    @Basic
+    @Column(name = "user_login")
     public String getLogin() {
         return login;
     }
@@ -43,12 +56,32 @@ public class User {
         this.login = login;
     }
 
+    @Basic
+    @Column(name = "user_password")
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @OneToMany(mappedBy = "userByUserId")
+    public Collection<Contact> getContactsByUserId() {
+        return contactsByUserId;
+    }
+
+    public void setContactsByUserId(Collection<Contact> contactsByUserId) {
+        this.contactsByUserId = contactsByUserId;
+    }
+
+    @OneToMany(mappedBy = "userByUserId")
+    public Collection<Group> getGroupsByUserId() {
+        return groupsByUserId;
+    }
+
+    public void setGroupsByUserId(Collection<Group> groupsByUserId) {
+        this.groupsByUserId = groupsByUserId;
     }
 
     public int getQuantityContact() {

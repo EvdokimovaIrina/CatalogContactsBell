@@ -6,6 +6,10 @@ import catalogContacts.dao.mappers.ModelMapper;
 import catalogContacts.dao.mappers.impl.ModelMapperUser;
 import catalogContacts.dao.mappers.impl.MapperStatisticQuantity;
 import catalogContacts.model.User;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 /**
@@ -46,7 +50,27 @@ public class DaoUser extends DaoParsing implements CrudDAOUser<User>{
     }
 
     public User authorizationUser(String login,String password) throws DaoException {
-       return modelMapperUser.getObject(executionQuery(selectAuthorizationUser,login,password));
+        User user = new User();
+
+        user.setLogin("test1");
+        user.setPassword("111");
+
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+            try {
+                session.beginTransaction().begin();
+                session.save(user);
+                session.getTransaction().commit();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (session != null) {
+                    session.close();
+                }
+            }
+
+        session.close();
+        return user;
+      // return modelMapperUser.getObject(executionQuery(selectAuthorizationUser,login,password));
     }
 
     public List<User> userList() {

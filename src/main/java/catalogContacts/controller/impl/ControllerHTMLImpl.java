@@ -161,7 +161,8 @@ public class ControllerHTMLImpl implements Controller {
 
     private String showGroupListContact(Contact contact, int idUser) throws DaoException {
 
-        List<Group> groupList = contact.getGroupList();
+        List<Group> groupList = new ArrayList<>();
+        //contact.getGroupList();
         List<Integer> listId = new ArrayList<>();
         String strHtml = "<p><h4>Группы контактов:</h4></p>" +
                 "<table>" +

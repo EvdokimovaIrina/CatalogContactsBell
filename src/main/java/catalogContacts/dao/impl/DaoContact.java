@@ -95,7 +95,7 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
         //если не совпадает, то запишем её в БД
         ResultSet result = null;
         List<Group> groupListBD = getGroupListInContact(contact);
-        for (Group group : contact.getGroupList()) {
+        /*for (Group group : contact.getGroupList()) {
             boolean isIdFound = false;
             Iterator<Group> iter = groupListBD.iterator();
             while (iter.hasNext()) {
@@ -109,7 +109,7 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
             if (!(isIdFound)) {
                 executionQuery(selectInsertGroupInContact, contact.getNumber(), group.getNumber());
             }
-        }
+        }*/
         //те группы, что остались лишними в листе из БД удалим, т.к. их не нашлось в основном списке и это означает, что их удалили из контакта
         for (Group groupBD : groupListBD) {
             executionQuery(selectDeleteGroupFromContact, groupBD.getNumber(), contact.getNumber());
@@ -123,7 +123,7 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
     public Contact getObject(int id) throws DaoException {
         Contact contact = modelMapperContact.getObject(executionQuery(selectGetContact, id));
         contact.setContactDetailsList(getContactDetailsList(contact));
-        contact.setGroupList(getGroupListInContact(contact));
+       // contact.setGroupList(getGroupListInContact(contact));
         return contact;
     }
 

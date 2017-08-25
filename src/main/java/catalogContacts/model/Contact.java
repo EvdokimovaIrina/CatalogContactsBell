@@ -1,16 +1,19 @@
 package catalogContacts.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Entity
+@Table
 public class Contact implements Serializable {
-
     private int number;
     private String fio;
-    private List<Group> groupList = new ArrayList<>();
+    private User userByUserId;
     private List<ContactDetails> contactDetailsList = new ArrayList<>();
+    private List<ContactGroup> contactGroupsByContactId = new ArrayList<>();
+
     public Contact() {
 
     }
@@ -25,14 +28,15 @@ public class Contact implements Serializable {
     }
 
 
-    public Contact(String fio, int number, List<Group> groupList, List<ContactDetails> contactDetailsList) {
+    public Contact(String fio, int number, List<ContactDetails> contactDetailsList) {
         this.fio = fio;
         this.number = number;
-        this.groupList = groupList;
         this.contactDetailsList = contactDetailsList;
 
     }
 
+    @Id
+    @Column(name="contact_id")
     public int getNumber() {
         return number;
     }
@@ -41,6 +45,8 @@ public class Contact implements Serializable {
         this.number = number;
     }
 
+    @Basic
+    @Column(name = "contact_name")
     public String getFio() {
         return fio;
     }
@@ -49,14 +55,16 @@ public class Contact implements Serializable {
         this.fio = fio;
     }
 
-    public List<Group> getGroupList() {
-        return groupList;
+    @OneToMany(mappedBy = "contactByContactId")
+    public List<ContactGroup> getContactGroupsByContactId() {
+        return contactGroupsByContactId;
     }
 
-    public void setGroupList(List<Group> groupList) {
-        this.groupList = groupList;
+    public void setContactGroupsByContactId(List<ContactGroup> contactGroupsByContactId) {
+        this.contactGroupsByContactId = contactGroupsByContactId;
     }
 
+    @OneToMany(mappedBy = "contactByContactId")
     public List<ContactDetails> getContactDetailsList() {
         return contactDetailsList;
     }
@@ -65,5 +73,13 @@ public class Contact implements Serializable {
         this.contactDetailsList = contactDetailsList;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    public User getUserByUserId() {
+        return userByUserId;
+    }
 
+    public void setUserByUserId(User userByUserId) {
+        this.userByUserId = userByUserId;
+    }
 }
