@@ -22,7 +22,7 @@ public interface ContactService {
     void deleteContactDetails(int numberContact,int numberContactDetails) throws DaoException;
     void ChangeSelectedContactDetails(int numberContact,int numberContactDetails,String value) throws DaoException;
     List<Contact> showContactList(Integer numberGroup) throws DaoException;
-    List<ContactDetails> showContactDetails(int numberContact) throws DaoException;
+    List<ContactDetails> showContactDetails(Contact contact) throws DaoException;
     Contact getContactByNumber(int numberContact) throws DaoException;
     void changeContact(int numberContact,String value) throws DaoException;
     void addGroupToContact(int numberContact, int numberGroup) throws DaoException;

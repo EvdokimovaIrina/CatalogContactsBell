@@ -1,13 +1,14 @@
 package catalogContacts.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *
  */
 @Entity
 @Table(name = "Contact_group")
-public class ContactGroup {
+public class ContactGroup implements Serializable {
     private Contact contactByContactId;
     private Group groupByGroupId;
 

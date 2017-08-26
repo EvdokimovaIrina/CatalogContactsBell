@@ -1,21 +1,21 @@
 package catalogContacts.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
  */
 @Entity
 @Table(name ="t_user")
-public class User {
+public class User implements Serializable{
     private int id;
     private String login;
     private String password;
-    private Collection<Contact> contactsByUserId;
-    private Collection<Group> groupsByUserId;
-    private int quantityContact;
-    private int quantityGroup;
+    private List<Contact> contactsByUserId;
+    private List<Group> groupsByUserId;
 
     public User() {
     }
@@ -25,14 +25,11 @@ public class User {
         this.login = login;
         this.password = password;
     }
-
-    public User(int id, String login, String password, int quantityContact, int quantityGroup) {
-        this.id = id;
+    public User(String login, String password) {
         this.login = login;
         this.password = password;
-        this.quantityContact = quantityContact;
-        this.quantityGroup = quantityGroup;
     }
+
     @Id
     @Column(name = "user_id")
     public int getId() {
@@ -64,36 +61,21 @@ public class User {
     }
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "userByUserId")
-    public Collection<Contact> getContactsByUserId() {
+    public List<Contact> getContactsByUserId() {
         return contactsByUserId;
     }
 
-    public void setContactsByUserId(Collection<Contact> contactsByUserId) {
+    public void setContactsByUserId(List<Contact> contactsByUserId) {
         this.contactsByUserId = contactsByUserId;
     }
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "userByUserId")
-    public Collection<Group> getGroupsByUserId() {
+    public List<Group> getGroupsByUserId() {
         return groupsByUserId;
     }
 
-    public void setGroupsByUserId(Collection<Group> groupsByUserId) {
+    public void setGroupsByUserId(List<Group> groupsByUserId) {
         this.groupsByUserId = groupsByUserId;
     }
 
-    public int getQuantityContact() {
-        return quantityContact;
-    }
-
-    public int getQuantityGroup() {
-        return quantityGroup;
-    }
-
-    public void setQuantityContact(int quantityContact) {
-        this.quantityContact = quantityContact;
-    }
-
-    public void setQuantityGroup(int quantityGroup) {
-        this.quantityGroup = quantityGroup;
-    }
 }

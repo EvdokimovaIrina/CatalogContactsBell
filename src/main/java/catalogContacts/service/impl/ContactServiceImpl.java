@@ -3,6 +3,7 @@ package catalogContacts.service.impl;
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.impl.DaoContact;
+import catalogContacts.dao.impl.DaoContactDetails;
 import catalogContacts.dao.impl.DaoGroup;
 import catalogContacts.model.*;
 import catalogContacts.service.ContactService;
@@ -19,6 +20,7 @@ public final class ContactServiceImpl implements ContactService {
     // private static ContactServiceImpl instance;
     private CrudDAO<Contact> crudDAOContact;
     private CrudDAO<Group> crudDAOGroup;
+    private CrudDAO<ContactDetails> crudDAOContactDetails;
 
     // Singleton
 
@@ -27,11 +29,13 @@ public final class ContactServiceImpl implements ContactService {
             synchronized (this) {
                 crudDAOContact = new DaoContact();
                 crudDAOGroup = new DaoGroup();
+                crudDAOContactDetails = new DaoContactDetails();
             }
 
         } catch (DaoException e) {
             crudDAOContact = null;
             crudDAOGroup = null;
+            crudDAOContactDetails = null;
         }
     }
 
@@ -67,9 +71,10 @@ public final class ContactServiceImpl implements ContactService {
 
             for (Map.Entry entry : mapDetails.entrySet()) {
                 ContactDetails contactDetails = new ContactDetails((TypeContact) entry.getKey(), (String) entry.getValue());
-                contact.getContactDetailsList().add(contactDetails);
+                contactDetails.setContactByContactId(contact);
+                crudDAOContactDetails.create(contactDetails);
             }
-            crudDAOContact.update(contact);
+
         }
 
     }
@@ -163,9 +168,7 @@ public final class ContactServiceImpl implements ContactService {
         return contact;
     }
 
-    public List<ContactDetails> showContactDetails(int numberContact) throws DaoException {
-
-        Contact contact = getContactByNumber(numberContact);
+    public List<ContactDetails> showContactDetails(Contact contact) throws DaoException {
 
         return contact.getContactDetailsList();
     }

@@ -1,5 +1,6 @@
 package catalogContacts.dao.impl;
 
+import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.dao.CrudDAOUser;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.mappers.ModelMapper;
@@ -8,6 +9,8 @@ import catalogContacts.dao.mappers.impl.MapperStatisticQuantity;
 import catalogContacts.model.User;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.List;
 /**
  *
  */
-public class DaoUser extends DaoParsing implements CrudDAOUser<User>{
+public class DaoUser extends DaoParsing implements CrudDAOUser<User> {
     private ModelMapper<User> modelMapperUser;
     private ModelMapper<Float> modelMapperQuantity;
     private final String selectAuthorizationUser = "SELECT * FROM authorizationuser(?,?)";
@@ -33,8 +36,8 @@ public class DaoUser extends DaoParsing implements CrudDAOUser<User>{
         this.modelMapperQuantity = new MapperStatisticQuantity();
     }
 
-    public void create(User object) throws DaoException {
-
+    public void create(User user) throws DaoException {
+        saveObgectToBD(user);
     }
 
     public void update(User object) throws DaoException {
@@ -46,31 +49,28 @@ public class DaoUser extends DaoParsing implements CrudDAOUser<User>{
     }
 
     public User getObject(int id) throws DaoException {
-        return modelMapperUser.getObject(executionQuery(selectGetUser,id));
+        return getObjectFromBDById(User.class,id);
+
     }
 
-    public User authorizationUser(String login,String password) throws DaoException {
-        User user = new User();
+    public User authorizationUser(String login, String password) throws DaoException {
+        User user=null;
+        Transaction transaction = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            transaction = session.beginTransaction();
+            Criteria userCriteria = session.createCriteria(User.class);
+            userCriteria.add(Restrictions.eq("login", login));
+            userCriteria.add(Restrictions.eq("password", password));
+            user = (User) userCriteria.uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DaoException("Ошибка при получении данных ", e);
+        }
 
-        user.setLogin("test1");
-        user.setPassword("111");
-
-        Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            try {
-                session.beginTransaction().begin();
-                session.save(user);
-                session.getTransaction().commit();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            } finally {
-                if (session != null) {
-                    session.close();
-                }
-            }
-
-        session.close();
         return user;
-      // return modelMapperUser.getObject(executionQuery(selectAuthorizationUser,login,password));
+        // return modelMapperUser.getObject(executionQuery(selectAuthorizationUser,login,password));
     }
 
     public List<User> userList() {
@@ -92,6 +92,7 @@ public class DaoUser extends DaoParsing implements CrudDAOUser<User>{
     }
 
     public float averageUserContact() throws DaoException {
+        //session.getNamedQuery("friends_online").setParameter("id", 26).list();
         return modelMapperQuantity.getObject(executionQuery(selectAverageUserContact));
     }
 
@@ -100,7 +101,7 @@ public class DaoUser extends DaoParsing implements CrudDAOUser<User>{
     }
 
     public List<User> inactiveUsers(int n) throws DaoException {
-        return modelMapperUser.getListOfObjects(executionQuery(selectInactiveUsers,n));
+        return modelMapperUser.getListOfObjects(executionQuery(selectInactiveUsers, n));
     }
 
     public List<User> CountingUserContact() throws DaoException {

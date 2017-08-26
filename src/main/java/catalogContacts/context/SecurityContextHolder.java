@@ -6,13 +6,13 @@ import catalogContacts.model.User;
  *
  */
 public class SecurityContextHolder {
-    private static final ThreadLocal<User> threadLocalScope = new  ThreadLocal<>();
+    private static final ThreadLocal<Integer> threadLocalScope = new  ThreadLocal<>();
 
-    public final static User getLoggedUser() {
+    public final static Integer getLoggedUserID() {
         return threadLocalScope.get();
     }
 
-    public final static void setLoggedUser(User user) {
-        threadLocalScope.set(user);
+    public final static void setLoggedUserID(Integer id) {
+        threadLocalScope.set(id);
     }
 }

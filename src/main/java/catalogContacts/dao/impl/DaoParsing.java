@@ -1,6 +1,10 @@
 package catalogContacts.dao.impl;
 
 import catalogContacts.dao.exception.DaoException;
+import catalogContacts.model.Contact;
+import catalogContacts.model.User;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -74,5 +78,58 @@ public abstract class DaoParsing {
 
     }
 
+    public void saveObgectToBD(Object object) throws DaoException {
+        //запишем новый контакт
+        Transaction transaction = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            transaction = session.beginTransaction();
+            session.saveOrUpdate(object);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        }
+
+    }
+
+    public <T> T getObjectFromBDById(Class<T> clazz, int id) throws DaoException {
+        Transaction transaction = null;
+        T object=null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            transaction = session.beginTransaction();
+            object = clazz.cast(session.get(clazz,id));
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DaoException("Ошибка при получении данных ", e);
+        }
+
+        return object;
+
+    }
+
+  /*  public <T> T removeObjectFromBDById(Class<T> clazz, int id) throws DaoException {
+        Transaction transaction = null;
+        T object=new T();
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            transaction = session.beginTransaction();
+            object.setTaskId(taskId);
+            session.delete(task);
+
+            object = clazz.cast(session.get(clazz,id));
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DaoException("Ошибка при получении данных ",e);
+        } finally {
+            HibernateUtil.closeSession();
+        }
+
+        return object;
+
+    }*/
 
 }

@@ -1,5 +1,7 @@
 package catalogContacts.dao.impl;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -8,8 +10,8 @@ import org.hibernate.cfg.Configuration;
 /**
  *
  */
-public class HibernateSessionFactory {
-    private static SessionFactory sessionFactory = buildSessionFactory();
+public class HibernateUtil {
+    private static SessionFactory session = buildSessionFactory();
     private static StandardServiceRegistry serviceRegistry;
 
    /* protected static SessionFactory buildSessionFactory2() {
@@ -43,10 +45,14 @@ public class HibernateSessionFactory {
     }
 
     public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+        return session;
     }
-    public static void shutdown (){
-        getSessionFactory().close();
+
+    public static void closeSession() throws HibernateException {
+        if (session != null) {
+            session.close();
+        }
     }
+
 
 }

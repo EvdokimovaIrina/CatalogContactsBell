@@ -92,7 +92,7 @@ public class ControllerHTMLImpl implements Controller {
     }
 
     private String menuListHTML(List<Contact> contactList){
-        int idUser = SecurityContextHolder.getLoggedUser().getId();
+        int idUser = SecurityContextHolder.getLoggedUserID();
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><body>" +
                 "<form action=\"menu\" method=\"POST\">" +
@@ -118,7 +118,7 @@ public class ControllerHTMLImpl implements Controller {
     }
 
     private String showContactDetailsList(Contact contact, int idUser) throws DaoException {
-        List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
+        List<ContactDetails> contactDetailsList = contactService.showContactDetails(contact);
 
         String strHtml = "<p><h4>Контактная информация:</h4></p>" +
                 "<table>" +
@@ -214,7 +214,7 @@ public class ControllerHTMLImpl implements Controller {
         synchronized (this) {
             contact = contactService.getContactByNumber(numberContact);
         }
-        int idUser = SecurityContextHolder.getLoggedUser().getId();
+        int idUser = SecurityContextHolder.getLoggedUserID();
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><body>" +
                 "<form action=\"menu\" method=\"POST\">" +
@@ -238,7 +238,7 @@ public class ControllerHTMLImpl implements Controller {
 
 
     public String showGroupList() throws DaoException {
-        int idUser = SecurityContextHolder.getLoggedUser().getId();
+        int idUser = SecurityContextHolder.getLoggedUserID();
         List<Group> groupList;
         synchronized (this) {
             groupList = groupService.showGroupList();
@@ -287,7 +287,7 @@ public class ControllerHTMLImpl implements Controller {
         synchronized (this) {
             userService.setUserThread(login, password);
         }
-        if (SecurityContextHolder.getLoggedUser() == null) {
+        if (SecurityContextHolder.getLoggedUserID() == null) {
             return false;
         } else {
             return true;
@@ -313,7 +313,7 @@ public class ControllerHTMLImpl implements Controller {
     }
 
     public String getMainMenuHTML() {
-        int idUser = SecurityContextHolder.getLoggedUser().getId();
+        int idUser = SecurityContextHolder.getLoggedUserID();
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><head>" +
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">" +

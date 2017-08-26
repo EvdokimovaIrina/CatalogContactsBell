@@ -6,14 +6,15 @@ import catalogContacts.dao.mappers.ModelMapper;
 import catalogContacts.dao.mappers.impl.ModelMapperContact;
 import catalogContacts.dao.mappers.impl.ModelMapperContactDetails;
 import catalogContacts.dao.mappers.impl.ModelMapperGroup;
-import catalogContacts.model.Contact;
-import catalogContacts.model.ContactDetails;
-import catalogContacts.model.Group;
+import catalogContacts.model.*;
 import catalogContacts.context.SecurityContextHolder;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,14 +49,17 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
 
     public void create(Contact contact) throws DaoException {
         //запишем новый контакт
-        executionQuery(selectInsertContact, SecurityContextHolder.getLoggedUser().getId(), contact.getFio());
+        contact.setUserByUserId(getObjectFromBDById(User.class,SecurityContextHolder.getLoggedUserID()));
+        saveObgectToBD(contact);
+
     }
 
 
     public void update(Contact contact) throws DaoException {
-        executionQuery(selectChangeContact, SecurityContextHolder.getLoggedUser().getId(), contact.getFio());
+        saveObgectToBD(contact);
+       /* executionQuery(selectChangeContact, SecurityContextHolder.getLoggedUserID(), contact.getFio());
         changeContactDetails(contact);
-        changeGroupToContact(contact);
+        changeGroupToContact(contact);*/
 
     }
 
@@ -119,45 +123,95 @@ public class DaoContact extends DaoParsing implements CrudDAO<Contact> {
     }
 
     public void delete(int number) throws DaoException {
-        executionQuery(selectDeleteContact, number);
+        Transaction transaction = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            transaction = session.beginTransaction();
+            Contact contact = new Contact();
+            contact.setNumber(number);
+            session.delete(contact);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DaoException("Ошибка при получении данных ", e);
+        }
     }
 
     public Contact getObject(int id) throws DaoException {
-        Contact contact = modelMapperContact.getObject(executionQuery(selectGetContact, id));
-        contact.setContactDetailsList(getContactDetailsList(contact));
-       // contact.setGroupList(getGroupListInContact(contact));
-        return contact;
+        Transaction transaction = null;
+        try {
+            Contact contact;
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            transaction = session.beginTransaction();
+            contact = (Contact) session.load(Contact.class,id);
+            contact.getContactDetailsList().size();
+            contact.getContactGroupsByContactId();
+            transaction.commit();
+            return contact;
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DaoException("Ошибка при получении данных ", e);
+        }
     }
 
     public List<Contact> getAll() throws DaoException {
-
-
-        List<Contact> contactList = null;
-        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+        int userID = SecurityContextHolder.getLoggedUserID();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = null;
         try {
-            session.beginTransaction().begin();
-            Criteria criteria = session.createCriteria(Contact.class);
-            contactList = (List<Contact>) criteria.list();
-            session.getTransaction().commit();
+            List<Contact>  contactList;
+            transaction = session.beginTransaction();
+            User user = (User) session.load(User.class,userID);
+            user.getContactsByUserId().size(); //для инициализации
+            contactList = user.getContactsByUserId();
+            transaction.commit();
+            return contactList;
         } catch (Exception e) {
+            transaction.rollback();
             throw new DaoException("Ошибка получения списка контактов ", e);
-        }finally {
-            if (session != null) session.close();
         }
-        return contactList;
-
     }
 
     private List<ContactDetails> getContactDetailsList(Contact contact) throws DaoException {
-        return modelMapperContactDetails.getListOfObjects(executionQuery(selectGetContactDetails, contact.getNumber()));
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+           // Contact contact1 = (Contact) session.merge(contact);
+            contact.getContactDetailsList().size();
+            List<ContactDetails>  contactDetailsList = contact.getContactDetailsList();
+            transaction.commit();
+            return contactDetailsList;
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DaoException("Ошибка получения списка контактов ", e);
+        }
     }
 
     private List<Group> getGroupListInContact(Contact contact) throws DaoException {
-        return modelMapperGroup.getListOfObjects(executionQuery(selectGetListGroupInContact, contact.getNumber()));
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = null;
+        List<Group> groupList=new ArrayList<>();
+        try {
+            transaction = session.beginTransaction();
+            // Contact contact1 = (Contact) session.merge(contact);
+            contact.getContactGroupsByContactId().size();
+            List<ContactGroup>  contactGroupList = contact.getContactGroupsByContactId();
+
+            for (ContactGroup contactGroup: contactGroupList) {
+                groupList.add(contactGroup.getGroupByGroupId());
+            }
+            transaction.commit();
+
+            return groupList;
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DaoException("Ошибка получения списка контактов ", e);
+        }
     }
 
     public List<Contact> findByName(String name) throws DaoException {
-        return modelMapperContact.getListOfObjects(executionQuery(selectGetContactList, SecurityContextHolder.getLoggedUser().getId(), name));
+        return modelMapperContact.getListOfObjects(executionQuery(selectGetContactList, SecurityContextHolder.getLoggedUserID(), name));
     }
 
 }

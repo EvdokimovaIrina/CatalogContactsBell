@@ -4,16 +4,18 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory name="hibernate.cfg.xml">
-    <property name="connection.driver_class">org.postgresql.Driver</property>
-    <property name="connection.datasource">java:comp/env/jdbc/catalogcontacs</property>
+    <!--<property name="connection.driver_class">org.postgresql.Driver</property>
+    <property name="connection.datasource">java:comp/env/jdbc/catalogcontacs</property>-->
 
-    <!--<property name="connection.url">jdbc:postgresql://localhost/catalogcontacs</property>
+    <property name="connection.url">jdbc:postgresql://localhost/catalogcontacs</property>
     <property name="connection.driver_class">org.postgresql.Driver</property>
     <property name="connection.username">postgres</property>
-    <property name="connection.password">31415926</property>-->
+    <property name="connection.password">31415926</property>
     <property name="dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
+    <property name="current_session_context_class">thread</property>
     <property name="swow_sql">true</property>
     <property name="hbm2ddl.auto">update</property>
+
 
     <mapping class="catalogContacts.model.Contact"/>
     <mapping class="catalogContacts.model.ContactDetails"/>
