@@ -161,8 +161,8 @@ public class ControllerHTMLImpl implements Controller {
 
     private String showGroupListContact(Contact contact, int idUser) throws DaoException {
 
-        List<Group> groupList = new ArrayList<>();
-        //contact.getGroupList();
+        List<Group> groupList = contact.getGroupList();
+
         List<Integer> listId = new ArrayList<>();
         String strHtml = "<p><h4>Группы контактов:</h4></p>" +
                 "<table>" +
@@ -250,20 +250,22 @@ public class ControllerHTMLImpl implements Controller {
                 "<input type=\"submit\" value=\"На главное меню\" />" +
                 "</form><br>" +
                 "<p><h3>Группы:</h3></p></body></html>" +
-                "<form action=\"groups\" method=\"POST\">" +
                 "<table>" +
                 "<tbody>";
         for (Group group : groupList) {
             strHtml = strHtml + "<tr> " +
+                    "<form action=\"groups\" method=\"POST\">" +
                     "<td>" + group.getName() + "</td>" +
                     "<input type=\"hidden\" name=\"idgroup\" value=\"" + group.getNumber() + "\"/>" +
                     "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
-                    "<td><input type=\"hidden\" name=\"buttonaction\" value=\"delete\"/></td>" +
-                    "<input type=\"submit\" value=\"Удалить\" />" +
+                    "<td><input type=\"hidden\" name=\"buttonaction\" value=\"delete\"/>" +
+                    "<input type=\"submit\" value=\"Удалить\" /></td>" +
+                    "</form>" +
                     "</tr>";
         }
         strHtml = strHtml + "</tbody>" +
                 "</table>" +
+                "<form action=\"groups\" method=\"POST\">" +
                 "<input type=\"text\" name=\"namegroup\"/>" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
                 "<input type=\"hidden\" name=\"buttonaction\"  value=\"add\"/>" +

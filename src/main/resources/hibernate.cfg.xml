@@ -11,6 +11,8 @@
     <property name="connection.driver_class">org.postgresql.Driver</property>
     <property name="connection.username">postgres</property>
     <property name="connection.password">31415926</property>
+
+
     <property name="dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
     <property name="current_session_context_class">thread</property>
     <property name="swow_sql">true</property>
@@ -21,7 +23,7 @@
     <mapping class="catalogContacts.model.ContactDetails"/>
     <mapping class="catalogContacts.model.Group"/>
     <mapping class="catalogContacts.model.User"/>
-    <mapping class="catalogContacts.model.ContactGroup"/>
+
 
 
   </session-factory>

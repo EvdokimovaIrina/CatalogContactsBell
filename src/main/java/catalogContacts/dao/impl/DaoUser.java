@@ -1,26 +1,26 @@
 package catalogContacts.dao.impl;
 
-import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.dao.CrudDAOUser;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.dao.mappers.ModelMapper;
 import catalogContacts.dao.mappers.impl.ModelMapperUser;
 import catalogContacts.dao.mappers.impl.MapperStatisticQuantity;
+import catalogContacts.model.Contact;
+import catalogContacts.model.Group;
 import catalogContacts.model.User;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
-import javax.jws.soap.SOAPBinding;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  */
-public class DaoUser extends DaoParsing implements CrudDAOUser<User> {
-    private ModelMapper<User> modelMapperUser;
-    private ModelMapper<Float> modelMapperQuantity;
+public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
     private final String selectAuthorizationUser = "SELECT * FROM authorizationuser(?,?)";
     private final String selectGetUser = "SELECT * FROM getuser(?)";
     private final String selectNumberOfUsers = "SELECT NumberOfUsers()";
@@ -28,12 +28,11 @@ public class DaoUser extends DaoParsing implements CrudDAOUser<User> {
     private final String selectCountingUserContact = "SELECT * FROM CountingUserContact()";
     private final String selectCountingUserGroup = "SELECT * FROM CountingUserGroup()";
     private final String selectAverageUserGroup = "SELECT AverageUserGroup()";
-    private final String selectInactiveUsers = "SELECT * FROM InactiveUsers(?)";
+    private final String selectInactiveUsers = "FROM InactiveUsers(?)";
 
     public DaoUser() throws DaoException {
         super();
-        this.modelMapperUser = new ModelMapperUser();
-        this.modelMapperQuantity = new MapperStatisticQuantity();
+
     }
 
     public void create(User user) throws DaoException {
@@ -87,29 +86,65 @@ public class DaoUser extends DaoParsing implements CrudDAOUser<User> {
     }
 
     public int numberOfUsers() throws DaoException {
-        Float floatValue = modelMapperQuantity.getObject(executionQuery(selectNumberOfUsers));
-        return floatValue.intValue();
+        return 0;
     }
 
     public float averageUserContact() throws DaoException {
         //session.getNamedQuery("friends_online").setParameter("id", 26).list();
-        return modelMapperQuantity.getObject(executionQuery(selectAverageUserContact));
+        return 0;
     }
 
     public float averageUserGroup() throws DaoException {
-        return modelMapperQuantity.getObject(executionQuery(selectAverageUserGroup));
+        return 0;
     }
 
     public List<User> inactiveUsers(int n) throws DaoException {
-        return modelMapperUser.getListOfObjects(executionQuery(selectInactiveUsers, n));
+        List<User> userList=null;
+        Transaction transaction = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            transaction = session.beginTransaction();
+            userList = (List<User>)session.createSQLQuery("{? = call InactiveUsers (:n)}").setLong("n",n).uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DaoException("Ошибка при получении данных ", e);
+        }
+
+        return userList;
+
     }
 
-    public List<User> CountingUserContact() throws DaoException {
-        return modelMapperUser.getListOfObjects(executionQuery(selectCountingUserContact));
+    public List<Map<User, Integer>> CountingUserContact() throws DaoException {
+        return getCountingForUser(Contact.class);
     }
 
-    public List<User> CountingUserGroup() throws DaoException {
-        return modelMapperUser.getListOfObjects(executionQuery(selectCountingUserGroup));
+    public List<Map<User, Integer>> CountingUserGroup() throws DaoException {
+        return getCountingForUser(Group.class);
+    }
+
+    private List<Map<User, Integer>> getCountingForUser(Class clazz) throws DaoException {
+        List<Map<User, Integer>> userListMap=null;
+        Transaction transaction = null;
+        try {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            transaction = session.beginTransaction();
+            List<User> userList = (List<User>)session.createQuery("from User").list();
+            for (User user: userList) {
+                Map<User, Integer> mapForList = new HashMap<>();
+                if (clazz == Contact.class) {
+                    mapForList.put(user,user.getContactsByUserId().size());
+                }else if(clazz== Group.class){
+                    mapForList.put(user, user.getGroupsByUserId().size());
+                }
+                userListMap.add(mapForList);
+            }
+            transaction.commit();
+            return userListMap;
+        } catch (Exception e) {
+            transaction.rollback();
+            throw new DaoException("Ошибка при получении данных ", e);
+        }
     }
 
 }

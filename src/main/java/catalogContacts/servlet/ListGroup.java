@@ -46,7 +46,6 @@ public class ListGroup extends HttpServlet {
     }
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
-
         switch (buttonAction) {
             case "add":
                 GroupServiceImpl.getInstance().addGroup(request.getParameter("namegroup"));

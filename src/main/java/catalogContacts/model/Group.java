@@ -13,7 +13,7 @@ public class Group implements Serializable {
     private int number;
     private String name;
     private User UserByUserId;
-    private List<ContactGroup> contactGroupsByGroupId;
+    private List<Contact> contactList;
 
     public Group(){
     }
@@ -28,7 +28,7 @@ public class Group implements Serializable {
     }
 
     @Basic
-    @Column(name = "group_name")
+    @Column(name = "group_name", nullable=false)
     public String getName() {
         return name;
     }
@@ -38,7 +38,8 @@ public class Group implements Serializable {
     }
 
     @Id
-    @Column(name="group_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="group_id", nullable=false)
     public int getNumber() {
         return number;
     }
@@ -57,12 +58,17 @@ public class Group implements Serializable {
         UserByUserId = userByUserId;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "groupByGroupId")
-    public List<ContactGroup> getContactGroupsByGroupId() {
-        return contactGroupsByGroupId;
+   // @ManyToMany(mappedBy = "groupList", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+   @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+   @JoinTable(name = "contact_group", joinColumns = {
+           @JoinColumn(name = "group_id", nullable = false, updatable = false) },
+           inverseJoinColumns = { @JoinColumn(name = "contact_id",
+                   nullable = false, updatable = false) })
+    public List<Contact> getContactList() {
+        return contactList;
     }
 
-    public void setContactGroupsByGroupId(List<ContactGroup> contactGroupsByGroupId) {
-        this.contactGroupsByGroupId = contactGroupsByGroupId;
+    public void setContactList(List<Contact> contactList) {
+        this.contactList = contactList;
     }
 }

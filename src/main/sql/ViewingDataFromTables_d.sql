@@ -28,7 +28,7 @@ BEGIN
     FOR r IN
         SELECT
               *
-        FROM "Group"
+        FROM t_group
             WHERE group_id=g_id
     LOOP
         RETURN NEXT r;
@@ -93,7 +93,7 @@ BEGIN
     FOR r IN
         SELECT
               *
-        FROM "Group"
+        FROM t_group
             WHERE user_id=u_id AND
             (find_name='' OR  (POSITION (find_name IN group_name)>0))
             ORDER BY group_id
@@ -114,7 +114,7 @@ BEGIN
     FOR r IN
         SELECT
               *
-        FROM "Group"
+        FROM t_group
             WHERE
             group_id IN (SELECT group_id FROM "Contact_group" WHERE contact_id=c_id)
         ORDER BY group_id

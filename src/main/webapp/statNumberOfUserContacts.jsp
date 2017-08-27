@@ -3,6 +3,7 @@
 <%@ page import="catalogContacts.service.impl.UserServiceImpl" %>
 <%@ page import="catalogContacts.model.User" %>
 <%@ page import="catalogContacts.dao.exception.DaoException" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
@@ -22,10 +23,14 @@
     UserService userService = UserServiceImpl.getInstance();
     try {
         synchronized(this) {
-        for (User user : userService.countingUserContact()) {%>
+
+        for (Map<User,Integer> mapUser : userService.countingUserContact()){%>
         <tr>
+         <% for (Map.Entry entry : mapUser.entrySet()) {
+         User user = (User) entry.getKey();%>
             <td><%= user.getLogin() %></td>
-            <td><%= user.getQuantityContact() %></td>
+            <td><%= entry.getValue() %></td>
+         <%}%>
         </tr>
         <% }
         }

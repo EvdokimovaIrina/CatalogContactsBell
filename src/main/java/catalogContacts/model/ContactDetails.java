@@ -25,7 +25,7 @@ public class ContactDetails implements Serializable {
     }
 
     @Basic
-    @Column(name = "details_type")
+    @Column(name = "details_type", nullable=false)
     public TypeContact getType() {
         return type;
     }
@@ -35,7 +35,7 @@ public class ContactDetails implements Serializable {
     }
 
     @Basic
-    @Column(name = "details_value")
+    @Column(name = "details_value", nullable=false)
     public String getValue() {
         return value;
     }
@@ -45,7 +45,8 @@ public class ContactDetails implements Serializable {
     }
 
     @Id
-    @Column(name="details_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="details_id", nullable=false)
     public int getId() {
         return id;
     }

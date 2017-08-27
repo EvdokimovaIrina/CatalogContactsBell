@@ -1,9 +1,14 @@
+<%@ page import="org.apache.log4j.Logger" %>
+<% Logger logger=Logger.getLogger("simple"); %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Статистика</title>
 </head>
 <body>
+<%
+    logger.info("log message from TestLog JSP-page");
+%>
     <div><a href=home>На главную</a></div>
     <p><a href=statNumberOfUsers.jsp> Общее количество пользователей. </a></p>
     <p><a href=statNumberOfUserContacts.jsp> Количество контактов каждого пользователя. </a></p>

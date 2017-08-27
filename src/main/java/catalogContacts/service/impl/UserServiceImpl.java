@@ -10,6 +10,7 @@ import org.slf4j.*;
 
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -86,20 +87,20 @@ public class UserServiceImpl implements UserService {
         return userList;
     }
 
-    public List<User> countingUserContact() throws DaoException {
-        List<User> userList;
+    public List<Map<User, Integer>> countingUserContact() throws DaoException {
+        List<Map<User,Integer>> userListcountingContact;
         synchronized (this) {
-            userList = crudDAOUser.CountingUserContact();
+            userListcountingContact = crudDAOUser.CountingUserContact();
         }
-        return userList;
+        return userListcountingContact;
     }
 
-    public List<User> countingUserGroup() throws DaoException {
-        List<User> userList;
+    public List<Map<User, Integer>> countingUserGroup() throws DaoException {
+        List<Map<User,Integer>> userListcountingContact;
         synchronized (this) {
-            userList = crudDAOUser.CountingUserGroup();
+            userListcountingContact = crudDAOUser.CountingUserGroup();
         }
-        return userList;
+        return userListcountingContact;
     }
 
     public void setCrudDAOUser(CrudDAOUser<User> crudDAOUser) {

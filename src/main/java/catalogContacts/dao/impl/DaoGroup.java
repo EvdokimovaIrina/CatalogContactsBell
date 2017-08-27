@@ -15,29 +15,23 @@ import java.util.List;
 /**
  *
  */
-public class DaoGroup extends DaoParsing implements CrudDAO<Group> {
-    private ModelMapper<Group> modelMapperGroup;
-    private final String selectInsertGroup = "SELECT insertgroup(?,?)";
-    private final String selectChangeGroup = "SELECT changegroup(?,?)";
-    private final String selectDeleteGroup = "SELECT deletegroup(?)";
-    private final String selectGetGroup = "SELECT * FROM getgroup(?)";
-    private final String selectGetListGroup = "SELECT * FROM getlistgroup(?,?)";
+public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
 
     public DaoGroup() throws DaoException {
         super();
-        modelMapperGroup = new ModelMapperGroup();
     }
 
     public void create(Group group) throws DaoException {
+        group.setUserByUserId(getObjectFromBDById(User.class,SecurityContextHolder.getLoggedUserID()));
         saveObgectToBD(group);
     }
 
     public void update(Group group) throws DaoException {
-        executionQuery(selectChangeGroup,group.getNumber(),group.getName());
+        saveObgectToBD(group);
     }
 
     public void delete(int number) throws DaoException {
-        executionQuery(selectDeleteGroup,number);
+        deleteObgectFromBD(Group.class,number);
     }
 
     public Group getObject(int id) throws DaoException {
@@ -63,8 +57,7 @@ public class DaoGroup extends DaoParsing implements CrudDAO<Group> {
     }
 
     public List<Group> findByName(String name) throws DaoException {
-        return modelMapperGroup.getListOfObjects(executionQuery(selectGetListGroup,
-                SecurityContextHolder.getLoggedUserID(),name));
+        return null;
     }
 
 }

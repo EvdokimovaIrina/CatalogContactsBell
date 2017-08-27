@@ -31,7 +31,8 @@ public class User implements Serializable{
     }
 
     @Id
-    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "user_id", nullable=false)
     public int getId() {
         return id;
     }
@@ -60,7 +61,7 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "userByUserId")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "userByUserId", cascade = CascadeType.ALL,orphanRemoval=true)
     public List<Contact> getContactsByUserId() {
         return contactsByUserId;
     }
@@ -69,7 +70,7 @@ public class User implements Serializable{
         this.contactsByUserId = contactsByUserId;
     }
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "userByUserId")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "userByUserId", cascade = CascadeType.ALL,orphanRemoval=true)
     public List<Group> getGroupsByUserId() {
         return groupsByUserId;
     }

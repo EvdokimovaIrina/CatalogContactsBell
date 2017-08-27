@@ -5,7 +5,7 @@
 CREATE OR REPLACE FUNCTION InsertContact(u_id INT,c_name VARCHAR) RETURNS VOID AS
 $BODY$
 BEGIN
-    INSERT INTO "Contact" ( contact_name,
+    INSERT INTO contact ( contact_name,
                             user_id)
          VALUES (
          c_name,
@@ -19,7 +19,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION InsertContactDetails(c_id INT,d_type VARCHAR,d_value VARCHAR) RETURNS VOID AS
 $BODY$
 BEGIN
-    INSERT INTO "ContactDetails" (  details_type,
+    INSERT INTO contactDetails (  details_type,
                                     details_value,
                                     contact_id)
             VALUES (
@@ -36,7 +36,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION InsertGroup(u_id INT,g_name VARCHAR) RETURNS VOID AS
 $BODY$
 BEGIN
-    INSERT INTO "Group" (
+    INSERT INTO t_group (
                          group_name,
                             user_id)
          VALUES (
@@ -53,7 +53,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION InsertGroupInContact(c_id INT,g_id INT) RETURNS VOID AS
 $BODY$
 BEGIN
-    INSERT INTO "Contact_group" (contact_id,group_id)
+    INSERT INTO contact_group (contact_id,group_id)
                          VALUES (c_id,g_id);
 END
 $BODY$
@@ -64,7 +64,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION ChangeContact(c_id INT,c_name VARCHAR) RETURNS VOID AS
 $BODY$
 BEGIN
-UPDATE "Contact" SET contact_name = c_name WHERE contact_id=c_id;
+UPDATE contact SET contact_name = c_name WHERE contact_id=c_id;
 END
 $BODY$
 LANGUAGE 'plpgsql';
@@ -73,7 +73,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION ChangeGroup(g_id INT,g_name VARCHAR) RETURNS VOID AS
 $BODY$
 BEGIN
-UPDATE "Group" SET group_name = g_name WHERE group_id=g_id;
+UPDATE t_group SET group_name = g_name WHERE group_id=g_id;
 END
 $BODY$
 LANGUAGE 'plpgsql';
@@ -82,7 +82,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION ChangeContactDetails(d_id INT,d_type VARCHAR,d_value VARCHAR) RETURNS VOID AS
 $BODY$
 BEGIN
-UPDATE "ContactDetails"
+UPDATE contactDetails
     SET
      details_type = d_type,
     details_value = d_value
@@ -96,7 +96,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION DeleteContactDetails(d_id INT) RETURNS VOID AS
 $BODY$
 BEGIN
-    DELETE FROM "ContactDetails"
+    DELETE FROM contactDetails
           WHERE details_id = d_id;
 END
 $BODY$
@@ -108,7 +108,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION DeleteGroupFromContact(g_id INT,c_id INT) RETURNS VOID AS
 $BODY$
 BEGIN
-    DELETE FROM "Contact_group"
+    DELETE FROM contact_group
           WHERE group_id = g_id AND
          		 contact_id = c_id;
 END
@@ -120,7 +120,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION DeleteContact(c_id INT) RETURNS VOID AS
 $BODY$
 BEGIN
-    DELETE FROM "Contact"
+    DELETE FROM contact
           WHERE contact_id = c_id;
 END
 $BODY$
@@ -131,7 +131,7 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION DeleteGroup(g_id INT) RETURNS VOID AS
 $BODY$
 BEGIN
-    DELETE FROM "Group"
+    DELETE FROM t_group
           WHERE group_id = g_id;
 END
 $BODY$
@@ -141,9 +141,9 @@ LANGUAGE 'plpgsql';
 CREATE OR REPLACE FUNCTION DeleteDataContact() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    DELETE FROM "ContactDetails"
+    DELETE FROM contactDetails
           WHERE contact_id = OLD.contact_id;
-    DELETE FROM "Contact_group"
+    DELETE FROM Contact_group
           WHERE contact_id = OLD.contact_id;
           RETURN OLD;
 END
@@ -151,14 +151,14 @@ $BODY$
 LANGUAGE 'plpgsql';
 
 CREATE TRIGGER trig_delete_contact
-  BEFORE DELETE ON "Contact" FOR EACH ROW EXECUTE PROCEDURE DeleteDataContact();
+  BEFORE DELETE ON contact FOR EACH ROW EXECUTE PROCEDURE DeleteDataContact();
 
 CREATE OR REPLACE FUNCTION DeleteDataContact() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    DELETE FROM "ContactDetails"
+    DELETE FROM contactDetails
           WHERE contact_id = OLD.contact_id;
-    DELETE FROM "Contact_group"
+    DELETE FROM contact_group
           WHERE contact_id = OLD.contact_id;
           RETURN OLD;
 END
@@ -166,4 +166,4 @@ $BODY$
 LANGUAGE 'plpgsql';
 
 CREATE TRIGGER trig_delete_contact
-  BEFORE DELETE ON "Contact" FOR EACH ROW EXECUTE PROCEDURE DeleteDataContact();
+  BEFORE DELETE ON contact FOR EACH ROW EXECUTE PROCEDURE DeleteDataContact();

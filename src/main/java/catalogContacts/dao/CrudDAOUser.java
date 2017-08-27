@@ -1,10 +1,10 @@
 package catalogContacts.dao;
 
-import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -24,6 +24,6 @@ public interface CrudDAOUser<U> extends CrudDAO<U> {
     float averageUserContact() throws DaoException;
     float averageUserGroup() throws DaoException;
     List<User> inactiveUsers(int n) throws DaoException;
-    List<User> CountingUserContact() throws DaoException;
-    List<User> CountingUserGroup() throws DaoException;
+    List<Map<User, Integer>> CountingUserContact() throws DaoException;
+    List<Map<User, Integer>> CountingUserGroup() throws DaoException;
 }

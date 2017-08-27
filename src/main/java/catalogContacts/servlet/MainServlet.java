@@ -2,6 +2,7 @@ package catalogContacts.servlet;
 
 import catalogContacts.controller.impl.ControllerHTMLImpl;
 import catalogContacts.dao.exception.DaoException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,8 +17,10 @@ import java.io.PrintWriter;
  */
 @WebServlet("/menu")
 public class MainServlet extends HttpServlet {
+    private static Logger logger=Logger.getLogger("simple");
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.info("log message from TestLogServlet");
         response.setContentType("text/html;charset=utf-8");
 
         PrintWriter out = response.getWriter();

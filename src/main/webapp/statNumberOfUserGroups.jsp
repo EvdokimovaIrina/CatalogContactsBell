@@ -1,7 +1,8 @@
 <%@ page import="catalogContacts.service.UserService" %>
 <%@ page import="catalogContacts.service.impl.UserServiceImpl" %>
 <%@ page import="catalogContacts.model.User" %>
-<%@ page import="catalogContacts.dao.exception.DaoException" %><%--
+<%@ page import="catalogContacts.dao.exception.DaoException" %>
+<%@ page import="java.util.Map" %><%--
   Created by IntelliJ IDEA.
   User: iren
   Date: 18.08.2017
@@ -26,15 +27,24 @@
     <%
         UserService userService = UserServiceImpl.getInstance();
         try {
-            synchronized(this) {
-            for (User user : userService.countingUserGroup()) {%>
-            <tr>
-                 <td><%= user.getLogin() %></td>
-                 <td><%= user.getQuantityGroup() %></td>
-            </tr>
-         <% }
-        }
-        }  catch (DaoException e) {%>
+            synchronized (this) {
+                for (Map<User, Integer> mapUser : userService.countingUserContact()) {%>
+    <tr>
+        <% for (Map.Entry entry : mapUser.entrySet()) {
+            User user = (User) entry.getKey();%>
+        <td><%= user.getLogin() %></td>
+
+        <td><%= entry.getValue() %></td>
+
+        <%}%>
+    </tr>
+    <% }
+    }
+    } catch
+            (
+            DaoException
+                    e
+            ) {%>
     <%= "Ошибка получения данных" %>
     <% }%>
     </tbody>

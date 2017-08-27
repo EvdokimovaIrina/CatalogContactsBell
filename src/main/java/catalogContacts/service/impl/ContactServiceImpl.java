@@ -74,9 +74,7 @@ public final class ContactServiceImpl implements ContactService {
                 contactDetails.setContactByContactId(contact);
                 crudDAOContactDetails.create(contactDetails);
             }
-
         }
-
     }
 
     //Сохранение контакта в хранилище
@@ -95,7 +93,12 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     public void deleteContactDetails(int numberContact, int numberContactDetails) throws DaoException {
-        Contact contact = getContactByNumber(numberContact);
+        synchronized (this) {
+            crudDAOContactDetails.delete(numberContactDetails);
+        }
+
+
+       /* Contact contact = getContactByNumber(numberContact);
 
         List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
 
@@ -111,7 +114,7 @@ public final class ContactServiceImpl implements ContactService {
         synchronized (this) {
             crudDAOContact.update(contact);
         }
-
+*/
 
     }
 
@@ -187,10 +190,13 @@ public final class ContactServiceImpl implements ContactService {
 
         Contact contact = getContactByNumber(numberContact);
         Group group = getGroupByNumber(numberGroup);
-        if (!(contact == null) & !(group == null)) {
+        contact.getGroupList().add(group);
+        //group.getContactList().add(contact);
+           if (!(contact == null) & !(group == null)) {
             /*contact.getGroupList().add(group);*/
             synchronized (this) {
                 crudDAOContact.update(contact);
+             //   crudDAOGroup.update(group);
             }
         }
     }

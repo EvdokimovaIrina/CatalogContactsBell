@@ -4,6 +4,11 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
          http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
+
+    <listener>
+        <listener-class>Log4jInit</listener-class>
+    </listener>
+
     <resource-ref>
         <description>DB Connection</description>
         <res-ref-name>jdbc/catalogcontacs</res-ref-name>

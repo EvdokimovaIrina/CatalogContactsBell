@@ -9,7 +9,7 @@ import java.util.List;
 /**
  *
  */
-public class DaoContactDetails extends DaoParsing implements CrudDAO<ContactDetails>{
+public class DaoContactDetails extends DaoGeneral implements CrudDAO<ContactDetails>{
 
     public DaoContactDetails() throws DaoException {
         super();
@@ -24,11 +24,11 @@ public class DaoContactDetails extends DaoParsing implements CrudDAO<ContactDeta
     }
 
     public void delete(int number) throws DaoException {
-
+         deleteObgectFromBD(ContactDetails.class,number);
     }
 
     public ContactDetails getObject(int id) throws DaoException {
-        return null;
+        return getObjectFromBDById(ContactDetails.class,id);
     }
 
     public List<ContactDetails> getAll() throws DaoException {

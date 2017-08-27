@@ -12,7 +12,7 @@ public class Contact implements Serializable {
     private String fio;
     private User userByUserId;
     private List<ContactDetails> contactDetailsList = new ArrayList<>();
-    private List<ContactGroup> contactGroupsByContactId = new ArrayList<>();
+    private List<Group> groupList = new ArrayList<>();
 
     public Contact() {
 
@@ -36,7 +36,8 @@ public class Contact implements Serializable {
     }
 
     @Id
-    @Column(name="contact_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="contact_id", nullable=false)
     public int getNumber() {
         return number;
     }
@@ -46,7 +47,9 @@ public class Contact implements Serializable {
     }
 
     @Basic
-    @Column(name = "contact_name")
+
+    @Column(name = "contact_name", nullable=false)
+
     public String getFio() {
         return fio;
     }
@@ -55,16 +58,8 @@ public class Contact implements Serializable {
         this.fio = fio;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactByContactId",cascade = CascadeType.ALL)
-    public List<ContactGroup> getContactGroupsByContactId() {
-        return contactGroupsByContactId;
-    }
 
-    public void setContactGroupsByContactId(List<ContactGroup> contactGroupsByContactId) {
-        this.contactGroupsByContactId = contactGroupsByContactId;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "contactByContactId", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "contactByContactId", cascade = CascadeType.ALL,orphanRemoval=true)
     public List<ContactDetails> getContactDetailsList() {
         return contactDetailsList;
     }
@@ -81,5 +76,18 @@ public class Contact implements Serializable {
 
     public void setUserByUserId(User userByUserId) {
         this.userByUserId = userByUserId;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "contact_group", joinColumns = {
+            @JoinColumn(name = "contact_id", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "group_id",
+                    nullable = false, updatable = false) })
+    public List<Group> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList(List<Group> groupList) {
+        this.groupList = groupList;
     }
 }
