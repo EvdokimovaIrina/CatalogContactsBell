@@ -2,27 +2,29 @@ package catalogContacts.dao.impl;
 
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.mappers.ModelMapper;
-import catalogContacts.dao.mappers.impl.ModelMapperGroup;
+import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
 import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.model.User;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  */
 public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
+    private static Logger logger = Logger.getLogger(DaoGroup.class.getName());
 
     public DaoGroup() throws DaoException {
         super();
     }
 
     public void create(Group group) throws DaoException {
-        group.setUserByUserId(getObjectFromBDById(User.class,SecurityContextHolder.getLoggedUserID()));
+        group.setUserByUserId(getObjectFromBDById(User.class, SecurityContextHolder.getLoggedUserID()));
         saveObgectToBD(group);
     }
 
@@ -31,11 +33,24 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
     }
 
     public void delete(int number) throws DaoException {
-        deleteObgectFromBD(Group.class,number);
+        deleteObgectFromBD(Group.class, number);
     }
 
     public Group getObject(int id) throws DaoException {
-        return getObjectFromBDById(Group.class,id);
+        Transaction transaction = null;
+        try {
+            Group group;
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            transaction = session.beginTransaction();
+            group = (Group) session.load(Group.class, id);
+            group.getContactList().size();
+            transaction.commit();
+            return group;
+        } catch (Exception e) {
+            transaction.rollback();
+            logger.error("Ошибка при получении данных ", e);
+            throw new DaoException("Ошибка при получении данных ", e);
+        }
     }
 
     public List<Group> getAll() throws DaoException {
@@ -44,20 +59,41 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction transaction = null;
         try {
+            List<Group> groupList;
             transaction = session.beginTransaction();
-            User user = (User) session.get(User.class,userID);
+            User user = (User) session.get(User.class, userID);
             user.getGroupsByUserId().size(); //для инициализации
-            List<Group>  groupList = user.getGroupsByUserId();
+            groupList = user.getGroupsByUserId();
             transaction.commit();
             return groupList;
         } catch (Exception e) {
             transaction.rollback();
+            logger.error("Ошибка получения списка группы ", e);
             throw new DaoException("Ошибка получения списка группы ", e);
         }
     }
 
     public List<Group> findByName(String name) throws DaoException {
-        return null;
+        int userID = SecurityContextHolder.getLoggedUserID();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = null;
+        try {
+            List<Group> groupList = new ArrayList<>();
+            transaction = session.beginTransaction();
+            User user = (User) session.get(User.class, userID);
+            user.getGroupsByUserId().size();
+            for (Group group : user.getGroupsByUserId()) {
+                if (group.getName().contains(name)) {
+                    groupList.add(group);
+                }
+            }
+            transaction.commit();
+            return groupList;
+        } catch (Exception e) {
+            transaction.rollback();
+            logger.error("Ошибка получения списка группы ", e);
+            throw new DaoException("Ошибка получения списка группы ", e);
+        }
     }
 
 }

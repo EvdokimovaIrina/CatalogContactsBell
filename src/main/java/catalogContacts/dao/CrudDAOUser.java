@@ -20,7 +20,7 @@ public interface CrudDAOUser<U> extends CrudDAO<U> {
     U authorizationUser(String login, String password) throws DaoException;
 
     List<U> userList();
-    int numberOfUsers() throws DaoException;
+    int countingUsers() throws DaoException;
     float averageUserContact() throws DaoException;
     float averageUserGroup() throws DaoException;
     List<User> inactiveUsers(int n) throws DaoException;

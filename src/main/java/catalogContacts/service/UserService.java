@@ -14,7 +14,7 @@ public interface UserService {
     void setUserThread(String login,String password) throws DaoException;
     void setUserThread(int id) throws DaoException;
     void setCrudDAOUser(CrudDAOUser<User> crudDAOUser);
-    int numberOfUsers() throws DaoException;
+    int countingUsers() throws DaoException;
     float averageUserContact() throws DaoException;
     float averageUserGroup() throws DaoException;
     List<User> inactiveUsersList(int n) throws DaoException;

@@ -17,10 +17,11 @@ import java.io.PrintWriter;
  */
 @WebServlet("/menu")
 public class MainServlet extends HttpServlet {
-    private static Logger logger=Logger.getLogger("simple");
+    private static Logger logger = Logger.getLogger(MainServlet.class.getName());
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("log message from TestLogServlet");
+
         response.setContentType("text/html;charset=utf-8");
 
         PrintWriter out = response.getWriter();
@@ -33,8 +34,10 @@ public class MainServlet extends HttpServlet {
                     String password = request.getParameter("password");
                     if (login != null & password != null) {
                         if (controllerHTML.isSetUserThread(login, password)) {
+                            logger.info("Авторизация пользователя");
                             out.println(controllerHTML.getMainMenuHTML());
                         } else {
+                            logger.info("Авторизация не выполнена, пользователь не найден");
                             out.println("Авторизация не выполнена");
                         }
                     }
@@ -44,6 +47,9 @@ public class MainServlet extends HttpServlet {
             }
         } catch (DaoException e) {
             out.println("Ошибка получения данных");
+        } catch (Exception e) {
+            logger.error("Ошибка " + e.getMessage());
+            out.println("Ошибка данных");
         }
 
     }

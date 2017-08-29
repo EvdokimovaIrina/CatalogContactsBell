@@ -1,5 +1,6 @@
 package catalogContacts.dao.impl;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,8 +16,9 @@ import java.io.File;
 public class HibernateUtil {
     private static SessionFactory session = buildSessionFactory();
     private static StandardServiceRegistry serviceRegistry;
+    private static Logger logger = Logger.getLogger(HibernateUtil.class.getName());
 
-   private static SessionFactory buildSessionFactory() {
+    private static SessionFactory buildSessionFactory() {
         try {
 
             Configuration configuration = new Configuration();
@@ -25,10 +27,10 @@ public class HibernateUtil {
 
             return configuration.buildSessionFactory(serviceRegistry);
 
-        }catch (Throwable e){
-            System.err.println("Initial SessionFactory failed" + e);
+        } catch (Throwable e) {
+            logger.error("ошибка получения session ", e);
         }
-       return null;
+        return null;
     }
 
     public static SessionFactory getSessionFactory() {

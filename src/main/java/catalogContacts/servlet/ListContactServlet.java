@@ -4,6 +4,7 @@ import catalogContacts.controller.impl.ControllerHTMLImpl;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.service.impl.ContactServiceImpl;
 import catalogContacts.service.impl.UserServiceImpl;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ import java.io.PrintWriter;
  */
 @WebServlet("/contacts")
 public class ListContactServlet extends HttpServlet {
+    private static Logger logger=Logger.getLogger(DataContactServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,6 +33,7 @@ public class ListContactServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String iduserStr = request.getParameter("iduser");
         if (iduserStr == null) {
+            logger.error("Ошибка авторизации");
             out.println("Ошибка авторизации");
             return;
         }
@@ -46,8 +49,11 @@ public class ListContactServlet extends HttpServlet {
                     out.println(ControllerHTMLImpl.getInstance().showContactListStr(null));
                 }
             }
-        } catch (DaoException | NumberFormatException e) {
+        } catch (DaoException e) {
             out.println("Ошибка получения данных");
+        }catch (Exception e) {
+            logger.error("Ошибка " + e.getMessage());
+            out.println("Ошибка данных");
         }
     }
 

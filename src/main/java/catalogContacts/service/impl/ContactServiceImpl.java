@@ -7,6 +7,7 @@ import catalogContacts.dao.impl.DaoContactDetails;
 import catalogContacts.dao.impl.DaoGroup;
 import catalogContacts.model.*;
 import catalogContacts.service.ContactService;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,11 +18,10 @@ import java.util.Map;
  * Created by iren on 20.07.2017.
  */
 public final class ContactServiceImpl implements ContactService {
-    // private static ContactServiceImpl instance;
     private CrudDAO<Contact> crudDAOContact;
     private CrudDAO<Group> crudDAOGroup;
     private CrudDAO<ContactDetails> crudDAOContactDetails;
-
+    private static Logger logger = Logger.getLogger(ContactServiceImpl.class.getName());
     // Singleton
 
     private ContactServiceImpl() {
@@ -96,43 +96,27 @@ public final class ContactServiceImpl implements ContactService {
         synchronized (this) {
             crudDAOContactDetails.delete(numberContactDetails);
         }
-
-
-       /* Contact contact = getContactByNumber(numberContact);
-
-        List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
-
-        Iterator<ContactDetails> iter = contactDetailsList.iterator();
-        while (iter.hasNext()) {
-            ContactDetails contactDetails = iter.next();
-            if (contactDetails.getId() == numberContactDetails) {
-                iter.remove();
-                break;
-            }
-        }
-
-        synchronized (this) {
-            crudDAOContact.update(contact);
-        }
-*/
-
     }
 
     public void ChangeSelectedContactDetails(int numberContact, int numberContactDetails, String value) throws DaoException {
-
-        Contact contact = getContactByNumber(numberContact);
-
-        List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
-
-        Iterator<ContactDetails> iter = contactDetailsList.iterator();
-        while (iter.hasNext()) {
-            ContactDetails contactDetails = iter.next();
-            if (contactDetails.getId() == numberContactDetails) {
-                contactDetails.setValue(value);
-                break;
-            }
-        }
         synchronized (this) {
+            Contact contact = getContactByNumber(numberContact);
+            List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
+            Iterator<ContactDetails> iter = contactDetailsList.iterator();
+            logger.info("Изменение контактной информации ");
+            logger.debug("Данные контакта : id = " + numberContact + ", name = " + contact.getFio());
+
+            while (iter.hasNext()) {
+                ContactDetails contactDetails = iter.next();
+                if (contactDetails.getId() == numberContactDetails) {
+                    logger.debug("Данные контактной информации : id = " + numberContactDetails +
+                            ", type = " + contactDetails.getType() + ", value = " + contactDetails.getValue());
+                    logger.debug("Новые данные контактной информации : id = " + numberContactDetails +
+                            ", type = " + contactDetails.getType() + ", value = " + value);
+                    contactDetails.setValue(value);
+                    break;
+                }
+            }
             crudDAOContact.update(contact);
         }
     }
@@ -146,19 +130,10 @@ public final class ContactServiceImpl implements ContactService {
         }
     }
 
-    public List<Contact> contactListFromGroup(Group group) {
-        List<Contact> list = new ArrayList<>();
-        try {
-            synchronized (this) {
-                for (Contact contact : crudDAOContact.getAll()) {
-                   /* if (contact.getGroupList().contains(group)) {
-                        list.add(contact);
-                    }*/
-                }
-            }
-        } catch (DaoException ignored) {
+    private List<Contact> contactListFromGroup(Group group) {
+        List<Contact> list;
+        list = group.getContactList();
 
-        }
         return list;
     }
 
@@ -178,10 +153,14 @@ public final class ContactServiceImpl implements ContactService {
 
     public void changeContact(int numberContact, String value) throws DaoException {
         Contact contact = getContactByNumber(numberContact);
+
         if (!(contact == null)) {
             contact.setFio(value);
             synchronized (this) {
+                logger.info("Изменение наименования контакта ");
+                logger.debug("Данные контакта : id = " + numberContact + ", name = " + contact.getFio());
                 crudDAOContact.update(contact);
+                logger.debug("новые данные контакта : id = " + numberContact + ", name = " + value);
             }
         }
     }
@@ -191,31 +170,36 @@ public final class ContactServiceImpl implements ContactService {
         Contact contact = getContactByNumber(numberContact);
         Group group = getGroupByNumber(numberGroup);
         contact.getGroupList().add(group);
-        //group.getContactList().add(contact);
-           if (!(contact == null) & !(group == null)) {
-            /*contact.getGroupList().add(group);*/
+        if (!(contact == null) & !(group == null)) {
             synchronized (this) {
+                logger.info("Добавление группы к контакту ");
+                logger.debug("Данные контакта : id = " + numberContact + ", name = " + contact.getFio());
+                logger.debug("Группа: id = " + numberGroup + ", name = " + group.getName());
                 crudDAOContact.update(contact);
-             //   crudDAOGroup.update(group);
             }
         }
     }
 
     public void deleteGroupToContact(int numberContact, int numberGroup) throws DaoException {
+        synchronized (this) {
+            Contact contact = getContactByNumber(numberContact);
+            logger.info("Удаление группы из контакта");
+            if (contact == null) {
+                logger.error("Контакт с id = " + numberContact + " не найден");
+            } else {
+                logger.debug("Данные контакта : id = " + numberContact + ", name = " + contact.getFio());
 
-        Contact contact = getContactByNumber(numberContact);
-       if (!(contact == null)) {
-            /*Iterator<Group> iter = contact.getGroupList().iterator();
-            while (iter.hasNext()) {
-                Group group1 = iter.next();
-                if (group1.getNumber() == numberGroup) {
-                    iter.remove();
-                    break;
+                Iterator<Group> iter = contact.getGroupList().iterator();
+                while (iter.hasNext()) {
+                    Group group1 = iter.next();
+                    if (group1.getNumber() == numberGroup) {
+                        logger.debug("Группа: id = " + group1.getNumber() + ", name = " + group1.getName());
+                        iter.remove();
+                        break;
+                    }
                 }
-            }
-            synchronized (this) {
                 crudDAOContact.update(contact);
-            }*/
+            }
         }
     }
 
@@ -228,7 +212,7 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     public Group getGroupByNumber(int numberGroup) throws DaoException {
-        Group group = null;
+        Group group;
         synchronized (this) {
             group = crudDAOGroup.getObject(numberGroup);
         }

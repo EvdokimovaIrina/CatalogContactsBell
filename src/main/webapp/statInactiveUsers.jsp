@@ -3,6 +3,8 @@
 <%@ page import="catalogContacts.dao.exception.DaoException" %>
 <%@ page import="catalogContacts.model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="org.apache.log4j.Logger" %>
+<% Logger logger=Logger.getLogger(this.getClass().getName()); %>
 <html>
 <head>
     <title>Не активные</title>
@@ -20,7 +22,9 @@
 
         <% }
              }
-        } catch (DaoException e) {%>
+        } catch (DaoException e) {
+            logger.error("Ошибка получения данных",e);
+        %>
 <%= "Ошибка получения данных" %>
 <% }%>
 

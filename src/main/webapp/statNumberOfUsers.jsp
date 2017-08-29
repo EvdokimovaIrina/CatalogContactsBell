@@ -2,6 +2,8 @@
 <%@ page import="catalogContacts.service.UserService" %>
 <%@ page import="catalogContacts.service.impl.UserServiceImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="org.apache.log4j.Logger" %>
+<% Logger logger=Logger.getLogger(this.getClass().getName()); %>
 
 <html>
 <head>
@@ -12,9 +14,10 @@
     String quantity="";
     try {
         synchronized(this) {
-            quantity = String.valueOf(userService.numberOfUsers());
+            quantity = String.valueOf(userService.countingUsers());
         }
     }catch (DaoException e){
+        logger.error("Ошибка получения данных",e);
         quantity="Ошибка получения данных";
     }
 %>

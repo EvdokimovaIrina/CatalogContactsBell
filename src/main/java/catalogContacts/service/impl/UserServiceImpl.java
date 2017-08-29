@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
                 crudDAOUser = new DaoUser();
             }
         } catch (DaoException e) {
-            crudDAOUser=null;
+            crudDAOUser = null;
         }
     }
 
@@ -46,25 +46,25 @@ public class UserServiceImpl implements UserService {
         synchronized (this) {
             user = crudDAOUser.authorizationUser(login, password);
         }
-        if (user!=null) {
+        if (user != null) {
             SecurityContextHolder.setLoggedUserID(user.getId());
         }
     }
 
     public void setUserThread(int id) throws DaoException {
-         SecurityContextHolder.setLoggedUserID(id);
+        SecurityContextHolder.setLoggedUserID(id);
     }
 
-    public int numberOfUsers() throws DaoException {
-        int quantity=0;
+    public int countingUsers() throws DaoException {
+        int quantity;
         synchronized (this) {
-            quantity = crudDAOUser.numberOfUsers();
+            quantity = crudDAOUser.countingUsers();
         }
         return quantity;
     }
 
     public float averageUserContact() throws DaoException {
-        float quantity=0;
+        float quantity;
         synchronized (this) {
             quantity = crudDAOUser.averageUserContact();
         }
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public float averageUserGroup() throws DaoException {
-        float quantity=0;
+        float quantity;
         synchronized (this) {
             quantity = crudDAOUser.averageUserGroup();
         }
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<Map<User, Integer>> countingUserContact() throws DaoException {
-        List<Map<User,Integer>> userListcountingContact;
+        List<Map<User, Integer>> userListcountingContact;
         synchronized (this) {
             userListcountingContact = crudDAOUser.CountingUserContact();
         }
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<Map<User, Integer>> countingUserGroup() throws DaoException {
-        List<Map<User,Integer>> userListcountingContact;
+        List<Map<User, Integer>> userListcountingContact;
         synchronized (this) {
             userListcountingContact = crudDAOUser.CountingUserGroup();
         }
@@ -106,7 +106,6 @@ public class UserServiceImpl implements UserService {
     public void setCrudDAOUser(CrudDAOUser<User> crudDAOUser) {
         this.crudDAOUser = crudDAOUser;
     }
-
 
 
 }

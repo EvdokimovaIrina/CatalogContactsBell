@@ -6,6 +6,7 @@ import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.impl.ContactServiceImpl;
 import catalogContacts.service.impl.UserServiceImpl;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,8 @@ import java.util.Map;
  */
 @WebServlet("/datacontact")
 public class DataContactServlet extends HttpServlet {
+    private static Logger logger = Logger.getLogger(DataContactServlet.class.getName());
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
@@ -31,6 +34,7 @@ public class DataContactServlet extends HttpServlet {
 
         String iduserStr = request.getParameter("iduser");
         if (iduserStr == null) {
+            logger.error("Ошибка авторизации");
             out.println("Ошибка авторизации");
             return;
         }
@@ -47,6 +51,9 @@ public class DataContactServlet extends HttpServlet {
             }
         } catch (DaoException | NumberFormatException e) {
             out.println("Ошибка получения данных");
+        } catch (Exception e) {
+            logger.error("Ошибка " + e.getMessage());
+            out.println("Ошибка данных");
         }
 
     }

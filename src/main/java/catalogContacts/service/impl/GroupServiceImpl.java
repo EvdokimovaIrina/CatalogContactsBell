@@ -7,15 +7,17 @@ import catalogContacts.dao.impl.DaoGroup;
 import catalogContacts.model.Group;
 
 import catalogContacts.service.GroupService;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
 /**
  * Created by EvdokimovaIS on 13.07.2017.
  */
-public final class GroupServiceImpl implements GroupService{
+public final class GroupServiceImpl implements GroupService {
     private static GroupServiceImpl instance;
     private CrudDAO<Group> crudDAOGroup;
+    private static Logger logger = Logger.getLogger(GroupServiceImpl.class.getName());
 
     // Singleton
 
@@ -51,17 +53,21 @@ public final class GroupServiceImpl implements GroupService{
 
     public void deleteGroup(int numberGroup) throws DaoException {
 
-            synchronized (this) {
-                crudDAOGroup.delete(numberGroup);
-            }
+        synchronized (this) {
+            crudDAOGroup.delete(numberGroup);
+        }
     }
 
     public void changeGroup(int numberGroup, String value) throws DaoException {
-            synchronized (this) {
-                Group group = crudDAOGroup.getObject(numberGroup);
-                group.setName(value);
-                crudDAOGroup.update(group);
-            }
+        synchronized (this) {
+            Group group = crudDAOGroup.getObject(numberGroup);
+            group.setName(value);
+            logger.info("Изменение наименования группы ");
+            logger.debug("Данные группы : id = " + numberGroup + ", name = " + group.getName());
+            crudDAOGroup.update(group);
+            logger.debug("новые данные группы : id = " + numberGroup + ", name = " + value);
+
+        }
 
     }
 
@@ -72,10 +78,10 @@ public final class GroupServiceImpl implements GroupService{
 
 
     public Group findByNumber(int number) throws DaoException {
-        Group group = null;
-            synchronized (this) {
-                group = crudDAOGroup.getObject(number);
-            }
+        Group group;
+        synchronized (this) {
+            group = crudDAOGroup.getObject(number);
+        }
         return group;
     }
 

@@ -2,14 +2,10 @@
 <%@ page import="catalogContacts.service.impl.UserServiceImpl" %>
 <%@ page import="catalogContacts.model.User" %>
 <%@ page import="catalogContacts.dao.exception.DaoException" %>
-<%@ page import="java.util.Map" %><%--
-  Created by IntelliJ IDEA.
-  User: iren
-  Date: 18.08.2017
-  Time: 20:23
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="org.apache.log4j.Logger" %>
+<% Logger logger=Logger.getLogger(this.getClass().getName()); %>
 <html>
 <head>
     <title>Количичество групп</title>
@@ -28,7 +24,7 @@
         UserService userService = UserServiceImpl.getInstance();
         try {
             synchronized (this) {
-                for (Map<User, Integer> mapUser : userService.countingUserContact()) {%>
+                for (Map<User, Integer> mapUser : userService.countingUserGroup()) {%>
     <tr>
         <% for (Map.Entry entry : mapUser.entrySet()) {
             User user = (User) entry.getKey();%>
@@ -41,10 +37,8 @@
     <% }
     }
     } catch
-            (
-            DaoException
-                    e
-            ) {%>
+            ( DaoException  e) {
+        logger.error("Ошибка получения данных",e);%>
     <%= "Ошибка получения данных" %>
     <% }%>
     </tbody>
