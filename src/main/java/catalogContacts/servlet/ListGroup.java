@@ -2,8 +2,6 @@ package catalogContacts.servlet;
 
 import catalogContacts.controller.impl.ControllerHTMLImpl;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.service.impl.GroupServiceImpl;
-import catalogContacts.service.impl.UserServiceImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -37,7 +35,7 @@ public class ListGroup extends HttpServlet {
         String buttonAction = request.getParameter("buttonaction");
         try {
             synchronized (this) {
-                UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
+               // UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
                 if (buttonAction != null) {
                     selectingTheActionForTheButton(buttonAction, request);
                 }
@@ -54,12 +52,12 @@ public class ListGroup extends HttpServlet {
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
         switch (buttonAction) {
-            case "add":
+           /* case "add":
                 GroupServiceImpl.getInstance().addGroup(request.getParameter("namegroup"));
                 break;
             case "delete":
                 GroupServiceImpl.getInstance().deleteGroup(Integer.parseInt(request.getParameter("idgroup")));
-                break;
+                break;*/
         }
     }
 

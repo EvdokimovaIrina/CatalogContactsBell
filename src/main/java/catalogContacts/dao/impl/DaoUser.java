@@ -8,15 +8,22 @@ import catalogContacts.model.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 /**
  *
  */
+@Repository
 public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
+    @Autowired
+    private SessionFactory sessionFactory;
+
     private static Logger logger = Logger.getLogger(DaoUser.class.getName());
 
     public DaoUser() throws DaoException {
@@ -45,7 +52,7 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
         User user = null;
         Transaction transaction = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
             Criteria userCriteria = session.createCriteria(User.class);
             userCriteria.add(Restrictions.eq("login", login));
@@ -79,7 +86,7 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
         Transaction transaction = null;
         try {
             int counting;
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
             List<User> userList = (List<User>) session.createQuery("from User").list();
             counting = userList.size();
@@ -105,7 +112,7 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
         try {
             int countingUser;
             int counting = 0;
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
             List<User> userList = (List<User>) session.createQuery("from User").list();
             countingUser = userList.size();
@@ -133,7 +140,7 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
         List<User> userList;
         Transaction transaction = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
             userList = (List<User>) session.createQuery("from User").list();
             Iterator<User> iter = userList.iterator();
@@ -164,7 +171,7 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
         List<Map<User, Integer>> userListMap = new ArrayList<>();
         Transaction transaction = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
             List<User> userList = (List<User>) session.createQuery("from User").list();
             for (User user : userList) {

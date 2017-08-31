@@ -1,9 +1,6 @@
 package catalogContacts.servlet;
 
-import catalogContacts.controller.impl.ControllerHTMLImpl;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.service.impl.ContactServiceImpl;
-import catalogContacts.service.impl.UserServiceImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -41,12 +38,12 @@ public class ListContactServlet extends HttpServlet {
         try {
 
             synchronized (this) {
-                UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
+               // UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
                 if (buttonAction != null) {
                     out.println(selectingTheActionForTheButton(buttonAction, request, response));
                 } else {
 
-                    out.println(ControllerHTMLImpl.getInstance().showContactListStr(null));
+                //    out.println(ControllerHTMLImpl.getInstance().showContactListStr(null));
                 }
             }
         } catch (DaoException e) {
@@ -60,7 +57,7 @@ public class ListContactServlet extends HttpServlet {
     private String selectingTheActionForTheButton(String buttonAction, HttpServletRequest request, HttpServletResponse response) throws DaoException, NumberFormatException, IOException {
 
             switch (buttonAction) {
-                case "add":
+               /* case "add":
                     ContactServiceImpl.getInstance().addContact(request.getParameter("namecontact"));
                     return ControllerHTMLImpl.getInstance().showContactListStr(null);
                 case "delete":
@@ -68,7 +65,7 @@ public class ListContactServlet extends HttpServlet {
                     return ControllerHTMLImpl.getInstance().showContactListStr(null);
                 case "searchForContacts":
                     return ControllerHTMLImpl.getInstance().findByName(request.getParameter("searchnamecontact"));
-
+*/
             }
 
         return "";

@@ -26,7 +26,8 @@ public class MainServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         try {
-            ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
+           // ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
+            ControllerHTMLImpl controllerHTML = null;
             String iduserStr = request.getParameter("iduser");
             synchronized (this) {
                 if (iduserStr == null) {

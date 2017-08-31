@@ -2,52 +2,34 @@ package catalogContacts.service.impl;
 
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.impl.DaoContact;
-import catalogContacts.dao.impl.DaoContactDetails;
-import catalogContacts.dao.impl.DaoGroup;
-import catalogContacts.model.*;
+import catalogContacts.model.Contact;
+import catalogContacts.model.ContactDetails;
+import catalogContacts.model.Group;
+import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
+import catalogContacts.service.GroupService;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by iren on 20.07.2017.
- */
+@Service("contactService")
 public final class ContactServiceImpl implements ContactService {
+    @Autowired
     private CrudDAO<Contact> crudDAOContact;
+    @Autowired
     private CrudDAO<Group> crudDAOGroup;
+    @Autowired
     private CrudDAO<ContactDetails> crudDAOContactDetails;
+    @Autowired
+    private GroupService groupService;
+
     private static Logger logger = Logger.getLogger(ContactServiceImpl.class.getName());
-    // Singleton
 
-    private ContactServiceImpl() {
-        try {
-            synchronized (this) {
-                crudDAOContact = new DaoContact();
-                crudDAOGroup = new DaoGroup();
-                crudDAOContactDetails = new DaoContactDetails();
-            }
-
-        } catch (DaoException e) {
-            crudDAOContact = null;
-            crudDAOGroup = null;
-            crudDAOContactDetails = null;
-        }
-    }
-
-    public static ContactServiceImpl getInstance() {
-        return ContactServiceImplHolder.instance;
-    }
-
-    private static class ContactServiceImplHolder {
-        private static final ContactServiceImpl instance = new ContactServiceImpl();
-    }
-
-    //////
 
     public synchronized List<Contact> findByName(String name) throws DaoException {
 
@@ -78,6 +60,7 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     //Сохранение контакта в хранилище
+    @Transactional
     public void saveContact(Contact contact) throws DaoException {
         synchronized (this) {
             crudDAOContact.create(contact);
@@ -85,25 +68,27 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     //удаление контакта из списка
+    @Transactional
     public void deleteContact(int numberContact) throws DaoException {
         synchronized (this) {
             crudDAOContact.delete(numberContact);
         }
-
     }
 
+    @Transactional
     public void deleteContactDetails(int numberContact, int numberContactDetails) throws DaoException {
         synchronized (this) {
             crudDAOContactDetails.delete(numberContactDetails);
         }
     }
 
+    @Transactional
     public void ChangeSelectedContactDetails(int numberContact, int numberContactDetails, String value) throws DaoException {
         synchronized (this) {
             Contact contact = getContactByNumber(numberContact);
             List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
             Iterator<ContactDetails> iter = contactDetailsList.iterator();
-            logger.info("Изменение контактной информации ");
+            logger.debug("Изменение контактной информации ");
             logger.debug("Данные контакта : id = " + numberContact + ", name = " + contact.getFio());
 
             while (iter.hasNext()) {
@@ -121,11 +106,12 @@ public final class ContactServiceImpl implements ContactService {
         }
     }
 
+    @Transactional
     public List<Contact> showContactList(Integer numberGroup) throws DaoException {
         if (numberGroup == null) {
             return crudDAOContact.getAll();
         } else {
-            Group group = GroupServiceImpl.getInstance().findByNumber(numberGroup);
+            Group group = groupService.findByNumber(numberGroup);
             return contactListFromGroup(group);
         }
     }
@@ -137,7 +123,7 @@ public final class ContactServiceImpl implements ContactService {
         return list;
     }
 
-
+    @Transactional
     public Contact getContactByNumber(int numberContact) throws DaoException {
         Contact contact;
         synchronized (this) {
@@ -151,6 +137,7 @@ public final class ContactServiceImpl implements ContactService {
         return contact.getContactDetailsList();
     }
 
+    @Transactional
     public void changeContact(int numberContact, String value) throws DaoException {
         Contact contact = getContactByNumber(numberContact);
 
@@ -165,6 +152,7 @@ public final class ContactServiceImpl implements ContactService {
         }
     }
 
+    @Transactional
     public void addGroupToContact(int numberContact, int numberGroup) throws DaoException {
 
         Contact contact = getContactByNumber(numberContact);
@@ -180,6 +168,7 @@ public final class ContactServiceImpl implements ContactService {
         }
     }
 
+    @Transactional
     public void deleteGroupToContact(int numberContact, int numberGroup) throws DaoException {
         synchronized (this) {
             Contact contact = getContactByNumber(numberContact);
@@ -203,14 +192,17 @@ public final class ContactServiceImpl implements ContactService {
         }
     }
 
+    @Transactional
     public void setCrudDAOContact(CrudDAO<Contact> crudDAOContact) {
         this.crudDAOContact = crudDAOContact;
     }
 
+    @Transactional
     public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
         this.crudDAOGroup = crudDAOGroup;
     }
 
+    @Transactional
     public Group getGroupByNumber(int numberGroup) throws DaoException {
         Group group;
         synchronized (this) {

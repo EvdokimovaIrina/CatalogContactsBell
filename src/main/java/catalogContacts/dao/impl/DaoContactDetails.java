@@ -4,21 +4,24 @@ import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.ContactDetails;
 import org.apache.log4j.Logger;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- *
- */
+@Repository
 public class DaoContactDetails extends DaoGeneral implements CrudDAO<ContactDetails> {
     private static Logger logger = Logger.getLogger(DaoContact.class.getName());
+    @Autowired
+    private SessionFactory sessionFactory;
 
     public DaoContactDetails() throws DaoException {
         super();
     }
 
     public void create(ContactDetails contactDetails) throws DaoException {
-        logger.info("Добавление новой контактной информации");
+        logger.debug("Добавление новой контактной информации");
         logger.debug("Данные контакта : id = " + contactDetails.getContactByContactId().getNumber() +
                 ", name = " + contactDetails.getContactByContactId().getFio());
         logger.debug("Данные контактной информации : id = " + contactDetails.getId() +
@@ -32,7 +35,7 @@ public class DaoContactDetails extends DaoGeneral implements CrudDAO<ContactDeta
 
     public void delete(int number) throws DaoException {
         ContactDetails contactDetails = getObject(number);
-        logger.info("Добавление новой контактной информации");
+        logger.debug("Добавление новой контактной информации");
         logger.debug("Данные контакта : id = " + contactDetails.getContactByContactId().getNumber() +
                 ", name = " + contactDetails.getContactByContactId().getFio());
         logger.debug("Данные контактной информации : id = " + contactDetails.getId() +

@@ -1,11 +1,8 @@
 package catalogContacts.servlet;
 
-import catalogContacts.controller.impl.ControllerHTMLImpl;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
-import catalogContacts.service.impl.ContactServiceImpl;
-import catalogContacts.service.impl.UserServiceImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -30,7 +27,7 @@ public class DataContactServlet extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
 
         PrintWriter out = response.getWriter();
-        ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
+       // ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
 
         String iduserStr = request.getParameter("iduser");
         if (iduserStr == null) {
@@ -42,12 +39,12 @@ public class DataContactServlet extends HttpServlet {
 
         try {
             synchronized (this) {
-                UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
+              //  UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
                 if (buttonAction != null) {
                     selectingTheActionForTheButton(buttonAction, request);
                 }
 
-                out.println(controllerHTML.showDetails(Integer.parseInt(request.getParameter("idcontact"))));
+               // out.println(controllerHTML.showDetails(Integer.parseInt(request.getParameter("idcontact"))));
             }
         } catch (DaoException | NumberFormatException e) {
             out.println("Ошибка получения данных");
@@ -59,8 +56,8 @@ public class DataContactServlet extends HttpServlet {
     }
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
-        ContactService contactService = ContactServiceImpl.getInstance();
-
+     //   ContactService contactService = ContactServiceImpl.getInstance();
+        ContactService contactService = null;
         int idContact = Integer.parseInt(request.getParameter("idcontact"));
         switch (buttonAction) {
             case "addgroup":

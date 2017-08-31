@@ -1,18 +1,11 @@
 package catalogContacts.controller;
 
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.model.TypeContact;
-import catalogContacts.service.ContactService;
-import catalogContacts.service.GroupService;
-
-import java.util.Map;
 
 /**
  * Redirects actions from view to service to work with models
  */
 public interface Controller {
-
-
 
     /**
      * Gets the list of contacts

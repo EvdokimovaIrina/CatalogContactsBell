@@ -10,9 +10,6 @@ import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.GroupService;
 import catalogContacts.service.UserService;
-import catalogContacts.service.impl.ContactServiceImpl;
-import catalogContacts.service.impl.GroupServiceImpl;
-import catalogContacts.service.impl.UserServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,23 +22,6 @@ public class ControllerHTMLImpl implements Controller {
     private GroupService groupService;
     private UserService userService;
 
-
-    // Singleton
-    public ControllerHTMLImpl() {
-        this.contactService = ContactServiceImpl.getInstance();
-        this.groupService = GroupServiceImpl.getInstance();
-        this.userService = UserServiceImpl.getInstance();
-    }
-
-    public static ControllerHTMLImpl getInstance() {
-        return ControllerHTMLImplHolder.instance;
-    }
-
-    private static class ControllerHTMLImplHolder {
-        private static final ControllerHTMLImpl instance = new ControllerHTMLImpl();
-    }
-
-    //////
 
     private String contactListHTML(List<Contact> contactList,int idUser){
         String strHtml ="";

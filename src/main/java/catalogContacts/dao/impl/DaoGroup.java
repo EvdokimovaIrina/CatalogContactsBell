@@ -1,22 +1,24 @@
 package catalogContacts.dao.impl;
 
+import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
-import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.model.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
+@Repository
 public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
+    @Autowired
+    private SessionFactory sessionFactory;
     private static Logger logger = Logger.getLogger(DaoGroup.class.getName());
 
     public DaoGroup() throws DaoException {
@@ -40,7 +42,7 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
         Transaction transaction = null;
         try {
             Group group;
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
             group = (Group) session.load(Group.class, id);
             group.getContactList().size();
@@ -56,7 +58,7 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
     public List<Group> getAll() throws DaoException {
 
         int userID = SecurityContextHolder.getLoggedUserID();
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {
             List<Group> groupList;
@@ -75,12 +77,12 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
 
     public List<Group> findByName(String name) throws DaoException {
         int userID = SecurityContextHolder.getLoggedUserID();
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {
             List<Group> groupList = new ArrayList<>();
             transaction = session.beginTransaction();
-            User user = (User) session.get(User.class, userID);
+            User user = (User) session.load(User.class, userID);
             user.getGroupsByUserId().size();
             for (Group group : user.getGroupsByUserId()) {
                 if (group.getName().contains(name)) {

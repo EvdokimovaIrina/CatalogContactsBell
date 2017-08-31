@@ -2,42 +2,21 @@ package catalogContacts.service.impl;
 
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.dao.impl.DaoGroup;
-
 import catalogContacts.model.Group;
-
 import catalogContacts.service.GroupService;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by EvdokimovaIS on 13.07.2017.
- */
+
+@Service("groupService")
 public final class GroupServiceImpl implements GroupService {
-    private static GroupServiceImpl instance;
+    @Autowired
     private CrudDAO<Group> crudDAOGroup;
+
     private static Logger logger = Logger.getLogger(GroupServiceImpl.class.getName());
-
-    // Singleton
-
-    private GroupServiceImpl() {
-        try {
-            crudDAOGroup = new DaoGroup();
-        } catch (DaoException e) {
-            crudDAOGroup = null;
-        }
-    }
-
-    public static GroupServiceImpl getInstance() {
-        return GroupServiceImplHolder.instance;
-    }
-
-    private static class GroupServiceImplHolder {
-        private static final GroupServiceImpl instance = new GroupServiceImpl();
-    }
-
-    //////
 
 
     public void addGroup(String name) throws DaoException {
@@ -62,7 +41,7 @@ public final class GroupServiceImpl implements GroupService {
         synchronized (this) {
             Group group = crudDAOGroup.getObject(numberGroup);
             group.setName(value);
-            logger.info("Изменение наименования группы ");
+            logger.debug("Изменение наименования группы ");
             logger.debug("Данные группы : id = " + numberGroup + ", name = " + group.getName());
             crudDAOGroup.update(group);
             logger.debug("новые данные группы : id = " + numberGroup + ", name = " + value);

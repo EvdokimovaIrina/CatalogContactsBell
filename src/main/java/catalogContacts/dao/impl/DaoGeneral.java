@@ -1,34 +1,25 @@
 package catalogContacts.dao.impl;
 
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.model.Contact;
-import catalogContacts.model.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  */
 public abstract class DaoGeneral {
+    @Autowired
+    private SessionFactory sessionFactory;
+
     private static Logger logger = Logger.getLogger(DaoGeneral.class.getName());
 
     public void saveObgectToBD(Object object) throws DaoException {
         Transaction transaction = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
             session.saveOrUpdate(object);
             transaction.commit();
@@ -43,7 +34,7 @@ public abstract class DaoGeneral {
     public void deleteObgectFromBD(Class clazz, int id) throws DaoException {
         Transaction transaction = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
             session.delete(clazz.cast(session.get(clazz, id)));
             transaction.commit();
@@ -59,9 +50,9 @@ public abstract class DaoGeneral {
         Transaction transaction = null;
         T object = null;
         try {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
-            object = clazz.cast(session.get(clazz, id));
+            object = clazz.cast(session.load(clazz, id));
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();

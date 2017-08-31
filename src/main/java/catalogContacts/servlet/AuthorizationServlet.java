@@ -1,6 +1,5 @@
 package catalogContacts.servlet;
 
-import catalogContacts.controller.impl.ControllerHTMLImpl;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,9 +21,9 @@ public class AuthorizationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
 
-            ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
+          /*  ControllerHTMLImpl controllerHTML = ControllerHTMLImpl.getInstance();
             synchronized(this) {
                 response.getWriter().println(controllerHTML.getAuthorizationHTML());
-            }
+            }*/
     }
 }

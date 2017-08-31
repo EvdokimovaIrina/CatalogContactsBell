@@ -1,30 +1,34 @@
 package catalogContacts.dao.impl;
 
+import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.dao.CrudDAO;
 import catalogContacts.dao.exception.DaoException;
-import catalogContacts.model.*;
-import catalogContacts.context.SecurityContextHolder;
+import catalogContacts.model.Contact;
+import catalogContacts.model.User;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-import org.apache.log4j.*;
-
-/**
- *
- */
+@Repository
 public class DaoContact extends DaoGeneral implements CrudDAO<Contact> {
+    //@Resource(name="sessionFactory")
+    @Autowired
+    private SessionFactory sessionFactory;
     private static Logger logger = Logger.getLogger(DaoContact.class.getName());
+
 
     public DaoContact() throws DaoException {
         super();
     }
 
     public void create(Contact contact) throws DaoException {
-        logger.info("Добавление нового контакта: " + contact.getFio());
+        logger.debug("Добавление нового контакта: " + contact.getFio());
         contact.setUserByUserId(getObjectFromBDById(User.class, SecurityContextHolder.getLoggedUserID()));
         saveObgectToBD(contact);
 
@@ -37,7 +41,7 @@ public class DaoContact extends DaoGeneral implements CrudDAO<Contact> {
     }
 
     public void delete(int number) throws DaoException {
-        logger.info("Удален контакта.");
+        logger.debug("Удален контакта.");
         deleteObgectFromBD(Contact.class, number);
 
     }
@@ -46,7 +50,7 @@ public class DaoContact extends DaoGeneral implements CrudDAO<Contact> {
         Transaction transaction = null;
         try {
             Contact contact;
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Session session = sessionFactory.getCurrentSession();
             transaction = session.beginTransaction();
             contact = (Contact) session.load(Contact.class, id);
             contact.getContactDetailsList().size();
@@ -62,7 +66,7 @@ public class DaoContact extends DaoGeneral implements CrudDAO<Contact> {
 
     public List<Contact> getAll() throws DaoException {
         int userID = SecurityContextHolder.getLoggedUserID();
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {
             List<Contact> contactList;
@@ -81,7 +85,7 @@ public class DaoContact extends DaoGeneral implements CrudDAO<Contact> {
 
     public List<Contact> findByName(String name) throws DaoException {
         int userID = SecurityContextHolder.getLoggedUserID();
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction transaction = null;
         try {
             List<Contact> contactList = new ArrayList<>();
