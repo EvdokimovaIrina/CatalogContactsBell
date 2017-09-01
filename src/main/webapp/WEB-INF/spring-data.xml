@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Dao -->
+    <bean id="daoContact" class="catalogContacts.dao.impl.DaoContact">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="daoGroup" class="catalogContacts.dao.impl.DaoGroup">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="daoContactDetails" class="catalogContacts.dao.impl.DaoContactDetails">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="daoGeneral" class="catalogContacts.dao.impl.DaoGeneral" abstract="true">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="daoUser" class="catalogContacts.dao.impl.DaoUser">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- servise -->
+
+    <bean id="contactServise" class="catalogContacts.service.impl.ContactServiceImpl">
+        <property name="crudDAOContact" ref="daoContact"/>
+        <property name="crudDAOGroup" ref="daoGroup"/>
+        <property name="crudDAOContactDetails" ref="daoContactDetails"/>
+        <property name="groupService" ref="groupServise"/>
+    </bean>
+
+    <bean id="groupServise" class="catalogContacts.service.impl.GroupServiceImpl">
+        <property name="crudDAOGroup" ref="daoGroup"/>
+    </bean>
+
+    <bean id="userServise" class="catalogContacts.service.impl.UserServiceImpl">
+        <property name="crudDAOUser" ref="daoUser"/>
+    </bean>
+
+    <!-- controller HTML -->
+    <bean id="controllerHTML" class="catalogContacts.controller.impl.ControllerHTMLImpl">
+        <property name="groupService" ref="groupServise"/>
+        <property name="userService" ref="userServise"/>
+        <property name="contactService" ref="contactServise"/>
+    </bean>
+
+
+    <!-- servlet -->
+
+    <bean id="authorizationServlet" class="catalogContacts.servlet.AuthorizationServlet">
+        <property name="controllerHTML" ref="controllerHTML"/>
+    </bean>
+
+    <bean id="dataContactServlet" class="catalogContacts.servlet.DataContactServlet">
+        <property name="controllerHTML" ref="controllerHTML"/>
+        <property name="userService" ref="userServise"/>
+        <property name="contactService" ref="contactServise"/>
+    </bean>
+
+    <bean id="listContactServlet" class="catalogContacts.servlet.ListContactServlet">
+        <property name="controllerHTML" ref="controllerHTML"/>
+        <property name="contactService" ref="contactServise"/>
+        <property name="userService" ref="userServise"/>
+    </bean>
+
+    <bean id = "listGroup" class="catalogContacts.servlet.ListGroup">
+        <property name="userService" ref="userServise"/>
+        <property name="controllerHTML" ref="controllerHTML"/>
+        <property name="groupService" ref="groupServise"/>
+    </bean>
+
+    <bean id="mainServlet" class="catalogContacts.servlet.MainServlet">
+        <property name="controllerHTML" ref="controllerHTML"/>
+    </bean>
+
+</beans>

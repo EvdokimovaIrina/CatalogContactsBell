@@ -5,7 +5,6 @@ import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.ContactDetails;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 @Repository
 public class DaoContactDetails extends DaoGeneral implements CrudDAO<ContactDetails> {
     private static Logger logger = Logger.getLogger(DaoContact.class.getName());
-    @Autowired
+
     private SessionFactory sessionFactory;
 
     public DaoContactDetails() throws DaoException {
@@ -53,5 +52,13 @@ public class DaoContactDetails extends DaoGeneral implements CrudDAO<ContactDeta
 
     public List<ContactDetails> findByName(String name) throws DaoException {
         return null;
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 }

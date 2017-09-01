@@ -11,17 +11,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 /**
  *
  */
-@Repository
+
 public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
-    @Autowired
+
     private SessionFactory sessionFactory;
 
     private static Logger logger = Logger.getLogger(DaoUser.class.getName());
@@ -192,4 +190,13 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
         }
     }
 
+    @Override
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    @Override
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 }

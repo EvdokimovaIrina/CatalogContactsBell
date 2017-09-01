@@ -3,13 +3,14 @@
 <%@ page import="catalogContacts.service.UserService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="org.apache.log4j.Logger" %>
-<% Logger logger=Logger.getLogger(this.getClass().getName()); %>
+<% Logger logger=Logger.getLogger(this.getClass().getName());
+    UserService userService = null;%>
 <html>
 <head>
     <title>Сред. кол-во контактов</title>
 </head>
 <body>
-<% UserService userService = UserServiceImpl.getInstance();
+<%
     String quantity="";
     try {
         synchronized(this) {

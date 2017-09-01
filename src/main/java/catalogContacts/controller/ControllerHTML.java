@@ -5,7 +5,7 @@ import catalogContacts.dao.exception.DaoException;
 /**
  * Redirects actions from view to service to work with models
  */
-public interface Controller {
+public interface ControllerHTML {
 
     /**
      * Gets the list of contacts

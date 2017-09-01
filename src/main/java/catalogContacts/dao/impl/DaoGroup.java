@@ -9,15 +9,13 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+
 public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
-    @Autowired
+
     private SessionFactory sessionFactory;
     private static Logger logger = Logger.getLogger(DaoGroup.class.getName());
 
@@ -98,4 +96,11 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
         }
     }
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 }

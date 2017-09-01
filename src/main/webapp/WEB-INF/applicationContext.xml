@@ -10,6 +10,7 @@
 			http://www.springframework.org/schema/mvc
 			http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
+
     <!-- Активирует различные аннотации, которые в классах bean -->
     <context:annotation-config />
 
@@ -19,7 +20,7 @@
     <!-- Настраивает управляемую аннотацией модель программирования Spring MVC  -->
     <mvc:annotation-driven />
 
-    <!-- Load Hibernate related configuration -->
     <import resource="hibernate-context.xml" />
 
+    <import resource="spring-data.xml" />
 </beans>

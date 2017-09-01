@@ -1,7 +1,7 @@
 package catalogContacts.controller.impl;
 
 import catalogContacts.context.SecurityContextHolder;
-import catalogContacts.controller.Controller;
+import catalogContacts.controller.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
@@ -17,7 +17,9 @@ import java.util.List;
 /**
  *
  */
-public class ControllerHTMLImpl implements Controller {
+
+public class ControllerHTMLImpl implements ControllerHTML {
+
     private ContactService contactService;
     private GroupService groupService;
     private UserService userService;
@@ -310,5 +312,29 @@ public class ControllerHTMLImpl implements Controller {
                 "</form>" +
                 "</body></html>";
         return strHtml;
+    }
+
+    public ContactService getContactService() {
+        return contactService;
+    }
+
+    public void setContactService(ContactService contactService) {
+        this.contactService = contactService;
+    }
+
+    public GroupService getGroupService() {
+        return groupService;
+    }
+
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
+    }
+
+    public UserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }

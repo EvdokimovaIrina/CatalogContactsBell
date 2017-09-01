@@ -5,13 +5,10 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- *
- */
+
 public abstract class DaoGeneral {
-    @Autowired
+
     private SessionFactory sessionFactory;
 
     private static Logger logger = Logger.getLogger(DaoGeneral.class.getName());
@@ -64,4 +61,11 @@ public abstract class DaoGeneral {
 
     }
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 }

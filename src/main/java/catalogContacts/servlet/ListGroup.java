@@ -1,11 +1,15 @@
 package catalogContacts.servlet;
 
-import catalogContacts.controller.impl.ControllerHTMLImpl;
+import catalogContacts.controller.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
+import catalogContacts.service.GroupService;
+import catalogContacts.service.UserService;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,15 +19,18 @@ import java.io.PrintWriter;
 /**
  *
  */
-@WebServlet("/groups")
+@Controller
 public class ListGroup extends HttpServlet {
+    ControllerHTML controllerHTML;
+    UserService userService;
+     GroupService groupService;
+
     private static Logger logger = Logger.getLogger(DataContactServlet.class.getName());
 
     @Override
+    @RequestMapping(value = "/groups", method = RequestMethod.POST)
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
-
-        ControllerHTMLImpl controllerHTML = new ControllerHTMLImpl();
 
         PrintWriter out = response.getWriter();
         String iduserStr = request.getParameter("iduser");
@@ -35,7 +42,7 @@ public class ListGroup extends HttpServlet {
         String buttonAction = request.getParameter("buttonaction");
         try {
             synchronized (this) {
-               // UserServiceImpl.getInstance().setUserThread(Integer.parseInt(iduserStr));
+                userService.setUserThread(Integer.parseInt(iduserStr));
                 if (buttonAction != null) {
                     selectingTheActionForTheButton(buttonAction, request);
                 }
@@ -52,17 +59,42 @@ public class ListGroup extends HttpServlet {
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
         switch (buttonAction) {
-           /* case "add":
-                GroupServiceImpl.getInstance().addGroup(request.getParameter("namegroup"));
+            case "add":
+                groupService.addGroup(request.getParameter("namegroup"));
                 break;
             case "delete":
-                GroupServiceImpl.getInstance().deleteGroup(Integer.parseInt(request.getParameter("idgroup")));
-                break;*/
+                groupService.deleteGroup(Integer.parseInt(request.getParameter("idgroup")));
+                break;
         }
     }
 
     @Override
+    @RequestMapping(value = "/groups", method = RequestMethod.GET)
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
+    }
+
+    public ControllerHTML getControllerHTML() {
+        return controllerHTML;
+    }
+
+    public void setControllerHTML(ControllerHTML controllerHTML) {
+        this.controllerHTML = controllerHTML;
+    }
+
+    public UserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public GroupService getGroupService() {
+        return groupService;
+    }
+
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
     }
 }

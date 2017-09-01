@@ -9,23 +9,21 @@ import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.GroupService;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@Service("contactService")
+
 public final class ContactServiceImpl implements ContactService {
-    @Autowired
+
     private CrudDAO<Contact> crudDAOContact;
-    @Autowired
+
     private CrudDAO<Group> crudDAOGroup;
-    @Autowired
+
     private CrudDAO<ContactDetails> crudDAOContactDetails;
-    @Autowired
+
     private GroupService groupService;
 
     private static Logger logger = Logger.getLogger(ContactServiceImpl.class.getName());
@@ -144,7 +142,7 @@ public final class ContactServiceImpl implements ContactService {
         if (!(contact == null)) {
             contact.setFio(value);
             synchronized (this) {
-                logger.info("Изменение наименования контакта ");
+                logger.debug("Изменение наименования контакта ");
                 logger.debug("Данные контакта : id = " + numberContact + ", name = " + contact.getFio());
                 crudDAOContact.update(contact);
                 logger.debug("новые данные контакта : id = " + numberContact + ", name = " + value);
@@ -160,7 +158,7 @@ public final class ContactServiceImpl implements ContactService {
         contact.getGroupList().add(group);
         if (!(contact == null) & !(group == null)) {
             synchronized (this) {
-                logger.info("Добавление группы к контакту ");
+                logger.debug("Добавление группы к контакту ");
                 logger.debug("Данные контакта : id = " + numberContact + ", name = " + contact.getFio());
                 logger.debug("Группа: id = " + numberGroup + ", name = " + group.getName());
                 crudDAOContact.update(contact);
@@ -211,5 +209,27 @@ public final class ContactServiceImpl implements ContactService {
         return group;
     }
 
+    public CrudDAO<Contact> getCrudDAOContact() {
+        return crudDAOContact;
+    }
 
+    public CrudDAO<Group> getCrudDAOGroup() {
+        return crudDAOGroup;
+    }
+
+    public CrudDAO<ContactDetails> getCrudDAOContactDetails() {
+        return crudDAOContactDetails;
+    }
+
+    public void setCrudDAOContactDetails(CrudDAO<ContactDetails> crudDAOContactDetails) {
+        this.crudDAOContactDetails = crudDAOContactDetails;
+    }
+
+    public GroupService getGroupService() {
+        return groupService;
+    }
+
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
+    }
 }

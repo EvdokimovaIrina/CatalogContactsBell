@@ -5,15 +5,13 @@ import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Group;
 import catalogContacts.service.GroupService;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
-@Service("groupService")
+
 public final class GroupServiceImpl implements GroupService {
-    @Autowired
+
     private CrudDAO<Group> crudDAOGroup;
 
     private static Logger logger = Logger.getLogger(GroupServiceImpl.class.getName());
