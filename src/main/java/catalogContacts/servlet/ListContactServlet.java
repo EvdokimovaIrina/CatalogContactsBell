@@ -1,15 +1,14 @@
 package catalogContacts.servlet;
 
+import catalogContacts.context.SpringUtils;
 import catalogContacts.controller.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.UserService;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,21 +18,19 @@ import java.io.PrintWriter;
 /**
  *
  */
-@Controller
+@WebServlet("/contacts")
 public class ListContactServlet extends HttpServlet {
     ControllerHTML controllerHTML;
     UserService userService;
     ContactService contactService;
-    private static Logger logger=Logger.getLogger(DataContactServlet.class.getName());
+    private static Logger logger = Logger.getLogger(DataContactServlet.class.getName());
 
     @Override
-    @RequestMapping(value = "/contacts", method = RequestMethod.GET)
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
     @Override
-    @RequestMapping(value = "/contacts", method = RequestMethod.POST)
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
 
@@ -48,17 +45,21 @@ public class ListContactServlet extends HttpServlet {
         try {
 
             synchronized (this) {
-               userService.setUserThread(Integer.parseInt(iduserStr));
+                controllerHTML = (ControllerHTML) SpringUtils.getContext().getBean("controllerHTML");
+                userService = (UserService) SpringUtils.getContext().getBean("userServise");
+                contactService = (ContactService) SpringUtils.getContext().getBean("contactServise");
+
+                userService.setUserThread(Integer.parseInt(iduserStr));
                 if (buttonAction != null) {
                     out.println(selectingTheActionForTheButton(buttonAction, request, response));
                 } else {
 
-                 out.println(controllerHTML.showContactListStr(null));
+                    out.println(controllerHTML.showContactListStr(null));
                 }
             }
         } catch (DaoException e) {
             out.println("Ошибка получения данных");
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Ошибка " + e.getMessage());
             out.println("Ошибка данных");
         }
@@ -66,16 +67,16 @@ public class ListContactServlet extends HttpServlet {
 
     private String selectingTheActionForTheButton(String buttonAction, HttpServletRequest request, HttpServletResponse response) throws DaoException, NumberFormatException, IOException {
 
-            switch (buttonAction) {
-                case "add":
-                   contactService.addContact(request.getParameter("namecontact"));
-                    return controllerHTML.showContactListStr(null);
-                case "delete":
-                    contactService.deleteContact(Integer.parseInt(request.getParameter("idcontact")));
-                    return controllerHTML.showContactListStr(null);
-                case "searchForContacts":
-                    return controllerHTML.findByName(request.getParameter("searchnamecontact"));
-            }
+        switch (buttonAction) {
+            case "add":
+                contactService.addContact(request.getParameter("namecontact"));
+                return controllerHTML.showContactListStr(null);
+            case "delete":
+                contactService.deleteContact(Integer.parseInt(request.getParameter("idcontact")));
+                return controllerHTML.showContactListStr(null);
+            case "searchForContacts":
+                return controllerHTML.findByName(request.getParameter("searchnamecontact"));
+        }
 
         return "";
     }

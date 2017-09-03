@@ -1,15 +1,14 @@
 package catalogContacts.servlet;
 
+import catalogContacts.context.SpringUtils;
 import catalogContacts.controller.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.service.GroupService;
 import catalogContacts.service.UserService;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ import java.io.PrintWriter;
 /**
  *
  */
-@Controller
+@WebServlet("/groups")
 public class ListGroup extends HttpServlet {
     ControllerHTML controllerHTML;
     UserService userService;
@@ -28,7 +27,6 @@ public class ListGroup extends HttpServlet {
     private static Logger logger = Logger.getLogger(DataContactServlet.class.getName());
 
     @Override
-    @RequestMapping(value = "/groups", method = RequestMethod.POST)
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
 
@@ -42,6 +40,10 @@ public class ListGroup extends HttpServlet {
         String buttonAction = request.getParameter("buttonaction");
         try {
             synchronized (this) {
+                controllerHTML = (ControllerHTML) SpringUtils.getContext().getBean("controllerHTML");
+                userService = (UserService) SpringUtils.getContext().getBean("userServise");
+                groupService = (GroupService) SpringUtils.getContext().getBean("groupServise");
+
                 userService.setUserThread(Integer.parseInt(iduserStr));
                 if (buttonAction != null) {
                     selectingTheActionForTheButton(buttonAction, request);
@@ -69,7 +71,6 @@ public class ListGroup extends HttpServlet {
     }
 
     @Override
-    @RequestMapping(value = "/groups", method = RequestMethod.GET)
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }

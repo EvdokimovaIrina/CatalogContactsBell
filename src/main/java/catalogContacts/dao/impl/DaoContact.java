@@ -109,5 +109,7 @@ public class DaoContact extends DaoGeneral implements CrudDAO<Contact> {
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+        super.setSessionFactory(sessionFactory);
     }
+
 }

@@ -198,5 +198,6 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
     @Override
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+        super.setSessionFactory(sessionFactory);
     }
 }

@@ -102,5 +102,6 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+        super.setSessionFactory(sessionFactory);
     }
 }

@@ -37,12 +37,13 @@ public final class ContactServiceImpl implements ContactService {
 
     //
     //добавление контакта
-    public void addContact(String name) throws DaoException {
+    public Contact addContact(String name) throws DaoException {
         Contact contact = new Contact(name);
         saveContact(contact);
+        return contact;
     }
 
-    public void addContactDetails(int numberContact, Map<TypeContact, String> mapDetails) throws DaoException {
+    public ContactDetails addContactDetails(int numberContact, Map<TypeContact, String> mapDetails) throws DaoException {
 
         Contact contact = null;
         synchronized (this) {
@@ -53,8 +54,10 @@ public final class ContactServiceImpl implements ContactService {
                 ContactDetails contactDetails = new ContactDetails((TypeContact) entry.getKey(), (String) entry.getValue());
                 contactDetails.setContactByContactId(contact);
                 crudDAOContactDetails.create(contactDetails);
+                return contactDetails;
             }
         }
+        return null;
     }
 
     //Сохранение контакта в хранилище
@@ -81,10 +84,11 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     @Transactional
-    public void ChangeSelectedContactDetails(int numberContact, int numberContactDetails, String value) throws DaoException {
+    public ContactDetails ChangeSelectedContactDetails(int numberContact, int numberContactDetails, String value) throws DaoException {
         synchronized (this) {
             Contact contact = getContactByNumber(numberContact);
             List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
+            ContactDetails contactDetailsReturn=null;
             Iterator<ContactDetails> iter = contactDetailsList.iterator();
             logger.debug("Изменение контактной информации ");
             logger.debug("Данные контакта : id = " + numberContact + ", name = " + contact.getFio());
@@ -97,10 +101,12 @@ public final class ContactServiceImpl implements ContactService {
                     logger.debug("Новые данные контактной информации : id = " + numberContactDetails +
                             ", type = " + contactDetails.getType() + ", value = " + value);
                     contactDetails.setValue(value);
+                    contactDetailsReturn = contactDetails;
                     break;
                 }
             }
             crudDAOContact.update(contact);
+            return contactDetailsReturn;
         }
     }
 
@@ -136,7 +142,7 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     @Transactional
-    public void changeContact(int numberContact, String value) throws DaoException {
+    public Contact changeContact(int numberContact, String value) throws DaoException {
         Contact contact = getContactByNumber(numberContact);
 
         if (!(contact == null)) {
@@ -148,10 +154,11 @@ public final class ContactServiceImpl implements ContactService {
                 logger.debug("новые данные контакта : id = " + numberContact + ", name = " + value);
             }
         }
+        return contact;
     }
 
     @Transactional
-    public void addGroupToContact(int numberContact, int numberGroup) throws DaoException {
+    public Contact addGroupToContact(int numberContact, int numberGroup) throws DaoException {
 
         Contact contact = getContactByNumber(numberContact);
         Group group = getGroupByNumber(numberGroup);
@@ -164,6 +171,7 @@ public final class ContactServiceImpl implements ContactService {
                 crudDAOContact.update(contact);
             }
         }
+        return contact;
     }
 
     @Transactional

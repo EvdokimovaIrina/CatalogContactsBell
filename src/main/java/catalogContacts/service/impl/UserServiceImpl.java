@@ -7,12 +7,13 @@ import catalogContacts.model.User;
 import catalogContacts.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Map;
 
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private CrudDAOUser<User> crudDAOUser;
 

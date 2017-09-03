@@ -1,11 +1,13 @@
-<%@ page import="catalogContacts.service.UserService" %>
-<%@ page import="catalogContacts.service.impl.UserServiceImpl" %>
-<%@ page import="catalogContacts.model.User" %>
+<%@ page import="catalogContacts.context.SpringUtils" %>
 <%@ page import="catalogContacts.dao.exception.DaoException" %>
-<%@ page import="java.util.Map" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="catalogContacts.model.User" %>
+<%@ page import="catalogContacts.service.UserService" %>
 <%@ page import="org.apache.log4j.Logger" %>
-<% Logger logger=Logger.getLogger(this.getClass().getName()); %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.Map" %>
+<% Logger logger = Logger.getLogger(this.getClass().getName());
+    UserService userService;
+%>
 <html>
 <head>
     <title>Количичество групп</title>
@@ -21,24 +23,26 @@
     </thead>
     <tbody>
     <%
-        UserService userService = UserServiceImpl.getInstance();
         try {
             synchronized (this) {
+                userService = (UserService) SpringUtils.getContext().getBean("userServise");
                 for (Map<User, Integer> mapUser : userService.countingUserGroup()) {%>
     <tr>
         <% for (Map.Entry entry : mapUser.entrySet()) {
             User user = (User) entry.getKey();%>
-        <td><%= user.getLogin() %></td>
+        <td><%= user.getLogin() %>
+        </td>
 
-        <td><%= entry.getValue() %></td>
+        <td><%= entry.getValue() %>
+        </td>
 
         <%}%>
     </tr>
     <% }
     }
     } catch
-            ( DaoException  e) {
-        logger.error("Ошибка получения данных",e);%>
+            (DaoException e) {
+        logger.error("Ошибка получения данных", e);%>
     <%= "Ошибка получения данных" %>
     <% }%>
     </tbody>

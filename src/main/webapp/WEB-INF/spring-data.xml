@@ -51,7 +51,6 @@
         <property name="contactService" ref="contactServise"/>
     </bean>
 
-
     <!-- servlet -->
 
     <bean id="authorizationServlet" class="catalogContacts.servlet.AuthorizationServlet">

@@ -60,5 +60,6 @@ public class DaoContactDetails extends DaoGeneral implements CrudDAO<ContactDeta
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+        super.setSessionFactory(sessionFactory);
     }
 }

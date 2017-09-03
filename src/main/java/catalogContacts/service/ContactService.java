@@ -15,17 +15,17 @@ import java.util.Map;
  */
 public interface ContactService {
 
-    void addContact(String name) throws DaoException;
-    void addContactDetails(int numberContact,Map<TypeContact,String> mapDetails) throws DaoException;
+    Contact addContact(String name) throws DaoException;
+    ContactDetails addContactDetails(int numberContact,Map<TypeContact,String> mapDetails) throws DaoException;
     void saveContact(Contact contact) throws DaoException;
     void deleteContact(int numberContact) throws DaoException;
     void deleteContactDetails(int numberContact,int numberContactDetails) throws DaoException;
-    void ChangeSelectedContactDetails(int numberContact,int numberContactDetails,String value) throws DaoException;
+    ContactDetails ChangeSelectedContactDetails(int numberContact,int numberContactDetails,String value) throws DaoException;
     List<Contact> showContactList(Integer numberGroup) throws DaoException;
     List<ContactDetails> showContactDetails(Contact contact) throws DaoException;
     Contact getContactByNumber(int numberContact) throws DaoException;
-    void changeContact(int numberContact,String value) throws DaoException;
-    void addGroupToContact(int numberContact, int numberGroup) throws DaoException;
+    Contact changeContact(int numberContact,String value) throws DaoException;
+    Contact addGroupToContact(int numberContact, int numberGroup) throws DaoException;
     void deleteGroupToContact(int numberContact, int numberGroup) throws DaoException;
     void setCrudDAOContact(CrudDAO<Contact> crudDAO);
     void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup);

@@ -1,13 +1,12 @@
 package catalogContacts.servlet;
 
+import catalogContacts.context.SpringUtils;
 import catalogContacts.controller.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,13 +16,12 @@ import java.io.PrintWriter;
 /**
  *
  */
-@Controller
+@WebServlet("/menu")
 public class MainServlet extends HttpServlet {
     ControllerHTML controllerHTML;
     private static Logger logger = Logger.getLogger(MainServlet.class.getName());
 
     @Override
-    @RequestMapping(value = "/menu", method = RequestMethod.POST)
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html;charset=utf-8");
@@ -32,6 +30,7 @@ public class MainServlet extends HttpServlet {
         try {
             String iduserStr = request.getParameter("iduser");
             synchronized (this) {
+                controllerHTML = (ControllerHTML) SpringUtils.getContext().getBean("controllerHTML");
                 if (iduserStr == null) {
                     String login = request.getParameter("login");
                     String password = request.getParameter("password");
@@ -58,7 +57,6 @@ public class MainServlet extends HttpServlet {
     }
 
     @Override
-    @RequestMapping(value = "/menu", method = RequestMethod.GET)
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }

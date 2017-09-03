@@ -11,13 +11,13 @@
 			http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 
-    <!-- Активирует различные аннотации, которые в классах bean -->
+    <!-- Активирует различные аннотации, которые в классах bean-->
     <context:annotation-config />
 
     <!-- путь к классам для аннотированных компонентов, которые будут автоматически зарегистрированы как Spring beans-->
     <context:component-scan base-package="catalogContacts" />
 
-    <!-- Настраивает управляемую аннотацией модель программирования Spring MVC  -->
+    <!-- Настраивает управляемую аннотацией модель программирования Spring MVC-->
     <mvc:annotation-driven />
 
     <import resource="hibernate-context.xml" />

@@ -17,9 +17,10 @@ public final class GroupServiceImpl implements GroupService {
     private static Logger logger = Logger.getLogger(GroupServiceImpl.class.getName());
 
 
-    public void addGroup(String name) throws DaoException {
+    public Group addGroup(String name) throws DaoException {
         Group group = new Group(name);
         saveGroup(group);
+        return group;
     }
 
     public void saveGroup(Group group) throws DaoException {
@@ -35,7 +36,7 @@ public final class GroupServiceImpl implements GroupService {
         }
     }
 
-    public void changeGroup(int numberGroup, String value) throws DaoException {
+    public Group changeGroup(int numberGroup, String value) throws DaoException {
         synchronized (this) {
             Group group = crudDAOGroup.getObject(numberGroup);
             group.setName(value);
@@ -43,7 +44,7 @@ public final class GroupServiceImpl implements GroupService {
             logger.debug("Данные группы : id = " + numberGroup + ", name = " + group.getName());
             crudDAOGroup.update(group);
             logger.debug("новые данные группы : id = " + numberGroup + ", name = " + value);
-
+            return group;
         }
 
     }

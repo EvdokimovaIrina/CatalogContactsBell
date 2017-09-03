@@ -1,16 +1,15 @@
 package catalogContacts.servlet;
 
+import catalogContacts.context.SpringUtils;
 import catalogContacts.controller.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.UserService;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +21,7 @@ import java.util.Map;
 /**
  *
  */
-@Controller
+@WebServlet("/datacontact")
 public class DataContactServlet extends HttpServlet {
     ControllerHTML controllerHTML;
     UserService userService;
@@ -31,7 +30,6 @@ public class DataContactServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(DataContactServlet.class.getName());
 
     @Override
-    @RequestMapping(value = "/datacontact", method = RequestMethod.POST)
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
 
@@ -47,6 +45,8 @@ public class DataContactServlet extends HttpServlet {
 
         try {
             synchronized (this) {
+                controllerHTML = (ControllerHTML) SpringUtils.getContext().getBean("controllerHTML");
+                userService = (UserService) SpringUtils.getContext().getBean("userServise");
                 userService.setUserThread(Integer.parseInt(iduserStr));
                 if (buttonAction != null) {
                     selectingTheActionForTheButton(buttonAction, request);
@@ -64,6 +64,7 @@ public class DataContactServlet extends HttpServlet {
     }
 
     private void selectingTheActionForTheButton(String buttonAction, HttpServletRequest request) throws DaoException, NumberFormatException {
+        contactService = (ContactService) SpringUtils.getContext().getBean("contactServise");
         int idContact = Integer.parseInt(request.getParameter("idcontact"));
         switch (buttonAction) {
             case "addgroup":
@@ -89,7 +90,6 @@ public class DataContactServlet extends HttpServlet {
 
 
     @Override
-    @RequestMapping(value = "/datacontact", method = RequestMethod.GET)
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
