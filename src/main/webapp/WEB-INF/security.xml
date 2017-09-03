@@ -2,28 +2,29 @@
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
-                 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-                 http://www.springframework.org/schema/security
-                 http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+             http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+             http://www.springframework.org/schema/security
+             http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
+    <http auto-config='true'>
+        <intercept-url pattern="/home" access="permitAll"/>
+        <intercept-url pattern="/datacontact" access="permitAll"/>
+        <intercept-url pattern="/contacts" access="permitAll"/>
+        <intercept-url pattern="/groups" access="permitAll"/>
+        <intercept-url pattern="/menu" access="permitAll"/>
+        <intercept-url pattern="/statAverageUserContact.jsp" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/statAverageUserGroup.jsp" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/statInactiveUsers.jsp" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/statNumberOfUserContacts.jsp" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/statNumberOfUserGroups.jsp" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/statNumberOfUsers.jsp" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/userStatistic.jsp" access="hasRole('ROLE_ADMIN')"/>
 
-    <http access-denied-page="/error403.jsp">
-        <intercept-url pattern="/index*" access="ROLE_USER,ROLE_ANONYMOUS"/>
-        <intercept-url pattern="/add*" access="ROLE_USER"/>
-        <intercept-url pattern="/delete/*" access="ROLE_ADMIN"/>
-        <form-login login-page="/home" default-target-url="/menu" authentication-failure-url="/login.jsp?error=true"/>
-        <logout logout-url="/logout" logout-success-url="/index"/>
-        <anonymous username="guest" granted-authority="ROLE_ANONYMOUS"/>
-        <remember-me/>
+        <form-login login-page="/home" default-target-url="/home" authentication-failure-url="/home"/>
+        <logout logout-url="/home" logout-success-url="/menu"/>
     </http>
 
     <authentication-manager>
-        <authentication-provider user-service-ref="userServise" >
-            <user-service>
-                <user name="admin" password="pass" authorities="ROLE_ADMIN,ROLE_USER"/>
-                <user name="user1" password="1111" authorities="ROLE_USER"/>
-                <user name="user2" password="2222" disabled="true" authorities="ROLE_USER"/>
-            </user-service>
-        </authentication-provider>
+        <authentication-provider user-service-ref="userServise" ></authentication-provider>
     </authentication-manager>
 </beans:beans>

@@ -1,24 +1,14 @@
 package catalogContacts.controller;
 
-import catalogContacts.context.SecurityContextHolder;
-import catalogContacts.controller.evenResult.EventType;
 import catalogContacts.controller.evenResult.FactoryRestResult;
-import catalogContacts.controller.evenResult.RestResult;
-import catalogContacts.dao.exception.DaoException;
-import catalogContacts.model.Contact;
-import catalogContacts.model.ContactDetails;
-import catalogContacts.model.Group;
-import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.GroupService;
 import catalogContacts.service.UserService;
 import org.apache.log4j.Logger;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -37,7 +27,7 @@ public class RestControllerImpl {
     @Resource(name = "factoryRestResult")
     private FactoryRestResult factoryRestResult;
 
-    @RequestMapping(value = "/contact", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/contact", method = RequestMethod.POST)
     public RestResult addContact(@RequestParam(value="userid") int userid,
                                   @RequestParam(value="name") String contactName) {
         logger.debug("Добавление нового контакта");
@@ -219,7 +209,7 @@ public class RestControllerImpl {
             return factoryRestResult.getFailResult(e);
         }
     }
-
+*/
     public ContactService getContactService() {
         return contactService;
     }

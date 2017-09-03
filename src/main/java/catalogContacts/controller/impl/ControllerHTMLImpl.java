@@ -256,7 +256,6 @@ public class ControllerHTMLImpl implements ControllerHTML {
     }
 
 
-
     public String findByName(String name) throws DaoException {
         List<Contact> contactList;
         synchronized (this) {
@@ -289,7 +288,6 @@ public class ControllerHTMLImpl implements ControllerHTML {
                 "<p>Введите имя пользователя: <input required type=\"text\" name=\"login\"></p>" +
                 "<p>Введите пароль: <input required type=\"password\" name=\"password\"></p>" +
                 "<input type=\"submit\" value=\"Войти\" />" +
-                "<p><a href=userStatistic.jsp> Посмотреть статистику </a></p>" +
                 "</form>" +
                 "</body></html>";
         return strHtml;
@@ -309,6 +307,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
                 "<form action=\"groups\" method=\"POST\">" +
                 "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
                 "<input type=\"submit\" value=\"Список групп\" />" +
+                "<p><a href=userStatistic.jsp> Посмотреть статистику </a></p>" +
                 "</form>" +
                 "</body></html>";
         return strHtml;
