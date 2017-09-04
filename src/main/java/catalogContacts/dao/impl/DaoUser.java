@@ -90,14 +90,27 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
             throw new DaoException("Ошибка получения данных пользователя ", e);
         }
     }
-
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED, rollbackFor = {java.lang.Exception.class})
     public User getUserByName(String name) throws DaoException {
-        List<User> userList = findByName(name);
-        if (userList.size() > 0) {
-            return userList.get(0);
-        } else {
-            return null;
+        User user;
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            Query query = session.createQuery("from User  where login = :paramName");
+            query.setParameter("paramName", name);
+            List<User> userList = (List<User>) query.list();
+            if (userList.size() > 0) {
+                user =  userList.get(0);
+                user.getGroupsByUserId().size();
+                user.getContactsByUserId().size();
+            } else {
+                user= null;
+            }
+            return user;
+        } catch (Exception e) {
+            logger.error("Ошибка получения данных пользователя", e);
+            throw new DaoException("Ошибка получения данных пользователя ", e);
         }
+
     }
 
     public int countingUsers() throws DaoException {

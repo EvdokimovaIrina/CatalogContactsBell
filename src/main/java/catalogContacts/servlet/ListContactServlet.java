@@ -4,7 +4,6 @@ import catalogContacts.context.SpringUtils;
 import catalogContacts.controller.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.service.ContactService;
-import catalogContacts.service.UserService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -21,7 +20,6 @@ import java.io.PrintWriter;
 @WebServlet("/contacts")
 public class ListContactServlet extends HttpServlet {
     ControllerHTML controllerHTML;
-    UserService userService;
     ContactService contactService;
     private static Logger logger = Logger.getLogger(DataContactServlet.class.getName());
 
@@ -46,10 +44,8 @@ public class ListContactServlet extends HttpServlet {
 
             synchronized (this) {
                 controllerHTML = (ControllerHTML) SpringUtils.getContext().getBean("controllerHTML");
-                userService = (UserService) SpringUtils.getContext().getBean("userServise");
                 contactService = (ContactService) SpringUtils.getContext().getBean("contactServise");
 
-                userService.setUserThread(Integer.parseInt(iduserStr));
                 if (buttonAction != null) {
                     out.println(selectingTheActionForTheButton(buttonAction, request, response));
                 } else {
@@ -85,9 +81,6 @@ public class ListContactServlet extends HttpServlet {
         this.controllerHTML = controllerHTML;
     }
 
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
 
     public void setContactService(ContactService contactService) {
         this.contactService = contactService;

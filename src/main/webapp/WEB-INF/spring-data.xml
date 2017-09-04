@@ -55,10 +55,6 @@
 
     <!-- servlet -->
 
-    <bean id="authorizationServlet" class="catalogContacts.servlet.AuthorizationServlet">
-        <property name="controllerHTML" ref="controllerHTML"/>
-    </bean>
-
     <bean id="dataContactServlet" class="catalogContacts.servlet.DataContactServlet">
         <property name="controllerHTML" ref="controllerHTML"/>
         <property name="userService" ref="userServise"/>
@@ -68,11 +64,9 @@
     <bean id="listContactServlet" class="catalogContacts.servlet.ListContactServlet">
         <property name="controllerHTML" ref="controllerHTML"/>
         <property name="contactService" ref="contactServise"/>
-        <property name="userService" ref="userServise"/>
     </bean>
 
     <bean id = "listGroup" class="catalogContacts.servlet.ListGroup">
-        <property name="userService" ref="userServise"/>
         <property name="controllerHTML" ref="controllerHTML"/>
         <property name="groupService" ref="groupServise"/>
     </bean>

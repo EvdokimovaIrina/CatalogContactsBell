@@ -14,7 +14,8 @@ public abstract class DaoGeneral {
 
     private static Logger logger = Logger.getLogger(DaoGeneral.class.getName());
 
-    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
+//    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
+@Transactional
     public void saveObgectToBD(Object object) throws DaoException {
         try {
             Session session = sessionFactory.getCurrentSession();

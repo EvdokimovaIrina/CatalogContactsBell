@@ -8,7 +8,7 @@
     <property name="connection.datasource">java:comp/env/jdbc/catalogcontacs</property>
 
     <property name="dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
-    <property name="current_session_context_class">thread</property>
+    <!--<property name="current_session_context_class">thread</property>-->
     <property name="show_sql">true</property>
     <property name="hbm2ddl.auto">update</property>
 

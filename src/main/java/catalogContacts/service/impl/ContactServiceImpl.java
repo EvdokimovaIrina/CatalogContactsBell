@@ -9,6 +9,7 @@ import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.GroupService;
 import org.apache.log4j.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +37,7 @@ public final class ContactServiceImpl implements ContactService {
 
     //
     //добавление контакта
+    @Transactional
     public Contact addContact(String name) throws DaoException {
         Contact contact = new Contact(name);
         saveContact(contact);
@@ -60,6 +62,7 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     //Сохранение контакта в хранилище
+    @Transactional
     public void saveContact(Contact contact) throws DaoException {
         synchronized (this) {
             crudDAOContact.create(contact);
@@ -67,6 +70,7 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     //удаление контакта из списка
+    @Transactional
     public void deleteContact(int numberContact) throws DaoException {
         synchronized (this) {
             crudDAOContact.delete(numberContact);
@@ -104,7 +108,7 @@ public final class ContactServiceImpl implements ContactService {
             return contactDetailsReturn;
         }
     }
-
+    @Transactional
     public List<Contact> showContactList(Integer numberGroup) throws DaoException {
         if (numberGroup == null) {
             return crudDAOContact.getAll();
