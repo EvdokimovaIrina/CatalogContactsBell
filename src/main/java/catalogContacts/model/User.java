@@ -2,7 +2,6 @@ package catalogContacts.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -14,6 +13,7 @@ public class User implements Serializable{
     private int id;
     private String login;
     private String password;
+    private UserRoles userRole;
     private List<Contact> contactsByUserId;
     private List<Group> groupsByUserId;
 
@@ -61,6 +61,16 @@ public class User implements Serializable{
         this.password = password;
     }
 
+    @Column(name = "user_role", nullable=false)
+    @Enumerated(EnumType.STRING)
+    public UserRoles getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRoles userRole) {
+        this.userRole = userRole;
+    }
+
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "userByUserId", cascade = CascadeType.ALL,orphanRemoval=true)
     public List<Contact> getContactsByUserId() {
         return contactsByUserId;
@@ -78,5 +88,6 @@ public class User implements Serializable{
     public void setGroupsByUserId(List<Group> groupsByUserId) {
         this.groupsByUserId = groupsByUserId;
     }
+
 
 }

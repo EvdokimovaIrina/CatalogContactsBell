@@ -2,8 +2,8 @@ package catalogContacts.servlet;
 
 import catalogContacts.context.SpringUtils;
 import catalogContacts.controller.ControllerHTML;
-import catalogContacts.dao.exception.DaoException;
 import org.apache.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,34 +31,47 @@ public class MainServlet extends HttpServlet {
             String iduserStr = request.getParameter("iduser");
             synchronized (this) {
                 controllerHTML = (ControllerHTML) SpringUtils.getContext().getBean("controllerHTML");
-                if (iduserStr == null) {
+               /* if (iduserStr == null) {
                     String login = request.getParameter("login");
                     String password = request.getParameter("password");
                     if (login != null & password != null) {
                         if (controllerHTML.isSetUserThread(login, password)) {
-                            logger.info("Авторизация пользователя");
-                            out.println(controllerHTML.getMainMenuHTML());
-                        } else {
+                            logger.info("Авторизация пользователя");*/
+                out.println(controllerHTML.getMainMenuHTML());
+               /*         } else {
                             logger.info("Авторизация не выполнена, пользователь не найден");
                             out.println("Авторизация не выполнена");
                         }
                     }
                 } else {
                     out.println(controllerHTML.getMainMenuHTML());
-                }
+                }*/
             }
-        } catch (DaoException e) {
-            out.println("Ошибка получения данных");
+        /*} catch (DaoException e) {
+            out.println("Ошибка получения данных");*/
         } catch (Exception e) {
             logger.error("Ошибка " + e.getMessage());
             out.println("Ошибка данных");
         }
-
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter out = response.getWriter();
+        try {
+            String iduserStr = request.getParameter("iduser");
+            String nameUser = SecurityContextHolder.getContext().getAuthentication().getName();
+            synchronized (this) {
+                controllerHTML = (ControllerHTML) SpringUtils.getContext().getBean("controllerHTML");
+
+                out.println(controllerHTML.getMainMenuHTML());
+            }
+
+        } catch (Exception e) {
+            logger.error("Ошибка " + e.getMessage());
+            out.println("Ошибка данных");
+        }
     }
 
     public ControllerHTML getControllerHTML() {

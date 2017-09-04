@@ -1,6 +1,6 @@
 package catalogContacts.controller.impl;
 
-import catalogContacts.context.SecurityContextHolder;
+import catalogContacts.context.SecurityContextHolderMy;
 import catalogContacts.controller.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Contact;
@@ -25,20 +25,20 @@ public class ControllerHTMLImpl implements ControllerHTML {
     private UserService userService;
 
 
-    private String contactListHTML(List<Contact> contactList,int idUser){
+    private String contactListHTML(List<Contact> contactList){
         String strHtml ="";
         for (Contact contact : contactList) {
             strHtml = strHtml + "<tr> " +
                     "<form action=\"datacontact\" method=\"POST\">" +
                     "<td>" + contact.getFio() + "</td>" +
                     "<td><input type=\"submit\" value=\"Просмотреть\" /></td>" +
-                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + "\"/></td>" +
                     "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
                     "</form>" +
                     "<form action=\"contacts\" method=\"POST\">" +
                     "<td><input type=\"hidden\" name=\"buttonaction\" value=\"delete\"/></td>" +
                     "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
-                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" +  "\"/></td>" +
                     "<td><input type=\"submit\" value=\"Удалить\"></td>" +
                     "</form>" +
                     "</tr>";
@@ -46,15 +46,15 @@ public class ControllerHTMLImpl implements ControllerHTML {
         return strHtml;
     }
 
-    private String searchForContactsHTML(int idUser){
+    private String searchForContactsHTML(){
         return "<form action=\"contacts\" method=\"POST\">" +
                 "<input type=\"text\" name=\"searchnamecontact\"/>" +
                 "<input type=\"hidden\" name=\"buttonaction\" value=\"searchForContacts\"/>" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" +  "\"/>" +
                 "<input type=\"submit\" value=\"Найти\" />" +
                 "</form><br>"+
                 "<form action=\"contacts\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + "\"/>" +
                 "  <input type=\"submit\" value=\"Показать весь список\" />" +
                 "</form><br>";
 
@@ -73,22 +73,22 @@ public class ControllerHTMLImpl implements ControllerHTML {
     }
 
     private String menuListHTML(List<Contact> contactList){
-        int idUser = SecurityContextHolder.getLoggedUserID();
+
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><body>" +
                 "<form action=\"menu\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" +  "\"/>" +
                 "<input type=\"submit\" value=\"На главное меню\" />" +
                 "</form><br>" +
                 "<p><h3>Контакты</h3></p></body></html>" +
-                searchForContactsHTML(idUser)+
+                searchForContactsHTML()+
                 "<table>" +
                 "<tbody>"+
-                contactListHTML(contactList,idUser)+
+                contactListHTML(contactList)+
                 "</tbody>" +
                 "</table>" +
                 "<form action=\"contacts\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" +  "\"/>" +
                 "<input type=\"hidden\" name=\"buttonaction\"  value=\"add\"/>" +
                 "<p></p>" +
                 "<p><h4>Новый контакт:</h4></p>" +
@@ -98,7 +98,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
         return strHtml;
     }
 
-    private String showContactDetailsList(Contact contact, int idUser) throws DaoException {
+    private String showContactDetailsList(Contact contact) throws DaoException {
         List<ContactDetails> contactDetailsList = contactService.showContactDetails(contact);
 
         String strHtml = "<p><h4>Контактная информация:</h4></p>" +
@@ -111,7 +111,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
                     "<td>" + contactDetails.getType() + ": </td>" +
                     "<td>" + contactDetails.getValue() + "</td>" +
                     "<td><input type=\"hidden\" name=\"iddetails\" value=\"" + contactDetails.getId() + "\"/></td>" +
-                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + "\"/></td>" +
                     "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
                     "<td><input type=\"hidden\" name=\"buttonaction\" value=\"deletedetails\"/></td>" +
                     "<td><input type=\"submit\" value=\"Удалить\"></td>" +
@@ -130,7 +130,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
         }
         strHtml = strHtml +
                 "</select>  Значение: <input type=\"text\" name=\"value\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + "\"/>" +
                 "<input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/>" +
                 "<td><input type=\"hidden\" name=\"buttonaction\" value=\"adddetails\"/></td>" +
                 "<input type=\"submit\" value=\"Добавить\"></p>" +
@@ -140,7 +140,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
         return strHtml;
     }
 
-    private String showGroupListContact(Contact contact, int idUser) throws DaoException {
+    private String showGroupListContact(Contact contact) throws DaoException {
 
         List<Group> groupList = contact.getGroupList();
 
@@ -155,7 +155,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
                     "<form action=\"datacontact\" method=\"POST\">" +
                     "<td>" + group.getName() + "</td>" +
                     "<td><input type=\"hidden\" name=\"idgroup\" value=\"" + group.getNumber() + "\"/></td>" +
-                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                    "<td><input type=\"hidden\" name=\"iduser\" value=\"" + "\"/></td>" +
                     "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
                     "<td><input type=\"hidden\" name=\"buttonaction\" value=\"deletegroup\"/></td>" +
                     "<td><input type=\"submit\" value=\"Удалить\"></td>" +
@@ -168,7 +168,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
                 "</tbody>" +
                 "<p>Добавить группу:</p>" +
                 "<form id=\"groupAddForm\" action=\"datacontact\" method=\"POST\">" +
-                "<td><input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/></td>" +
+                "<td><input type=\"hidden\" name=\"iduser\" value=\"" + "\"/></td>" +
                 "<td><input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/></td>" +
                 "<td><input type=\"hidden\" name=\"buttonaction\" value=\"addgroup\"/></td>" +
                 "<p><select required name=\"idgroup\">";
@@ -195,16 +195,15 @@ public class ControllerHTMLImpl implements ControllerHTML {
         synchronized (this) {
             contact = contactService.getContactByNumber(numberContact);
         }
-        int idUser = SecurityContextHolder.getLoggedUserID();
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><body>" +
                 "<form action=\"menu\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + "\"/>" +
                 "<input type=\"submit\" value=\"На главное меню\" />" +
                 "</form><br>" +
                 "<p><h2> " + contact.getFio() + " </h2></p></body></html>" +
                 "<form action=\"datacontact\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + "\"/>" +
                 "<input type=\"hidden\" name=\"idcontact\" value=\"" + contact.getNumber() + "\"/>" +
                 "<input type=\"text\" name=\"newnamecontact\"/>" +
                 "<td><input type=\"hidden\" name=\"buttonaction\" value=\"changecontactname\"/></td>" +
@@ -212,14 +211,13 @@ public class ControllerHTMLImpl implements ControllerHTML {
                 "</form><br>" +
 
 
-                showContactDetailsList(contact, idUser) +
-                showGroupListContact(contact, idUser);
+                showContactDetailsList(contact) +
+                showGroupListContact(contact);
         return strHtml;
     }
 
 
     public String showGroupList() throws DaoException {
-        int idUser = SecurityContextHolder.getLoggedUserID();
         List<Group> groupList;
         synchronized (this) {
             groupList = groupService.showGroupList();
@@ -227,7 +225,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><body>" +
                 "<form action=\"menu\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" +  "\"/>" +
                 "<input type=\"submit\" value=\"На главное меню\" />" +
                 "</form><br>" +
                 "<p><h3>Группы:</h3></p></body></html>" +
@@ -238,7 +236,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
                     "<form action=\"groups\" method=\"POST\">" +
                     "<td>" + group.getName() + "</td>" +
                     "<input type=\"hidden\" name=\"idgroup\" value=\"" + group.getNumber() + "\"/>" +
-                    "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                    "<input type=\"hidden\" name=\"iduser\" value=\"" +  "\"/>" +
                     "<td><input type=\"hidden\" name=\"buttonaction\" value=\"delete\"/>" +
                     "<input type=\"submit\" value=\"Удалить\" /></td>" +
                     "</form>" +
@@ -248,7 +246,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
                 "</table>" +
                 "<form action=\"groups\" method=\"POST\">" +
                 "<input type=\"text\" name=\"namegroup\"/>" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + "\"/>" +
                 "<input type=\"hidden\" name=\"buttonaction\"  value=\"add\"/>" +
                 "<input type=\"submit\" value=\"Добавить\" />" +
                 "</form>";
@@ -269,7 +267,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
         synchronized (this) {
             userService.setUserThread(login, password);
         }
-        if (SecurityContextHolder.getLoggedUserID() == null) {
+        if (SecurityContextHolderMy.getLoggedUserID() == null) {
             return false;
         } else {
             return true;
@@ -283,7 +281,7 @@ public class ControllerHTMLImpl implements ControllerHTML {
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">" +
                 "<title>Авторизация</title></head>" +
                 "<body>" +
-                "<form action=\"menu\" method=\"POST\">" +
+                "<form action=\"home\" method=\"POST\">" +
                 "<p><h3>Для просмотра контактов укажите регистрационные данные:</h3></p>" +
                 "<p>Введите имя пользователя: <input required type=\"text\" name=\"login\"></p>" +
                 "<p>Введите пароль: <input required type=\"password\" name=\"password\"></p>" +
@@ -294,18 +292,18 @@ public class ControllerHTMLImpl implements ControllerHTML {
     }
 
     public String getMainMenuHTML() {
-        int idUser = SecurityContextHolder.getLoggedUserID();
+
         String strHtml = "<!DOCTYPE HTML>" +
                 "<html><head>" +
                 "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">" +
                 "<title>Меню</title></head>" +
                 "<body>" +
                 "<form action=\"contacts\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" + "\"/>" +
                 "<input type=\"submit\" value=\"Cписок контактов\" />" +
                 "</form>" +
                 "<form action=\"groups\" method=\"POST\">" +
-                "<input type=\"hidden\" name=\"iduser\" value=\"" + idUser + "\"/>" +
+                "<input type=\"hidden\" name=\"iduser\" value=\"" +  "\"/>" +
                 "<input type=\"submit\" value=\"Список групп\" />" +
                 "<p><a href=userStatistic.jsp> Посмотреть статистику </a></p>" +
                 "</form>" +

@@ -6,11 +6,10 @@ import catalogContacts.model.Contact;
 import catalogContacts.model.Group;
 import catalogContacts.model.User;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -76,8 +75,29 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
         return null;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED, rollbackFor = {java.lang.Exception.class})
     public List<User> findByName(String name) throws DaoException {
-        return null;
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery("from User  where login = :paramName");
+            query.setParameter("paramName", name);
+            List<User> userList = (List<User>) query.list();
+            transaction.commit();
+            return userList;
+        } catch (Exception e) {
+            logger.error("Ошибка получения данных пользователя", e);
+            throw new DaoException("Ошибка получения данных пользователя ", e);
+        }
+    }
+
+    public User getUserByName(String name) throws DaoException {
+        List<User> userList = findByName(name);
+        if (userList.size() > 0) {
+            return userList.get(0);
+        } else {
+            return null;
+        }
     }
 
     public int countingUsers() throws DaoException {

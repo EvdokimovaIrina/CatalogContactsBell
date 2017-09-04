@@ -13,8 +13,6 @@
 			http://www.springframework.org/schema/context/spring-context-4.3.xsd
 	   		">
 
-    <!-- Включить аннотации управления транзакциями -->
-    <tx:annotation-driven transaction-manager="transactionManager" />
 
     <!-- Объявление Hibernate SessionFactory для получения session -->
    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
@@ -25,5 +23,8 @@
     <!-- Объявление transaction manager-->
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"
           p:sessionFactory-ref="sessionFactory" />
+
+    <!-- Включить аннотации управления транзакциями -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
 </beans>

@@ -8,8 +8,7 @@ import catalogContacts.model.Group;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.GroupService;
-import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
+import org.apache.log4j.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -61,7 +60,6 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     //Сохранение контакта в хранилище
-    @Transactional
     public void saveContact(Contact contact) throws DaoException {
         synchronized (this) {
             crudDAOContact.create(contact);
@@ -69,21 +67,18 @@ public final class ContactServiceImpl implements ContactService {
     }
 
     //удаление контакта из списка
-    @Transactional
     public void deleteContact(int numberContact) throws DaoException {
         synchronized (this) {
             crudDAOContact.delete(numberContact);
         }
     }
 
-    @Transactional
     public void deleteContactDetails(int numberContact, int numberContactDetails) throws DaoException {
         synchronized (this) {
             crudDAOContactDetails.delete(numberContactDetails);
         }
     }
 
-    @Transactional
     public ContactDetails ChangeSelectedContactDetails(int numberContact, int numberContactDetails, String value) throws DaoException {
         synchronized (this) {
             Contact contact = getContactByNumber(numberContact);
@@ -110,7 +105,6 @@ public final class ContactServiceImpl implements ContactService {
         }
     }
 
-    @Transactional
     public List<Contact> showContactList(Integer numberGroup) throws DaoException {
         if (numberGroup == null) {
             return crudDAOContact.getAll();
@@ -127,7 +121,7 @@ public final class ContactServiceImpl implements ContactService {
         return list;
     }
 
-    @Transactional
+
     public Contact getContactByNumber(int numberContact) throws DaoException {
         Contact contact;
         synchronized (this) {
@@ -141,7 +135,6 @@ public final class ContactServiceImpl implements ContactService {
         return contact.getContactDetailsList();
     }
 
-    @Transactional
     public Contact changeContact(int numberContact, String value) throws DaoException {
         Contact contact = getContactByNumber(numberContact);
 
@@ -157,7 +150,6 @@ public final class ContactServiceImpl implements ContactService {
         return contact;
     }
 
-    @Transactional
     public Contact addGroupToContact(int numberContact, int numberGroup) throws DaoException {
 
         Contact contact = getContactByNumber(numberContact);
@@ -174,7 +166,6 @@ public final class ContactServiceImpl implements ContactService {
         return contact;
     }
 
-    @Transactional
     public void deleteGroupToContact(int numberContact, int numberGroup) throws DaoException {
         synchronized (this) {
             Contact contact = getContactByNumber(numberContact);
@@ -198,17 +189,17 @@ public final class ContactServiceImpl implements ContactService {
         }
     }
 
-    @Transactional
+
     public void setCrudDAOContact(CrudDAO<Contact> crudDAOContact) {
         this.crudDAOContact = crudDAOContact;
     }
 
-    @Transactional
+
     public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
         this.crudDAOGroup = crudDAOGroup;
     }
 
-    @Transactional
+
     public Group getGroupByNumber(int numberGroup) throws DaoException {
         Group group;
         synchronized (this) {

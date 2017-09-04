@@ -1,7 +1,7 @@
 package catalogContacts.dao.impl;
 
-import catalogContacts.context.SecurityContextHolder;
 import catalogContacts.dao.CrudDAO;
+import catalogContacts.dao.CrudDAOUser;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Group;
 import catalogContacts.model.User;
@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,14 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
 
     private SessionFactory sessionFactory;
     private static Logger logger = Logger.getLogger(DaoGroup.class.getName());
+    private CrudDAOUser<User> userCrudDAO;
 
     public DaoGroup() throws DaoException {
         super();
     }
 
     public void create(Group group) throws DaoException {
-        group.setUserByUserId(getObjectFromBDById(User.class, SecurityContextHolder.getLoggedUserID()));
+        group.setUserByUserId(userCrudDAO.getUserByName(SecurityContextHolder.getContext().getAuthentication().getName()));
         saveObgectToBD(group);
     }
 
@@ -54,43 +56,38 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
     }
 
     public List<Group> getAll() throws DaoException {
-
-        int userID = SecurityContextHolder.getLoggedUserID();
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
         try {
             List<Group> groupList;
-            transaction = session.beginTransaction();
-            User user = (User) session.get(User.class, userID);
+            User user = userCrudDAO.getUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
+            if (user==null){
+                logger.error("Ошибка авторизации, пользователь не найден");
+                throw new DaoException("Ошибка авторизации, пользователь не найден");
+            }
             user.getGroupsByUserId().size(); //для инициализации
             groupList = user.getGroupsByUserId();
-            transaction.commit();
             return groupList;
         } catch (Exception e) {
-            transaction.rollback();
             logger.error("Ошибка получения списка группы ", e);
             throw new DaoException("Ошибка получения списка группы ", e);
         }
     }
 
     public List<Group> findByName(String name) throws DaoException {
-        int userID = SecurityContextHolder.getLoggedUserID();
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = null;
         try {
             List<Group> groupList = new ArrayList<>();
-            transaction = session.beginTransaction();
-            User user = (User) session.load(User.class, userID);
+            User user = userCrudDAO.getUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
+            if (user==null){
+                logger.error("Ошибка авторизации, пользователь не найден");
+                throw new DaoException("Ошибка авторизации, пользователь не найден");
+            }
             user.getGroupsByUserId().size();
             for (Group group : user.getGroupsByUserId()) {
                 if (group.getName().contains(name)) {
                     groupList.add(group);
                 }
             }
-            transaction.commit();
             return groupList;
         } catch (Exception e) {
-            transaction.rollback();
             logger.error("Ошибка получения списка группы ", e);
             throw new DaoException("Ошибка получения списка группы ", e);
         }
@@ -103,5 +100,13 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
         super.setSessionFactory(sessionFactory);
+    }
+
+    public CrudDAOUser<User> getUserCrudDAO() {
+        return userCrudDAO;
+    }
+
+    public void setUserCrudDAO(CrudDAOUser<User> userCrudDAO) {
+        this.userCrudDAO = userCrudDAO;
     }
 }

@@ -5,6 +5,7 @@ import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Group;
 import catalogContacts.service.GroupService;
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,20 +23,20 @@ public final class GroupServiceImpl implements GroupService {
         saveGroup(group);
         return group;
     }
-
+    @Transactional
     public void saveGroup(Group group) throws DaoException {
         synchronized (this) {
             crudDAOGroup.create(group);
         }
     }
-
+    @Transactional
     public void deleteGroup(int numberGroup) throws DaoException {
 
         synchronized (this) {
             crudDAOGroup.delete(numberGroup);
         }
     }
-
+    @Transactional
     public Group changeGroup(int numberGroup, String value) throws DaoException {
         synchronized (this) {
             Group group = crudDAOGroup.getObject(numberGroup);
@@ -48,13 +49,13 @@ public final class GroupServiceImpl implements GroupService {
         }
 
     }
-
+    @Transactional
     public List<Group> showGroupList() throws DaoException {
         return crudDAOGroup.getAll();
 
     }
 
-
+    @Transactional
     public Group findByNumber(int number) throws DaoException {
         Group group;
         synchronized (this) {

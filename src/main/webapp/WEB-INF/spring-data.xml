@@ -9,10 +9,12 @@
     <!-- Dao -->
     <bean id="daoContact" class="catalogContacts.dao.impl.DaoContact">
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="userCrudDAO" ref="daoUser"/>
     </bean>
 
     <bean id="daoGroup" class="catalogContacts.dao.impl.DaoGroup">
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="userCrudDAO" ref="daoUser"/>
     </bean>
 
     <bean id="daoContactDetails" class="catalogContacts.dao.impl.DaoContactDetails">

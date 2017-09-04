@@ -1,16 +1,20 @@
 package catalogContacts.service.impl;
 
-import catalogContacts.context.SecurityContextHolder;
+import catalogContacts.context.SecurityContextHolderMy;
 import catalogContacts.dao.CrudDAOUser;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.User;
+import catalogContacts.model.UserRoles;
 import catalogContacts.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,12 +32,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user = crudDAOUser.authorizationUser(login, password);
         }
         if (user != null) {
-            SecurityContextHolder.setLoggedUserID(user.getId());
+            SecurityContextHolderMy.setLoggedUserID(user.getId());
         }
     }
 
     public void setUserThread(int id) throws DaoException {
-        SecurityContextHolder.setLoggedUserID(id);
+        SecurityContextHolderMy.setLoggedUserID(id);
     }
 
     public int countingUsers() throws DaoException {
@@ -89,7 +93,38 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        User user;
+        try {
+            user = crudDAOUser.getUserByName(name);
+            if (user==null) {
+               throw new UsernameNotFoundException("Пользователь не найден");
+            }
+
+        } catch (DaoException e) {
+            throw new UsernameNotFoundException("Ошибка получения данных пользователя");
+        }
+
+        List<GrantedAuthority> authorities =
+                buildUserAuthority(user.getUserRole());
+
+        return buildUserForAuthentication(user, authorities);
+    }
+
+
+    // конвертируем User в UserDetails
+    private UserDetails buildUserForAuthentication(User user,
+                                            List<GrantedAuthority> authorities) {
+        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(),
+                true, true, true, true, authorities);
+
+    }
+
+    private List<GrantedAuthority> buildUserAuthority(UserRoles userRoles) {
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(userRoles.toString()));
+
+        return authorities;
     }
 }

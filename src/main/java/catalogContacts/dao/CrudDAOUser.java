@@ -26,4 +26,5 @@ public interface CrudDAOUser<U> extends CrudDAO<U> {
     List<User> inactiveUsers(int n) throws DaoException;
     List<Map<User, Integer>> CountingUserContact() throws DaoException;
     List<Map<User, Integer>> CountingUserGroup() throws DaoException;
+    User getUserByName(String name) throws DaoException;
 }

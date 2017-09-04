@@ -20,9 +20,9 @@
     <!-- Настраивает управляемую аннотацией модель программирования Spring MVC-->
     <mvc:annotation-driven />
 
-    <import resource="security.xml" />
-
     <import resource="hibernate-context.xml" />
 
     <import resource="spring-data.xml" />
+
+
 </beans>

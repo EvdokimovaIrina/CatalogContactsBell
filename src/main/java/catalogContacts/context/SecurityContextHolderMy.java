@@ -1,11 +1,9 @@
 package catalogContacts.context;
 
-import catalogContacts.model.User;
-
 /**
  *
  */
-public class SecurityContextHolder {
+public class SecurityContextHolderMy {
     private static final ThreadLocal<Integer> threadLocalScope = new  ThreadLocal<>();
 
     public final static Integer getLoggedUserID() {

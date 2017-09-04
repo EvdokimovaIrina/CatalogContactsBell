@@ -6,12 +6,12 @@
              http://www.springframework.org/schema/security
              http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
-    <http auto-config='true'>
-        <intercept-url pattern="/home" access="permitAll"/>
-        <intercept-url pattern="/datacontact" access="permitAll"/>
-        <intercept-url pattern="/contacts" access="permitAll"/>
-        <intercept-url pattern="/groups" access="permitAll"/>
-        <intercept-url pattern="/menu" access="permitAll"/>
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/login*" access="permitAll"/>
+        <intercept-url pattern="/datacontact" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/contacts" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/groups" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/menu" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/statAverageUserContact.jsp" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/statAverageUserGroup.jsp" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/statInactiveUsers.jsp" access="hasRole('ROLE_ADMIN')"/>
@@ -20,11 +20,31 @@
         <intercept-url pattern="/statNumberOfUsers.jsp" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/userStatistic.jsp" access="hasRole('ROLE_ADMIN')"/>
 
-        <form-login login-page="/home" default-target-url="/home" authentication-failure-url="/home"/>
-        <logout logout-url="/home" logout-success-url="/menu"/>
+        <!--<form-login
+                authentication-success-handler-ref="successHandler"
+                authentication-failure-handler-ref="failureHandler"
+        />-->
+
+        <form-login
+                login-page="/login.jsp"
+                username-parameter="username"
+                password-parameter="password"
+                login-processing-url="/j_spring_security_check"
+                default-target-url="/menu"
+                authentication-failure-url="/login.jsp?login_error=1"/>
+                <access-denied-handler error-page="/accessDenied.jsp"/>
+
+        <!--temporally disable csrf -->
+        <csrf disabled="true"/>
+
     </http>
 
+    <beans:bean id="successHandler"
+                class="catalogContacts.servlet.AuthenticationSuccessHandler"/>
+    <beans:bean id="failureHandler"
+                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
+
     <authentication-manager>
-        <authentication-provider user-service-ref="userServise" ></authentication-provider>
+        <authentication-provider user-service-ref="userServise"></authentication-provider>
     </authentication-manager>
 </beans:beans>
