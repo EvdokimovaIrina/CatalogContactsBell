@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,7 @@ public class DaoContact extends DaoGeneral implements CrudDAO<Contact> {
 
     }
 
-    @Transactional(readOnly = true)
+
     public Contact getObject(int id) throws DaoException {
         try {
             Contact contact;

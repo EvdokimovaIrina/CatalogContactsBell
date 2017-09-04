@@ -29,12 +29,7 @@ public class ListGroup extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
 
         PrintWriter out = response.getWriter();
-        String iduserStr = request.getParameter("iduser");
-        if (iduserStr == null) {
-            logger.error("Ошибка авторизации");
-            out.println("Ошибка авторизации");
-            return;
-        }
+
         String buttonAction = request.getParameter("buttonaction");
         try {
             synchronized (this) {

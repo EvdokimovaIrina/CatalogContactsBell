@@ -26,9 +26,6 @@ public interface ControllerHTML {
 
     String findByName(String name) throws DaoException;
 
-    boolean isSetUserThread(String login, String password) throws DaoException ;
-
     String getMainMenuHTML();
 
-    String getAuthorizationHTML();
 }

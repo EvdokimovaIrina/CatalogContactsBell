@@ -9,6 +9,7 @@ import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
 import catalogContacts.service.GroupService;
 import org.apache.log4j.*;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
@@ -37,13 +38,14 @@ public final class ContactServiceImpl implements ContactService {
 
     //
     //добавление контакта
-    @Transactional
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public Contact addContact(String name) throws DaoException {
         Contact contact = new Contact(name);
         saveContact(contact);
         return contact;
     }
 
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public ContactDetails addContactDetails(int numberContact, Map<TypeContact, String> mapDetails) throws DaoException {
 
         Contact contact = null;
@@ -77,17 +79,20 @@ public final class ContactServiceImpl implements ContactService {
         }
     }
 
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public void deleteContactDetails(int numberContact, int numberContactDetails) throws DaoException {
         synchronized (this) {
             crudDAOContactDetails.delete(numberContactDetails);
         }
     }
 
+
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public ContactDetails ChangeSelectedContactDetails(int numberContact, int numberContactDetails, String value) throws DaoException {
         synchronized (this) {
             Contact contact = getContactByNumber(numberContact);
             List<ContactDetails> contactDetailsList = contact.getContactDetailsList();
-            ContactDetails contactDetailsReturn=null;
+            ContactDetails contactDetailsReturn = null;
             Iterator<ContactDetails> iter = contactDetailsList.iterator();
             logger.debug("Изменение контактной информации ");
             logger.debug("Данные контакта : id = " + numberContact + ", name = " + contact.getFio());
@@ -108,7 +113,8 @@ public final class ContactServiceImpl implements ContactService {
             return contactDetailsReturn;
         }
     }
-    @Transactional
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public List<Contact> showContactList(Integer numberGroup) throws DaoException {
         if (numberGroup == null) {
             return crudDAOContact.getAll();
@@ -125,7 +131,7 @@ public final class ContactServiceImpl implements ContactService {
         return list;
     }
 
-
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public Contact getContactByNumber(int numberContact) throws DaoException {
         Contact contact;
         synchronized (this) {
@@ -139,6 +145,7 @@ public final class ContactServiceImpl implements ContactService {
         return contact.getContactDetailsList();
     }
 
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public Contact changeContact(int numberContact, String value) throws DaoException {
         Contact contact = getContactByNumber(numberContact);
 
@@ -154,6 +161,7 @@ public final class ContactServiceImpl implements ContactService {
         return contact;
     }
 
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public Contact addGroupToContact(int numberContact, int numberGroup) throws DaoException {
 
         Contact contact = getContactByNumber(numberContact);
@@ -170,6 +178,7 @@ public final class ContactServiceImpl implements ContactService {
         return contact;
     }
 
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public void deleteGroupToContact(int numberContact, int numberGroup) throws DaoException {
         synchronized (this) {
             Contact contact = getContactByNumber(numberContact);
@@ -194,16 +203,7 @@ public final class ContactServiceImpl implements ContactService {
     }
 
 
-    public void setCrudDAOContact(CrudDAO<Contact> crudDAOContact) {
-        this.crudDAOContact = crudDAOContact;
-    }
-
-
-    public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
-        this.crudDAOGroup = crudDAOGroup;
-    }
-
-
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public Group getGroupByNumber(int numberGroup) throws DaoException {
         Group group;
         synchronized (this) {
@@ -212,12 +212,21 @@ public final class ContactServiceImpl implements ContactService {
         return group;
     }
 
+
     public CrudDAO<Contact> getCrudDAOContact() {
         return crudDAOContact;
     }
 
+    public void setCrudDAOContact(CrudDAO<Contact> crudDAOContact) {
+        this.crudDAOContact = crudDAOContact;
+    }
+
     public CrudDAO<Group> getCrudDAOGroup() {
         return crudDAOGroup;
+    }
+
+    public void setCrudDAOGroup(CrudDAO<Group> crudDAOGroup) {
+        this.crudDAOGroup = crudDAOGroup;
     }
 
     public CrudDAO<ContactDetails> getCrudDAOContactDetails() {

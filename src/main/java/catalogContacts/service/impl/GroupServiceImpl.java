@@ -5,6 +5,7 @@ import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Group;
 import catalogContacts.service.GroupService;
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,25 +19,28 @@ public final class GroupServiceImpl implements GroupService {
     private static Logger logger = Logger.getLogger(GroupServiceImpl.class.getName());
 
 
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public Group addGroup(String name) throws DaoException {
         Group group = new Group(name);
         saveGroup(group);
         return group;
     }
-    @Transactional
+
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public void saveGroup(Group group) throws DaoException {
         synchronized (this) {
             crudDAOGroup.create(group);
         }
     }
-    @Transactional
+
+
     public void deleteGroup(int numberGroup) throws DaoException {
 
         synchronized (this) {
             crudDAOGroup.delete(numberGroup);
         }
     }
-    @Transactional
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public Group changeGroup(int numberGroup, String value) throws DaoException {
         synchronized (this) {
             Group group = crudDAOGroup.getObject(numberGroup);
@@ -49,13 +53,13 @@ public final class GroupServiceImpl implements GroupService {
         }
 
     }
-    @Transactional
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public List<Group> showGroupList() throws DaoException {
         return crudDAOGroup.getAll();
 
     }
 
-    @Transactional
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public Group findByNumber(int number) throws DaoException {
         Group group;
         synchronized (this) {

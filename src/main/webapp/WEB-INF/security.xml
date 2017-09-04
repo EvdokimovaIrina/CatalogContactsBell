@@ -8,10 +8,10 @@
 
     <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/login*" access="permitAll"/>
-        <intercept-url pattern="/datacontact" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/contacts" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/groups" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/menu" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/datacontact" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
+        <intercept-url pattern="/contacts" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
+        <intercept-url pattern="/groups" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
+        <intercept-url pattern="/menu" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
         <intercept-url pattern="/statAverageUserContact.jsp" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/statAverageUserGroup.jsp" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/statInactiveUsers.jsp" access="hasRole('ROLE_ADMIN')"/>

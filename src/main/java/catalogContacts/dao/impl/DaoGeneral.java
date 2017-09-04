@@ -1,11 +1,9 @@
 package catalogContacts.dao.impl;
 
 import catalogContacts.dao.exception.DaoException;
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 
 public abstract class DaoGeneral {
@@ -15,7 +13,7 @@ public abstract class DaoGeneral {
     private static Logger logger = Logger.getLogger(DaoGeneral.class.getName());
 
 //    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
-@Transactional
+
     public void saveObgectToBD(Object object) throws DaoException {
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -27,7 +25,6 @@ public abstract class DaoGeneral {
 
     }
 
-    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public void deleteObgectFromBD(Class clazz, int id) throws DaoException {
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -38,7 +35,7 @@ public abstract class DaoGeneral {
         }
 
     }
-    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
+
     public <T> T getObjectFromBDById(Class<T> clazz, int id) throws DaoException {
         T object = null;
         try {

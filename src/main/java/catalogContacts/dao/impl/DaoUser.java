@@ -8,8 +8,6 @@ import catalogContacts.model.User;
 import org.apache.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -47,17 +45,13 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
 
     public User authorizationUser(String login, String password) throws DaoException {
         User user = null;
-        Transaction transaction = null;
-        try {
+            try {
             Session session = sessionFactory.getCurrentSession();
-            transaction = session.beginTransaction();
             Criteria userCriteria = session.createCriteria(User.class);
             userCriteria.add(Restrictions.eq("login", login));
             userCriteria.add(Restrictions.eq("password", password));
             user = (User) userCriteria.uniqueResult();
-            transaction.commit();
         } catch (Exception e) {
-            transaction.rollback();
             logger.error("Ошибка при получении данных ", e);
             throw new DaoException("Ошибка при получении данных ", e);
         }
@@ -75,22 +69,20 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
         return null;
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED, rollbackFor = {java.lang.Exception.class})
+
     public List<User> findByName(String name) throws DaoException {
         Session session = sessionFactory.getCurrentSession();
         try {
-            Transaction transaction = session.beginTransaction();
             Query query = session.createQuery("from User  where login = :paramName");
             query.setParameter("paramName", name);
             List<User> userList = (List<User>) query.list();
-            transaction.commit();
             return userList;
         } catch (Exception e) {
             logger.error("Ошибка получения данных пользователя", e);
             throw new DaoException("Ошибка получения данных пользователя ", e);
         }
     }
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED, rollbackFor = {java.lang.Exception.class})
+
     public User getUserByName(String name) throws DaoException {
         User user;
         Session session = sessionFactory.getCurrentSession();
@@ -114,17 +106,13 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
     }
 
     public int countingUsers() throws DaoException {
-        Transaction transaction = null;
         try {
             int counting;
             Session session = sessionFactory.getCurrentSession();
-            transaction = session.beginTransaction();
             List<User> userList = (List<User>) session.createQuery("from User").list();
             counting = userList.size();
-            transaction.commit();
             return counting;
         } catch (Exception e) {
-            transaction.rollback();
             logger.error("Ошибка при получении данных ", e);
             throw new DaoException("Ошибка при получении данных ", e);
         }
@@ -139,12 +127,11 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
     }
 
     private float averageForUser(Class clazz) throws DaoException {
-        Transaction transaction = null;
+
         try {
             int countingUser;
             int counting = 0;
             Session session = sessionFactory.getCurrentSession();
-            transaction = session.beginTransaction();
             List<User> userList = (List<User>) session.createQuery("from User").list();
             countingUser = userList.size();
             if (countingUser == 0) {
@@ -157,11 +144,9 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
                     counting += user.getGroupsByUserId().size();
                 }
             }
-            transaction.commit();
             return (float) counting / countingUser;
 
         } catch (Exception e) {
-            transaction.rollback();
             logger.error("Ошибка при получении данных ", e);
             throw new DaoException("Ошибка при получении данных ", e);
         }
@@ -169,10 +154,8 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
 
     public List<User> inactiveUsers(int n) throws DaoException {
         List<User> userList;
-        Transaction transaction = null;
         try {
             Session session = sessionFactory.getCurrentSession();
-            transaction = session.beginTransaction();
             userList = (List<User>) session.createQuery("from User").list();
             Iterator<User> iter = userList.iterator();
             while (iter.hasNext()) {
@@ -181,10 +164,8 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
                     iter.remove();
                 }
             }
-            transaction.commit();
             return userList;
         } catch (Exception e) {
-            transaction.rollback();
             logger.error("Ошибка при получении данных ", e);
             throw new DaoException("Ошибка при получении данных ", e);
         }
@@ -200,10 +181,8 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
 
     private List<Map<User, Integer>> getCountingForUser(Class clazz) throws DaoException {
         List<Map<User, Integer>> userListMap = new ArrayList<>();
-        Transaction transaction = null;
         try {
             Session session = sessionFactory.getCurrentSession();
-            transaction = session.beginTransaction();
             List<User> userList = (List<User>) session.createQuery("from User").list();
             for (User user : userList) {
                 Map<User, Integer> mapForList = new HashMap<>();
@@ -214,10 +193,8 @@ public class DaoUser extends DaoGeneral implements CrudDAOUser<User> {
                 }
                 userListMap.add(mapForList);
             }
-            transaction.commit();
             return userListMap;
         } catch (Exception e) {
-            transaction.rollback();
             logger.error("Ошибка при получении данных ", e);
             throw new DaoException("Ошибка при получении данных ", e);
         }

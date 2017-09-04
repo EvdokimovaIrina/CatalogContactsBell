@@ -8,7 +8,6 @@ import catalogContacts.model.User;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
@@ -39,17 +38,13 @@ public class DaoGroup extends DaoGeneral implements CrudDAO<Group> {
     }
 
     public Group getObject(int id) throws DaoException {
-        Transaction transaction = null;
         try {
             Group group;
             Session session = sessionFactory.getCurrentSession();
-            transaction = session.beginTransaction();
             group = (Group) session.load(Group.class, id);
             group.getContactList().size();
-            transaction.commit();
             return group;
         } catch (Exception e) {
-            transaction.rollback();
             logger.error("Ошибка при получении данных ", e);
             throw new DaoException("Ошибка при получении данных ", e);
         }

@@ -18,7 +18,5 @@ public interface UserService {
     List<User> inactiveUsersList(int n) throws DaoException;
     List<Map<User, Integer>> countingUserContact() throws DaoException;
     List<Map<User, Integer>> countingUserGroup() throws DaoException;
-    void setUserThread(String login,String password) throws DaoException;
-    void setUserThread(int id) throws DaoException;
     void setCrudDAOUser(CrudDAOUser<User> crudDAOUser);
 }

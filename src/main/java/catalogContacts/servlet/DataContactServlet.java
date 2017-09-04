@@ -5,7 +5,6 @@ import catalogContacts.controller.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;
-import catalogContacts.service.UserService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -24,7 +23,6 @@ import java.util.Map;
 @WebServlet("/datacontact")
 public class DataContactServlet extends HttpServlet {
     ControllerHTML controllerHTML;
-    UserService userService;
     ContactService contactService;
 
     private static Logger logger = Logger.getLogger(DataContactServlet.class.getName());
@@ -35,19 +33,12 @@ public class DataContactServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        String iduserStr = request.getParameter("iduser");
-        if (iduserStr == null) {
-            logger.error("Ошибка авторизации");
-            out.println("Ошибка авторизации");
-            return;
-        }
         String buttonAction = request.getParameter("buttonaction");
 
         try {
             synchronized (this) {
                 controllerHTML = (ControllerHTML) SpringUtils.getContext().getBean("controllerHTML");
-                userService = (UserService) SpringUtils.getContext().getBean("userServise");
-                userService.setUserThread(Integer.parseInt(iduserStr));
+
                 if (buttonAction != null) {
                     selectingTheActionForTheButton(buttonAction, request);
                 }
@@ -100,14 +91,6 @@ public class DataContactServlet extends HttpServlet {
 
     public void setControllerHTML(ControllerHTML controllerHTML) {
         this.controllerHTML = controllerHTML;
-    }
-
-    public UserService getUserService() {
-        return userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
     }
 
     public ContactService getContactService() {

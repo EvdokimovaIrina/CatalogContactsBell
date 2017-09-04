@@ -57,7 +57,6 @@
 
     <bean id="dataContactServlet" class="catalogContacts.servlet.DataContactServlet">
         <property name="controllerHTML" ref="controllerHTML"/>
-        <property name="userService" ref="userServise"/>
         <property name="contactService" ref="contactServise"/>
     </bean>
 

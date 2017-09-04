@@ -1,6 +1,5 @@
 package catalogContacts.service.impl;
 
-import catalogContacts.context.SecurityContextHolderMy;
 import catalogContacts.dao.CrudDAOUser;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.User;
@@ -13,6 +12,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +26,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
-
-    public void setUserThread(String login, String password) throws DaoException {
-        User user;
-        synchronized (this) {
-            user = crudDAOUser.authorizationUser(login, password);
-        }
-        if (user != null) {
-            SecurityContextHolderMy.setLoggedUserID(user.getId());
-        }
-    }
-
-    public void setUserThread(int id) throws DaoException {
-        SecurityContextHolderMy.setLoggedUserID(id);
-    }
-
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public int countingUsers() throws DaoException {
         int quantity;
         synchronized (this) {
@@ -48,6 +35,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return quantity;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public float averageUserContact() throws DaoException {
         float quantity;
         synchronized (this) {
@@ -56,6 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return quantity;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public float averageUserGroup() throws DaoException {
         float quantity;
         synchronized (this) {
@@ -64,6 +53,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return quantity;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public List<User> inactiveUsersList(int n) throws DaoException {
         List<User> userList;
         synchronized (this) {
@@ -72,6 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userList;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public List<Map<User, Integer>> countingUserContact() throws DaoException {
         List<Map<User, Integer>> userListcountingContact;
         synchronized (this) {
@@ -80,6 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userListcountingContact;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public List<Map<User, Integer>> countingUserGroup() throws DaoException {
         List<Map<User, Integer>> userListcountingContact;
         synchronized (this) {
@@ -88,11 +80,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userListcountingContact;
     }
 
-    public void setCrudDAOUser(CrudDAOUser<User> crudDAOUser) {
-        this.crudDAOUser = crudDAOUser;
-    }
-
-
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         User user;
         try {
@@ -127,4 +115,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         return authorities;
     }
+
+    public void setCrudDAOUser(CrudDAOUser<User> crudDAOUser) {
+        this.crudDAOUser = crudDAOUser;
+    }
+
 }
