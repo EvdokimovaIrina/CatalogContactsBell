@@ -1,7 +1,7 @@
 package catalogContacts.servlet;
 
 import catalogContacts.context.SpringUtils;
-import catalogContacts.controller.ControllerHTML;
+import catalogContacts.controller.html.ControllerHTML;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;

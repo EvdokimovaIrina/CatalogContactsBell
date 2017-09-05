@@ -9,7 +9,7 @@
 <%
     logger.info("Просмотр статистики");
 %>
-    <div><a href=home>На главную</a></div>
+    <div><a href=menu>В главное меню</a></div>
     <p><a href=../statNumberOfUsers.jsp> Общее количество пользователей. </a></p>
     <p><a href=../statNumberOfUserContacts.jsp> Количество контактов каждого пользователя. </a></p>
     <p><a href=../statNumberOfUserGroups.jsp> Количество групп каждого пользователя. </a></p>

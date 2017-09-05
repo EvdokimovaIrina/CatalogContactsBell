@@ -47,7 +47,7 @@
     </bean>
 
     <!-- controller HTML -->
-    <bean id="controllerHTML" class="catalogContacts.controller.impl.ControllerHTMLImpl">
+    <bean id="controllerHTML" class="catalogContacts.controller.html.impl.ControllerHTMLImpl">
         <property name="groupService" ref="groupServise"/>
         <property name="userService" ref="userServise"/>
         <property name="contactService" ref="contactServise"/>

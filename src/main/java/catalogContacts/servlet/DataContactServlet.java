@@ -1,7 +1,7 @@
 package catalogContacts.servlet;
 
 import catalogContacts.context.SpringUtils;
-import catalogContacts.controller.ControllerHTML;
+import catalogContacts.controller.html.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.TypeContact;
 import catalogContacts.service.ContactService;

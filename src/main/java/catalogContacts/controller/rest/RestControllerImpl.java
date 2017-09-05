@@ -1,8 +1,8 @@
-package catalogContacts.controller;
+package catalogContacts.controller.rest;
 
-import catalogContacts.controller.evenResult.EventType;
-import catalogContacts.controller.evenResult.FactoryRestResult;
-import catalogContacts.controller.evenResult.RestResult;
+import catalogContacts.controller.rest.evenResult.EventType;
+import catalogContacts.controller.rest.evenResult.FactoryRestResult;
+import catalogContacts.controller.rest.evenResult.RestResult;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
@@ -40,7 +40,7 @@ public class RestControllerImpl {
     public RestResult addContact(@RequestParam(value="name") String contactName) {
         logger.debug("Добавление нового контакта");
         try {
-            return factoryRestResult.getSuccessResult(EventType.CONTACT,contactService.addContact(contactName));
+           return factoryRestResult.getSuccessResult(EventType.CONTACT,contactService.addContact(contactName));
         } catch (DaoException e) {
             return factoryRestResult.getFailResult(e);
         }

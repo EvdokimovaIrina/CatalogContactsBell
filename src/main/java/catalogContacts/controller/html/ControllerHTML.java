@@ -1,4 +1,4 @@
-package catalogContacts.controller;
+package catalogContacts.controller.html;
 
 import catalogContacts.dao.exception.DaoException;
 

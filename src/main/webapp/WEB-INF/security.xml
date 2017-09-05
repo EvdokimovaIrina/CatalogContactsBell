@@ -21,11 +21,6 @@
         <intercept-url pattern="/statNumberOfUsers.jsp" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/userStatistic.jsp" access="hasRole('ROLE_ADMIN')"/>
 
-        <!--<form-login
-                authentication-success-handler-ref="successHandler"
-                authentication-failure-handler-ref="failureHandler"
-        />-->
-
         <form-login
                 login-page="/login.jsp"
                 username-parameter="username"
@@ -35,8 +30,13 @@
                 authentication-failure-url="/login.jsp?login_error=1"/>
                 <access-denied-handler error-page="/accessDenied.jsp"/>
 
+        <logout
+                logout-success-url="/login.jsp"
+                delete-cookies="JSESSIONID" />
+
         <!--temporally disable csrf -->
         <csrf disabled="true"/>
+
 
     </http>
 

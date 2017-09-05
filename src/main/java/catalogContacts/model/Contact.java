@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "contact")
 public class Contact implements Serializable {
     private int number;
     private String fio;
@@ -47,9 +47,7 @@ public class Contact implements Serializable {
     }
 
     @Basic
-
     @Column(name = "contact_name", nullable=false)
-
     public String getFio() {
         return fio;
     }

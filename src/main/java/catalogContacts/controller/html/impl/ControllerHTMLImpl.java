@@ -1,6 +1,6 @@
-package catalogContacts.controller.impl;
+package catalogContacts.controller.html.impl;
 
-import catalogContacts.controller.ControllerHTML;
+import catalogContacts.controller.html.ControllerHTML;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
@@ -260,6 +260,9 @@ public class ControllerHTMLImpl implements ControllerHTML {
                 "<form action=\"groups\" method=\"POST\">" +
                 "<input type=\"submit\" value=\"Список групп\" />" +
                 "<p><a href=userStatistic.jsp> Посмотреть статистику </a></p>" +
+                "</form>" +
+                "<form action=\"logout\">" +
+                "<input type=\"submit\" value=\"Выйти\" />" +
                 "</form>" +
                 "</body></html>";
         return strHtml;
