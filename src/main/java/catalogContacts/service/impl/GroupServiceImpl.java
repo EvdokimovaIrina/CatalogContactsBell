@@ -33,7 +33,7 @@ public final class GroupServiceImpl implements GroupService {
         }
     }
 
-
+    @Transactional(propagation= Propagation.REQUIRED, rollbackFor=Exception.class)
     public void deleteGroup(int numberGroup) throws DaoException {
 
         synchronized (this) {

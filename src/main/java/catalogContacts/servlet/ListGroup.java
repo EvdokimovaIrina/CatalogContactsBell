@@ -58,6 +58,9 @@ public class ListGroup extends HttpServlet {
             case "delete":
                 groupService.deleteGroup(Integer.parseInt(request.getParameter("idgroup")));
                 break;
+            case "changegroupname":
+                groupService.changeGroup(Integer.parseInt(request.getParameter("idgroup")),request.getParameter("namegroup"));
+                break;
         }
     }
 

@@ -30,6 +30,7 @@ public final class ContactServiceImpl implements ContactService {
     private static Logger logger = Logger.getLogger(ContactServiceImpl.class.getName());
 
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, rollbackFor = Exception.class)
     public synchronized List<Contact> findByName(String name) throws DaoException {
 
         return crudDAOContact.findByName(name);

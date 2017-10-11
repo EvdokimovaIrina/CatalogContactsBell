@@ -64,8 +64,11 @@ public class ListContactServlet extends HttpServlet {
             case "delete":
                 contactService.deleteContact(Integer.parseInt(request.getParameter("idcontact")));
                 return controllerHTML.showContactListStr(null);
+            case "showContactListGroup":
+                return controllerHTML.showContactListStr(Integer.parseInt(request.getParameter("idgroup")));
             case "searchForContacts":
                 return controllerHTML.findByName(request.getParameter("searchnamecontact"));
+
         }
 
         return "";

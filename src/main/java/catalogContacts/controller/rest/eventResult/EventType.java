@@ -1,4 +1,4 @@
-package catalogContacts.controller.rest.evenResult;
+package catalogContacts.controller.rest.eventResult;
 
 /**
  *

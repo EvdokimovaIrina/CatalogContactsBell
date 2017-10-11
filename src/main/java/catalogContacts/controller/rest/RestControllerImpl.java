@@ -1,8 +1,8 @@
 package catalogContacts.controller.rest;
 
-import catalogContacts.controller.rest.evenResult.EventType;
-import catalogContacts.controller.rest.evenResult.FactoryRestResult;
-import catalogContacts.controller.rest.evenResult.RestResult;
+import catalogContacts.controller.rest.eventResult.EventType;
+import catalogContacts.controller.rest.eventResult.FactoryRestResult;
+import catalogContacts.controller.rest.eventResult.RestResult;
 import catalogContacts.dao.exception.DaoException;
 import catalogContacts.model.Contact;
 import catalogContacts.model.ContactDetails;
